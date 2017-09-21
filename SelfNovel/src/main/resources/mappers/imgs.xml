@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sn.img.repository.mappers.imgs">
+	 
+	<select id="do_save" parameterType="ImgVO">
+		INSERT
+			INTO IMAGES
+			(
+			 IMG_ID,
+			 IMG_NUM,
+			 IMG_ORG_NM,
+			 IMG_SV_NM,
+			 IMG_PATH,
+			 IMG_USE_YN
+			)
+			VALUES
+			(
+			 #{img_id},
+			 #{img_num},
+			 #{img_org_nm},
+			 #{img_sv_nm},
+			 #{img_path},
+			 #{img_use_yn}
+			)
+	</select>
+	
+</mapper>  
+  
+  
+  

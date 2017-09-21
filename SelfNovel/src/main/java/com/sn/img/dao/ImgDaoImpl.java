@@ -19,7 +19,7 @@ public class ImgDaoImpl implements ImgDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	private final String namespace = "com.sn.codes.repository.mappers.codes";
+	private final String namespace = "com.sn.img.repository.mappers.imgs";
 	
 	@Override
 	public int do_save(DTO dto) {
