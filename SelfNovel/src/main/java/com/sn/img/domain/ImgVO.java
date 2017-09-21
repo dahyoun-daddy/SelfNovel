@@ -8,7 +8,7 @@ import com.sn.common.DTO;
  * 최초작성: 2017-09-21
  * @author sist
  *
- */ 
+ */
 public class ImgVO extends DTO {
 	private int img_id;     //이미지ID
 	private int img_num;    //이미지 순서
@@ -24,10 +24,20 @@ public class ImgVO extends DTO {
 		
 	}
 	
+	public ImgVO(int img_id, int img_num, String img_org_nm, String img_sv_nm, String img_path, int img_use_yn) {
+		super();
+		this.img_id = img_id;
+		this.img_num = img_num;
+		this.img_org_nm = img_org_nm;
+		this.img_sv_nm = img_sv_nm;
+		this.img_path = img_path;
+		this.img_use_yn = img_use_yn;
+	}
+
 	/***********************************************/
 	//getter and setter
 	/***********************************************/
-	public int getImg_id() {
+	public int getImg_id() { 
 		return img_id;
 	}
 
