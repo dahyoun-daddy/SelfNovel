@@ -4,9 +4,9 @@ import com.sn.common.DTO;
 
 /**
  * RsmVO 
- * detail : 자소서 게시판 테이블 VO 
+ * detail : 자소서 테이블 VO 
  * 최초작성: 2017-09-21
- * @author @author MinSeok <dev.edwinner@gmail.com>
+ * @author MinSeok <dev.edwinner@gmail.com>
  *
  */
 public class RsmVO extends DTO {
@@ -22,6 +22,7 @@ public class RsmVO extends DTO {
 	private String u_id          ;//작성자
 	private String rsm_reg_dt    ;//작성일
 	private String rsm_recommend ;//추천수
+	private String rsm_count	 ;//조회수
 	private String rsm_use_yn    ;//공개 여부
 	private String rsm_ord_yn    ;//신청 여부
 	
@@ -42,11 +43,12 @@ public class RsmVO extends DTO {
 	 * @param u_id
 	 * @param rsm_reg_dt
 	 * @param rsm_recommend
+	 * @param rsm_count
 	 * @param rsm_use_yn
 	 * @param rsm_ord_yn
 	 */
 	public RsmVO(String rsm_id, String img_id, String rsm_title, String rsm_content, String u_id, String rsm_reg_dt,
-			String rsm_recommend, String rsm_use_yn, String rsm_ord_yn) {
+			String rsm_recommend, String rsm_count, String rsm_use_yn, String rsm_ord_yn) {
 		super();
 		this.rsm_id = rsm_id;
 		this.img_id = img_id;
@@ -55,8 +57,9 @@ public class RsmVO extends DTO {
 		this.u_id = u_id;
 		this.rsm_reg_dt = rsm_reg_dt;
 		this.rsm_recommend = rsm_recommend;
+		this.rsm_count = rsm_count;
 		this.rsm_use_yn = rsm_use_yn;
-		this.rsm_ord_yn = rsm_ord_yn;
+		this.rsm_ord_yn = rsm_ord_yn;		
 	}	
 	
 	/***********************************************/
@@ -159,6 +162,20 @@ public class RsmVO extends DTO {
 	 */
 	public void setRsm_recommend(String rsm_recommend) {
 		this.rsm_recommend = rsm_recommend;
+	}	
+
+	/**
+	 * @return the rsm_count
+	 */
+	public String getRsm_count() {
+		return rsm_count;
+	}
+
+	/**
+	 * @param rsm_count the rsm_count to set
+	 */
+	public void setRsm_count(String rsm_count) {
+		this.rsm_count = rsm_count;
 	}
 
 	/**
@@ -188,11 +205,11 @@ public class RsmVO extends DTO {
 	public void setRsm_ord_yn(String rsm_ord_yn) {
 		this.rsm_ord_yn = rsm_ord_yn;
 	}
-	
+
 	/***********************************************/
 	//method
 	/***********************************************/
-
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -200,7 +217,7 @@ public class RsmVO extends DTO {
 	public String toString() {
 		return "RsmVO [rsm_id=" + rsm_id + ", img_id=" + img_id + ", rsm_title=" + rsm_title + ", rsm_content="
 				+ rsm_content + ", u_id=" + u_id + ", rsm_reg_dt=" + rsm_reg_dt + ", rsm_recommend=" + rsm_recommend
-				+ ", rsm_use_yn=" + rsm_use_yn + ", rsm_ord_yn=" + rsm_ord_yn + "]";
+				+ ", rsm_count=" + rsm_count + ", rsm_use_yn=" + rsm_use_yn + ", rsm_ord_yn=" + rsm_ord_yn + "]";
 	}
 	
 }//--RsmVO
