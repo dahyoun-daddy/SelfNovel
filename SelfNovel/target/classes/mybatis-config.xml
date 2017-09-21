@@ -5,5 +5,6 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.sn.codes.domain.CodesVO" alias="CodesVO"/>
+		<typeAlias type="com.sn.img.domain.ImgVO" alias="ImgVO"/> 
 	</typeAliases>
 </configuration>
