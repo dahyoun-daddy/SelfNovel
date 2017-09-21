@@ -52,8 +52,10 @@ public class RsmDaoImpl implements RsmDao {
 	 */
 	@Override
 	public int do_delete(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String statement = namespace +".do_delete";//resume.xml연결
+		RsmVO  inRsmVO   = (RsmVO)dto;             //파라미터 주입
+				
+		return sqlSession.insert(statement, inRsmVO);
 	}
 
 	/**
@@ -61,8 +63,10 @@ public class RsmDaoImpl implements RsmDao {
 	 */
 	@Override
 	public int do_update(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String statement = namespace +".do_update";//resume.xml연결
+		RsmVO  inRsmVO   = (RsmVO)dto;             //파라미터 주입
+				
+		return sqlSession.insert(statement, inRsmVO);
 	}
 
 	/**

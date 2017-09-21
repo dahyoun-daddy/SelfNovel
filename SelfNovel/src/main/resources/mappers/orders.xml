@@ -24,15 +24,15 @@
 		  );
 	</insert>
 	
-	<select id="do_search" parameterType="">
+	<select id="do_search" parameterType="com.sn.orders.domain.OrdersVO">
 	</select>
 	
-	<delete id="do_delete" parameterType="">
+	<delete id="do_delete" parameterType="com.sn.orders.domain.OrdersVO">
 	</delete>
 	
-	<insert id="do_update" parameterType="">
+	<insert id="do_update" parameterType="com.sn.orders.domain.OrdersVO">
 	</insert>
 
-	<select id="do_searchOne" parameterType="">
+	<select id="do_searchOne" parameterType="com.sn.orders.domain.OrdersVO">
 	</select>
 </mapper>
