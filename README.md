@@ -68,7 +68,7 @@
 ## 참고
 
 ## ERD
-![ERD](https://github.com/dahyoun-daddy/SelfNovel/blob/master/Images/0921erd.png)
+![ERD](https://github.com/dahyoun-daddy/SelfNovel/blob/master/Images/0921_2.png)
 
 ## 개발 환경 및 개발 툴
 - [Java SE 8 (Oracle JDK 1.8.x)](http://www.oracle.com/technetwork/java/javase/downloads)
