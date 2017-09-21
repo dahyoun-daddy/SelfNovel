@@ -41,7 +41,7 @@
 		WHERE MST_CD_ID=#{mst_cd_id}
 	</select>
 	
-	<select id="do_searchOne" parameterType="String" resultType="CodesVO">	  
+	<select id="do_searchOne" parameterType="CodesVO" resultType="CodesVO">	  
 		SELECT 
 		  MST_CD_ID,
 		  DTL_CD_ID,

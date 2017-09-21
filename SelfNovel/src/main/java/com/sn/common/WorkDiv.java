@@ -16,9 +16,39 @@ import java.util.List;
  *
  */
 public interface WorkDiv {
-	  public int do_save(DTO dto);	
+	  /**
+	   * do_save
+	   * detail: 저장
+	   * @param dto
+	   * @return flag
+	   */
+	  public int do_save(DTO dto);
+	  /**
+	   * do_search
+	   * detail: 다건조회
+	   * @param dto
+	   * @return list
+	   */
 	  public List<?> do_search(DTO dto);	
+	  /**
+	   * do_delete
+	   * detail: 삭제
+	   * @param dto
+	   * @return flag
+	   */
 	  public int do_delete(DTO dto);	
+	  /**
+	   * do_update
+	   * detail: 수정
+	   * @param dto
+	   * @return flag
+	   */
 	  public int do_update(DTO dto);
+	  /**
+	   * do_searchOne
+	   * detail: 단건조회
+	   * @param dto
+	   * @return dto
+	   */
 	  public DTO do_searchOne(DTO dto);
 }
