@@ -27,7 +27,7 @@ public class testController {
 	@RequestMapping(value = "/img.do", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		ImgVO dto = new ImgVO();
-		imgDao.do_save(dto);
+		imgDao.do_save(dto); 
 		
 		return "home";
 	}
