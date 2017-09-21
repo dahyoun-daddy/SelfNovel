@@ -1,6 +1,4 @@
-<snippet>
-  <content><![CDATA[
-# ${1:SelfNovel}
+# SelfNovel
 >SelfNovel은 자기소개서를 작성하여 공유하고 첨삭할 수 있는 사이트입니다.
 ## Installation
 TODO: Describe the installation process
@@ -18,6 +16,6 @@ TODO: Write history
 TODO: Write credits
 ## License
 TODO: Write license
-]]></content>
-  <tabTrigger>readme</tabTrigger>
-</snippet>
+]]>
+
+
