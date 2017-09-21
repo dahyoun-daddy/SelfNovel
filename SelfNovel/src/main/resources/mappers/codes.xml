@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sn.codes.repository.mappers.codes">
+
+	<select id="do_save" parameterType="CodesVO">
+	INSERT
+		INTO CODES
+		  (
+		    MST_CD_ID,
+		    DTL_CD_ID,
+		    MST_CD_NM,
+		    DTL_CD_NM,
+		    SEQ,
+		    SUP_MST_CD_ID,
+		    USE_YN
+		  )
+		  VALUES
+		  (
+		    #{mst_cd_id},
+		    #{dtl_cd_id},
+		    #{mst_cd_nm},
+		    #{dtl_cd_nm},
+		    #{seq},
+		    #{sup_mst_cd_id},
+		    #{use_yn}
+		  )
+	</select>
+
+</mapper>  
+  
+  
+  
