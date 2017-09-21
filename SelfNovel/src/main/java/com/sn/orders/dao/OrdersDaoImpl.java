@@ -1,4 +1,4 @@
-package com.sn.order.dao;
+package com.sn.orders.dao;
 
 import java.util.List;
 
@@ -9,23 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sn.codes.domain.CodesVO;
 import com.sn.common.DTO;
-import com.sn.order.domain.OrderVO;
+import com.sn.orders.domain.OrdersVO;
 
 /**
- * OrderDaoImpl 
+ * OrdersDaoImpl 
  * detail : 의뢰테이블 dao 인터페이스 
  * 최초작성: 2017-09-21
  * @author @author SeulGi <dev.leewisdom92@gmail.com>
  *
  */
-public class OrderDaoImpl implements OrderDao {
+public class OrdersDaoImpl implements OrdersDao {
 	/***********************************************/
 	//field
 	/***********************************************/
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private SqlSessionTemplate sqlSession;
-	private final String namespace = "com.sn.order.repository.mappers.order";
+	private final String namespace = "com.sn.orders.repository.mappers.orders";
 	
 	/***********************************************/
 	//method
@@ -46,7 +46,7 @@ public class OrderDaoImpl implements OrderDao {
 		log.debug("dto: "+dto.toString());
 		log.debug("=======================================");
 		
-		OrderVO inUserVO = (OrderVO)dto;
+		OrdersVO inUserVO = (OrdersVO)dto;
 		return sqlSession.insert(statement, inUserVO);
 	}
 
@@ -66,7 +66,7 @@ public class OrderDaoImpl implements OrderDao {
 		log.debug("dto: "+dto.toString());
 		log.debug("=======================================");
 		
-		OrderVO inUserVO = (OrderVO)dto;
+		OrdersVO inUserVO = (OrdersVO)dto;
 		return sqlSession.selectList(statement, inUserVO);
 	}
 
@@ -86,7 +86,7 @@ public class OrderDaoImpl implements OrderDao {
 		log.debug("dto: "+dto.toString());
 		log.debug("=======================================");
 		
-		OrderVO inUserVO = (OrderVO)dto;
+		OrdersVO inUserVO = (OrdersVO)dto;
 		return sqlSession.delete(statement, inUserVO);
 	}
 
@@ -106,7 +106,7 @@ public class OrderDaoImpl implements OrderDao {
 		log.debug("dto: "+dto.toString());
 		log.debug("=======================================");
 		
-		OrderVO inUserVO = (OrderVO)dto;
+		OrdersVO inUserVO = (OrdersVO)dto;
 		return sqlSession.update(statement, inUserVO);
 	}
 
@@ -119,14 +119,14 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public DTO do_searchOne(DTO dto) {
 		//아래의 이름으로 codes.xml에서 해당하는 select를 불러온다.
-		String statement = namespace +".do_update";
+		String statement = namespace +".do_searchOne";
 		
 		log.debug("in do_delete========================");
 		log.debug("statement: "+statement);
 		log.debug("dto: "+dto.toString());
 		log.debug("=======================================");
 		
-		OrderVO inUserVO = (OrderVO)dto;
+		OrdersVO inUserVO = (OrdersVO)dto;
 		return sqlSession.selectOne(statement, inUserVO);
 	}
 

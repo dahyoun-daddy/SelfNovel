@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sn.orders.repository.mappers.orders">
+
+	<insert id="do_save" parameterType="CodesVO">
+		INSERT
+		INTO ORDERS
+		  (
+		    "rsm_id",
+		    "exp_id",
+		    "u_id",
+		    "ord_state",
+		    "ord_reg_dt"
+		  )
+		  VALUES
+		  (
+		    #{rsm_id},
+		    #{exp_id},
+		    #{u_id},
+		    #{ord_state},
+		    sysdate
+		  );
+	</insert>
+	
+	<select id="do_search" parameterType="">
+	</select>
+	
+	<delete id="do_delete" parameterType="">
+	</delete>
+	
+	<insert id="do_update" parameterType="">
+	</insert>
+
+	<select id="do_searchOne" parameterType="">
+	</select>
+</mapper>

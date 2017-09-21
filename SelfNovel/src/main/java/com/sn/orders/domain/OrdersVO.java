@@ -1,37 +1,37 @@
-package com.sn.order.domain;
+package com.sn.orders.domain;
 
 import com.sn.common.DTO;
 
 /**
- * OrederVO 
+ * OrdersVO 
  * detail : 자소서 의뢰 테이블 vo
  * 최초작성: 2017-09-21
  * @author SeulGi <dev.leewisdom92@gmail.com>
  *
  */
-public class OrderVO extends DTO {
+public class OrdersVO extends DTO {
 	/***********************************************/
 	//field
 	/***********************************************/
 	int	rsm_id			;	//	자소서 아이디(PK)(FK)		
 	String	exp_id		;	//	의뢰 받은 사람(PK)(FK)		
 	String	u_id		;	//	의뢰한 사람		
-	String	org_state	;	//	상태(코드)		
+	String	ord_state	;	//	상태(코드)		
 	String	ord_reg_dt	;	//	작성일		
 
 	
 	/***********************************************/
 	//constructor
 	/***********************************************/
-	public OrderVO() {
+	public OrdersVO() {
 		
 	}
-	public OrderVO(int rsm_id, String exp_id, String u_id, String org_state, String ord_reg_dt) {
+	public OrdersVO(int rsm_id, String exp_id, String u_id, String ord_state, String ord_reg_dt) {
 		super();
 		this.rsm_id = rsm_id;
 		this.exp_id = exp_id;
 		this.u_id = u_id;
-		this.org_state = org_state;
+		this.ord_state = ord_state;
 		this.ord_reg_dt = ord_reg_dt;
 	}
 	/***********************************************/
@@ -55,11 +55,11 @@ public class OrderVO extends DTO {
 	public void setU_id(String u_id) {
 		this.u_id = u_id;
 	}
-	public String getOrg_state() {
-		return org_state;
+	public String getOrd_state() {
+		return ord_state;
 	}
-	public void setOrg_state(String org_state) {
-		this.org_state = org_state;
+	public void setOrd_state(String ord_state) {
+		this.ord_state = ord_state;
 	}
 	public String getOrd_reg_dt() {
 		return ord_reg_dt;
@@ -73,7 +73,7 @@ public class OrderVO extends DTO {
 	/***********************************************/
 	@Override
 	public String toString() {
-		return "OrderVO [rsm_id=" + rsm_id + ", exp_id=" + exp_id + ", u_id=" + u_id + ", org_state=" + org_state
+		return "OrderVO [rsm_id=" + rsm_id + ", exp_id=" + exp_id + ", u_id=" + u_id + ", ord_state=" + ord_state
 				+ ", ord_reg_dt=" + ord_reg_dt + "]";
 	}
 }
