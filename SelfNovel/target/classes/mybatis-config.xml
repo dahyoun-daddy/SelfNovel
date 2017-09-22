@@ -6,6 +6,7 @@
 	<typeAliases>
 		<typeAlias type="com.sn.codes.domain.CodesVO" alias="CodesVO"/>
 		<typeAlias type="com.sn.img.domain.ImgVO" alias="ImgVO"/>
-		<typeAlias type="com.sn.orders.domain.OrdersVO" alias="OrdersVO"/>  
+		<typeAlias type="com.sn.orders.domain.OrdersVO" alias="OrdersVO"/> 
+		<typeAlias type="com.sn.log.domain.LogVO" alias="LogVO"/> 
 	</typeAliases>
 </configuration>
