@@ -21,6 +21,16 @@ public class OrdersSvcImpl implements OrdersSvc {
 	@Autowired
 	OrdersDao ordersDao;
 	
+	
+	  /**
+	   * do_saveTx
+	   * detail: 저장
+	   * @param dto
+	   * @return list
+	   */
+	public int do_saveTx(DTO dto){
+		return ordersDao.do_save(dto);
+	}
 	  /**
 	   * do_search
 	   * detail: 다건조회
@@ -39,7 +49,7 @@ public class OrdersSvcImpl implements OrdersSvc {
 	   * @return flag
 	   */
 	@Override
-	public int do_delete(DTO dto) {
+	public int do_deleteTx(DTO dto) {
 		return ordersDao.do_delete(dto);
 	}
 

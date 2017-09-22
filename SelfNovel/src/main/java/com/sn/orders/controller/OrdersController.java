@@ -45,6 +45,10 @@ public class OrdersController {
 	public ModelAndView main(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		
+		//Trasjaction test
+//		OrdersVO dto2 = new OrdersVO(1, "sty2002", "1", "1", "1","1");
+//		orderSvc.do_saveTx(dto2);
+		
 		//임시 dto
 		Hashtable<String, String> param = new Hashtable<String, String>();
 //		param.put("SEARCH_DIV", "exp");
@@ -81,7 +85,7 @@ public class OrdersController {
 		}else if(WORK_DIV.equals("do_reject")) {
 			orderSvc.do_reject(dto);
 		}else if(WORK_DIV.equals("do_delete")) {
-			orderSvc.do_delete(dto);
+			orderSvc.do_deleteTx(dto);
 		}
 
 		return "redirect:list.do";

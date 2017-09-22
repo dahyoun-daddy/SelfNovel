@@ -15,6 +15,13 @@ import com.sn.orders.domain.OrdersVO;
  */
 public interface OrdersSvc {
 	  /**
+	   * do_saveTx
+	   * detail: 저장
+	   * @param dto
+	   * @return list
+	   */
+	public int do_saveTx(DTO dto);
+	  /**
 	   * do_search
 	   * detail: 다건조회
 	   * @param dto
@@ -22,12 +29,12 @@ public interface OrdersSvc {
 	   */
 	public List<?> do_search(DTO dto);
 	  /**
-	   * do_delete
+	   * do_deleteTx
 	   * detail: 삭제
 	   * @param dto
 	   * @return flag
 	   */
-	public int do_delete(DTO dto);
+	public int do_deleteTx(DTO dto);
 	
 	  /**
 	   * do_nextState

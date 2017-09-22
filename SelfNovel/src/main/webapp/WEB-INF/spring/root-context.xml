@@ -16,8 +16,36 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
+	<!-- ****************************for transaction**************************** -->
+	  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dataSource"/>
+    </bean>
+	
+    <bean id="transactionAdvice" class="com.sn.common.TransactionAdvice">
+    	<property name="transactionManager" ref="transactionManager" />
+    </bean>
+    
+    <!-- Tx PointCut -->
+    <!-- 
+    	조건1: SvcImpl로 끝나는 클래스 이름
+    	조건2: Tx로 끝나는 메소드 이름
+     -->
+    <bean  id="transactionPointcut" 
+        class="com.sn.common.NameMatchClassMethodPointcut" >
+        <property name="mappedClassName" value="*SvcImpl" />
+        <property name="mappedName" value="*Tx"></property>        
+    </bean>
+    
+    <!-- Tx Advisor -->
+    <bean  id="transactionAdvisor"  
+      class="org.springframework.aop.support.DefaultPointcutAdvisor">
+      <property name="advice" ref="transactionAdvice" />
+      <property name="pointcut" ref="transactionPointcut" />
+    </bean>	
+	<!-- ***************************for transaction end************************* -->
 		
-	<!-- for mybatis -->	
+		
+	<!-- ****************************for mybatis**************************** -->	
 	<!-- sqlSession 을 SqlSessionTemplate으로 만든다. -->										
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"											
         destroy-method="clearCache">											
@@ -42,6 +70,6 @@
 		p:maxIdle="5"									
 		p:maxWait="-1"									
 	/>																	
-	<!-- for mybatis end -->
+	<!-- ****************************for mybatis end ****************************-->
 	
 </beans>
