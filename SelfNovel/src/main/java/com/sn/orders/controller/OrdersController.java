@@ -30,7 +30,7 @@ public class OrdersController {
 		//임시 dto
 		Hashtable<String, String> param = new Hashtable<String, String>();
 //		param.put("SEARCH_DIV", "exp");
-//		param.put("SEARCH_ID", "exp1");
+//		param.put("SEARCH_ID", "exp1"); 
 		param.put("SEARCH_DIV", "user");
 		param.put("SEARCH_ID", "u1");		
 		OrdersVO dto = new OrdersVO();
