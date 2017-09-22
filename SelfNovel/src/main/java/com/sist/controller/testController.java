@@ -39,18 +39,28 @@ public class testController {
 	 * imgTest
 	 */
 	@RequestMapping(value = "/img.do", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String do_save(Locale locale, Model model) {
 		ImgVO dto = new ImgVO();
 		
-		dto.setImg_id(1);
-		dto.setImg_num(1);
-		dto.setImg_org_nm("test");
-		dto.setImg_path("test");
-		dto.setImg_sv_nm("test");
+		dto.setImg_id(2);
+		dto.setImg_num(2);
+		dto.setImg_org_nm("test2");
+		dto.setImg_path("test2");
+		dto.setImg_sv_nm("test2");
 		dto.setImg_use_yn(0);
 		
 		log.debug("==========do_save==========");
 		imgDao.do_save(dto); 
+		
+		return "home";
+	}
+	
+	@RequestMapping(value = "/imgSearch.do", method = RequestMethod.GET)
+	public String do_search(Locale locale, Model model) {
+		ImgVO dto = new ImgVO();
+		
+		List<ImgVO> list = (List<ImgVO>)codesDao.do_search(dto);
+		log.debug("다건조회: "+list.toString());
 		
 		return "home";
 	}

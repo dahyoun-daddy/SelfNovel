@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.sn.codes.domain.CodesVO;
 import com.sn.common.DTO;
 import com.sn.img.domain.ImgVO;
 
@@ -36,8 +37,16 @@ public class ImgDaoImpl implements ImgDao {
 
 	@Override
 	public List<?> do_search(DTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		String statement = namespace +".do_search";
+		
+		log.debug("in do_search============");
+		log.debug("statement: "+statement);
+		log.debug("dto: "+dto.toString());
+		log.debug("========================");
+		
+		ImgVO imgVO = (ImgVO)dto;
+		
+		return sqlSession.selectList(statement, imgVO);
 	}
 
 	@Override

@@ -26,6 +26,17 @@
 			)
 	</select>
 	
+	<select id="do_search" parameterType="ImgVO">
+		SELECT 
+			  IMG_ID,
+			  IMG_NUM,
+			  IMG_ORG_NM,
+			  IMG_SV_NM,
+			  IMG_PATH,
+			  IMG_USE_YN
+		 FROM IMAGES
+	</select>
+	
 </mapper>  
   
   
