@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.sn.codes.dao.CodesDao;
 import com.sn.codes.domain.CodesVO;
 import com.sn.img.dao.ImgDao;
+import com.sn.img.dao.ImgDaoImpl;
 import com.sn.img.domain.ImgVO;
 
 /**
@@ -29,9 +30,15 @@ import com.sn.img.domain.ImgVO;
  */
 @Controller
 public class testController {
+	
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+	
 	@Autowired
 	ImgDao imgDao;
+	
+	@Autowired
+	ImgDaoImpl imgDaoImpl;
+	
 	@Autowired
 	CodesDao codesDao;
 	
@@ -39,18 +46,30 @@ public class testController {
 	 * img Test do_save
 	 */
 	@RequestMapping(value = "/img.do", method = RequestMethod.GET)
-	public String do_save(Locale locale, Model model) {
-		ImgVO dto = new ImgVO();
+	public String do_save(HttpServletRequest req) {
+		ImgVO imgVO = new ImgVO();
 		
-		dto.setImg_id(2);
-		dto.setImg_num(2);
-		dto.setImg_org_nm("test2");
-		dto.setImg_path("test2");
-		dto.setImg_sv_nm("test2");
-		dto.setImg_use_yn(0);
+		imgVO.setImg_id(6);
+		imgVO.setImg_num(7);
+		imgVO.setImg_org_nm("test7");
+		imgVO.setImg_path("test7");
+		imgVO.setImg_sv_nm("test7");
+		imgVO.setImg_use_yn(1);
 		
-		log.debug("==========do_save==========");
-		imgDao.do_save(dto); 
+		//String workDiv = req.getParameter("workDiv");
+		String workDiv = "6";
+		int flag = 0;
+		// workDiv==null?do_save/do_update
+		if (workDiv == null || workDiv.trim().equals("")) {
+			log.debug("======do_save======");
+			flag = imgDaoImpl.do_save(imgVO);
+			log.debug("======do_save======");
+		} else {
+			log.debug("======do_update======");
+			flag = imgDaoImpl.do_update(imgVO);
+		}
+
+		log.debug("flag: " + flag);
 		
 		return "home";
 	}
@@ -70,28 +89,6 @@ public class testController {
 		dto.setImg_id(1);
 		ImgVO resultDTO = (ImgVO)imgDao.do_searchOne(dto);
 		log.debug("단건조회: "+resultDTO.toString());
-		
-		return "home";
-	}
-	
-	/**
-	 * img Test do_delete
-	 */
-	@RequestMapping(value = "/imgDelete.do", method = RequestMethod.GET)
-	public String do_delete(Locale locale, Model model) {
-		ImgVO dto = new ImgVO();
-		
-		
-		return "home";
-	}
-	
-	/**
-	 * img Test do_update
-	 */
-	@RequestMapping(value = "/imgUpdate.do", method = RequestMethod.GET)
-	public String do_update(Locale locale, Model model) {
-		ImgVO dto = new ImgVO();
-		
 		
 		return "home";
 	}

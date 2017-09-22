@@ -49,11 +49,12 @@
 	</select>
 	
 	<select id="do_delete" parameterType="ImgVO" resultType="ImgVO">
-		DELETE FROM IMAGES
+		UPDATE IMAGES
+		   SET IMG_USE_YN = #{img_use_yn}
 		 WHERE IMG_ID = #{img_id}
 	</select>
 	
-	<select id="do_delete" parameterType="ImgVO" resultType="ImgVO">
+	<select id="do_update" parameterType="ImgVO" resultType="ImgVO">
 		UPDATE IMAGES
    		   SET IMG_NUM    = #{img_num},
        		   IMG_ORG_NM = #{img_org_nm},
