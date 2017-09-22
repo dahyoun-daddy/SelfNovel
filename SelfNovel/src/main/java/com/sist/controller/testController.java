@@ -59,8 +59,14 @@ public class testController {
 	public String do_search(Locale locale, Model model) {
 		ImgVO dto = new ImgVO();
 		
-		List<ImgVO> list = (List<ImgVO>)codesDao.do_search(dto);
+		dto.setImg_num(1);
+		
+		List<ImgVO> list = (List<ImgVO>)imgDao.do_search(dto);
 		log.debug("다건조회: "+list.toString());
+		
+		dto.setImg_id(1);
+		ImgVO resultDTO = (ImgVO)imgDao.do_searchOne(dto);
+		log.debug("단건조회: "+resultDTO.toString());
 		
 		return "home";
 	}

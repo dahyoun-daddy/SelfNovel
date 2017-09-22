@@ -63,8 +63,16 @@ public class ImgDaoImpl implements ImgDao {
 
 	@Override
 	public DTO do_searchOne(DTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		String statement = namespace +".do_searchOne";
+		
+		log.debug("in do_searchOne========================");
+		log.debug("statement: "+statement);
+		log.debug("dto: "+dto.toString());
+		log.debug("=======================================");
+		
+		ImgVO imgVO = (ImgVO)dto;
+		
+		return sqlSession.selectOne(statement, imgVO);
 	}
 
 }

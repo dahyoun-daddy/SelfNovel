@@ -26,15 +26,26 @@
 			)
 	</select>
 	
-	<select id="do_search" parameterType="ImgVO">
-		SELECT 
-			  IMG_ID,
-			  IMG_NUM,
-			  IMG_ORG_NM,
-			  IMG_SV_NM,
-			  IMG_PATH,
-			  IMG_USE_YN
-		 FROM IMAGES
+	<select id="do_search" parameterType="String" resultType="ImgVO">
+		SELECT IMG_ID,
+		  	   IMG_NUM,
+		  	   IMG_ORG_NM,
+		  	   IMG_SV_NM,
+		  	   IMG_PATH,
+		  	   IMG_USE_YN
+		  FROM IMAGES 
+		 WHERE IMG_NUM=#{img_num}
+	</select>
+	
+	<select id="do_searchOne" parameterType="ImgVO" resultType="ImgVO">	  
+		SELECT IMG_ID,
+		  	   IMG_NUM,
+		  	   IMG_ORG_NM,
+		  	   IMG_SV_NM,
+		  	   IMG_PATH,
+		  	   IMG_USE_YN
+		FROM IMAGES 
+		WHERE IMG_ID=#{img_id}
 	</select>
 	
 </mapper>  
