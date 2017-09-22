@@ -21,4 +21,13 @@ public interface OrdersDao extends WorkDiv {
 	 * @return
 	 */
 	public int do_nextState(DTO dto);
+	/**
+	 * do_reject
+	 * detail: 거절한다.
+	 * 
+	 * 최초작성: 2017-09-22
+	 * @param dto
+	 * @return
+	 */
+	public int do_reject(DTO dto);
 }

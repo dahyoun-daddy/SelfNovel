@@ -13,7 +13,8 @@
 		    "exp_id",
 		    "u_id",
 		    "ord_state",
-		    "ord_reg_dt"
+		    "ord_reg_dt",
+		    "ord_use_yn"
 		  )
 		  VALUES
 		  (
@@ -21,7 +22,8 @@
 		    #{exp_id},
 		    #{u_id},
 		    #{ord_state},
-		    sysdate
+		    sysdate,
+		    1
 		  )
 	</insert>
 	
@@ -39,6 +41,7 @@
 		  "u_id",
 		  "ord_state",
 		  "ord_reg_dt",
+		  "ord_use_yn",
 		  GET_CD_NM('C001',"ord_state") as ord_state_nm,
 		  GET_RS_NM("rsm_id") as rsm_title,
 		  no,
@@ -49,6 +52,7 @@
 		  		 A."u_id",
 		  		 A."ord_state",
 		  		 A."ord_reg_dt",
+		  		 A."ord_use_yn",
 	             ROW_NUMBER() OVER (ORDER BY A."ord_reg_dt" DESC) AS no,
 	             COUNT(*) OVER() AS total_cnt
 	      FROM ORDERS A
@@ -70,14 +74,19 @@
 		    	
 		    	</otherwise>
 		    </choose>
+		    AND "ord_use_yn"=1
 		</where>      	
  	</sql>
 	
 	<!-- do_delete -->
 	<!-- 
-		실제 삭제하지는 않으며 플래그만 0으로 바꾸면 될것같은데 플래그를 안만들었네... 
+		실제 삭제하지는 않으며 플래그만 0으로 바꾸면 됨
 	-->
 	<delete id="do_delete" parameterType="OrdersVO">
+		UPDATE ORDERS
+		SET "ord_use_yn" = 0
+		WHERE "rsm_id"   = #{rsm_id}
+		  AND "exp_id"   = #{exp_id}
 	</delete>
 	
 	<insert id="do_update" parameterType="OrdersVO">
@@ -88,9 +97,19 @@
 	</select>
 	
 	<!-- do_nextState -->
+	<!-- 
+		ORD_NEXT_STAT: 코드테이블을 이용하여 다음 단계의 값을 반환하는 함수.	
+	 -->
 	<update id="do_nextState">
 		UPDATE ORDERS
 		SET "ord_state" = ORD_NEXT_STAT("ord_state")
+		WHERE "rsm_id"   = #{rsm_id}
+		  AND "exp_id"   = #{exp_id}
+	</update>
+	
+	<update id="do_reject">
+		UPDATE ORDERS
+		SET "ord_state" = 10
 		WHERE "rsm_id"   = #{rsm_id}
 		  AND "exp_id"   = #{exp_id}
 	</update>

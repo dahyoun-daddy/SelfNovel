@@ -17,7 +17,8 @@ public class OrdersVO extends DTO {
 	String	exp_id		;	//	의뢰 받은 사람(PK)(FK)		
 	String	u_id		;	//	의뢰한 사람		
 	String	ord_state	;	//	상태(코드)
-	String	ord_reg_dt	;	//	작성일		
+	String	ord_reg_dt	;	//	작성일
+	String 	ord_use_yn	;	//	사용여부
 	
 	String	ord_state_nm;	//	상태(텍스트). db에서 꺼내올 때만 set한다.
 	String 	rsm_title	;	//	이력서 제목.
@@ -28,13 +29,15 @@ public class OrdersVO extends DTO {
 	public OrdersVO() {
 		
 	}
-	public OrdersVO(int rsm_id, String exp_id, String u_id, String ord_state, String ord_reg_dt) {
+	public OrdersVO(int rsm_id, String exp_id, String u_id, String ord_state, String ord_reg_dt, String ord_use_yn) 
+	{
 		super();
 		this.rsm_id = rsm_id;
 		this.exp_id = exp_id;
 		this.u_id = u_id;
 		this.ord_state = ord_state;
 		this.ord_reg_dt = ord_reg_dt;
+		this.ord_use_yn = ord_use_yn;
 	}
 	/***********************************************/
 	//getter and setter
@@ -81,13 +84,21 @@ public class OrdersVO extends DTO {
 	public void setRsm_title(String rsm_title) {
 		this.rsm_title = rsm_title;
 	}
+	public String getOrd_use_yn() {
+		return ord_use_yn;
+	}
+	public void setOrd_use_yn(String ord_use_yn) {
+		this.ord_use_yn = ord_use_yn;
+	}
 	/***********************************************/
 	//method
 	/***********************************************/
 	@Override
 	public String toString() {
 		return "OrdersVO [rsm_id=" + rsm_id + ", exp_id=" + exp_id + ", u_id=" + u_id + ", ord_state=" + ord_state
-				+ ", ord_reg_dt=" + ord_reg_dt + ", ord_state_nm=" + ord_state_nm + ", rsm_title=" + rsm_title + "]";
+				+ ", ord_reg_dt=" + ord_reg_dt + ", ord_use_yn=" + ord_use_yn + ", ord_state_nm=" + ord_state_nm
+				+ ", rsm_title=" + rsm_title + "]";
 	}
+
 	
 }

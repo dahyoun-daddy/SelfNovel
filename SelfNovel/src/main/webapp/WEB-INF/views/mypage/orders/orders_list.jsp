@@ -12,32 +12,45 @@
 <script type="text/javascript">
 
 	$(function() {
-		$("input[name=levelUpTest]").click(function(){
-			//2017-09-22
-			//상태변경 쿼리 테스트입니다. 버튼을 클릭하면 해당 row의 정보를 긁어와 던지도록 만들었으니 나중에 view만들때도 재활용하면 될것같습니다.
-			var record = $(this).parents("tr");
-			console.log(record);
-			
+		
+		//2017-09-22
+		//상태변경 쿼리 테스트입니다. 버튼을 클릭하면 해당 row의 정보를 긁어와 던지도록 만들었으니 나중에 view만들때도 재활용하면 될것같습니다.
+		function setFormValue(element){
+			var record = $(element).parents("tr");			
 			var exp_id = $(record).find('td').eq(2).text();
 			var rsm_id = $(record).find('input[name=rsm_id]').val();
 			
-			console.log(exp_id);
-			console.log(rsm_id);
-			
-			$("#exp_id").val(exp_id);
-			$("#rsm_id").val(rsm_id);
+			$("#EXP_ID").val(exp_id);
+			$("#RSM_ID").val(rsm_id);
 			
 			var testfrm = document.testfrm;
 			testfrm.submit();
+		}
+		
+		//거절 이외의 경우 다음 상태로 변경
+		$("input[name=levelUpTest]").click(function(){
+			$("#WORK_DIV").val("do_nextState");
+			setFormValue(this);
+		});
+		//거절의 경우
+		$("input[name=rejectTest]").click(function(){
+			$("#WORK_DIV").val("do_reject");
+			setFormValue(this);
+		});
+		//삭제의 경우
+		$("input[name=deleteTest]").click(function(){
+			$("#WORK_DIV").val("do_delete");
+			setFormValue(this);
 		});
 	});
 
 </script>
 </head>
 <body>
-		<form action="levelUpTest.do" method="post" name="testfrm">
-			<input type="hidden" id="exp_id" name="exp_id"/>
-			<input type="hidden" id="rsm_id" name="rsm_id"/>
+		<form action="workdiv.do" method="post" name="testfrm">
+			<input type="hidden" id="WORK_DIV" name="WORK_DIV"/>
+			<input type="hidden" id="EXP_ID" name="EXP_ID"/>
+			<input type="hidden" id="RSM_ID" name="RSM_ID"/>
 		</form>
 
 
@@ -52,6 +65,8 @@
 					<th class="text-center">상태텍스트</th>		
 					<th class="text-center">작성일</th>
 					<th class="text-center">등급업 테스트</th>
+					<th class="text-center">거절 테스트</th>
+					<th class="text-center">삭제 테스트</th>
 				</tr>							
 			</thead>
 			<tbody>
@@ -68,6 +83,8 @@
 							<td class="text-right"><c:out value="${orders.ord_state_nm}"/></td>
 							<td class="text-right"><c:out value="${orders.ord_reg_dt}"/></td>
 							<td class="text-right"><input type="button" name="levelUpTest" value="레벨업!"/></td>
+							<td class="text-right"><input type="button" name="rejectTest" value="거절"/></td>
+							<td class="text-right"><input type="button" name="deleteTest" value="삭제"/></td>
 						</tr>
 					</c:forEach>
 				</c:when>

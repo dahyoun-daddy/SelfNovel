@@ -18,6 +18,7 @@ import com.sn.orders.domain.OrdersVO;
  * OrdersDaoImpl 
  * detail : 의뢰테이블 dao 인터페이스 
  * 최초작성: 2017-09-21
+ * 최종수정: 2017-09-22
  * @author @author SeulGi <dev.leewisdom92@gmail.com>
  *
  */
@@ -159,6 +160,27 @@ public class OrdersDaoImpl implements OrdersDao {
 	public int do_nextState(DTO dto) {
 		//아래의 이름으로 codes.xml에서 해당하는 select를 불러온다.
 		String statement = namespace +".do_nextState";
+		
+		log.debug("in do_nextState========================");
+		log.debug("statement: "+statement);
+		log.debug("dto: "+dto.toString());
+		log.debug("=======================================");
+		
+		OrdersVO inUserVO = (OrdersVO)dto;
+		return sqlSession.update(statement, inUserVO);		
+	}
+	
+	/**
+	 * do_reject
+	 * detail: 거절한다.
+	 * 
+	 * 최초작성: 2017-09-22
+	 * @param dto
+	 * @return
+	 */
+	public int do_reject(DTO dto) {
+		//아래의 이름으로 codes.xml에서 해당하는 select를 불러온다.
+		String statement = namespace +".do_reject";
 		
 		log.debug("in do_nextState========================");
 		log.debug("statement: "+statement);
