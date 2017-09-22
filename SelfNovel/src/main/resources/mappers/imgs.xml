@@ -50,7 +50,7 @@
 	
 	<select id="do_delete" parameterType="ImgVO" resultType="ImgVO">
 		UPDATE IMAGES
-		   SET IMG_USE_YN = #{img_use_yn}
+		   SET IMG_USE_YN = 0
 		 WHERE IMG_ID = #{img_id}
 	</select>
 	

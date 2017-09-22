@@ -48,26 +48,33 @@ public class testController {
 	@RequestMapping(value = "/img.do", method = RequestMethod.GET)
 	public String do_save(HttpServletRequest req) {
 		ImgVO imgVO = new ImgVO();
+		int flag = 0;
 		
-		imgVO.setImg_id(6);
-		imgVO.setImg_num(7);
-		imgVO.setImg_org_nm("test7");
-		imgVO.setImg_path("test7");
-		imgVO.setImg_sv_nm("test7");
+		imgVO.setImg_id(9);
+		imgVO.setImg_num(9);
+		imgVO.setImg_org_nm("test9");
+		imgVO.setImg_path("test9");
+		imgVO.setImg_sv_nm("test9");
 		imgVO.setImg_use_yn(1);
 		
-		//String workDiv = req.getParameter("workDiv");
-		String workDiv = "6";
-		int flag = 0;
-		// workDiv==null?do_save/do_update
-		if (workDiv == null || workDiv.trim().equals("")) {
-			log.debug("======do_save======");
-			flag = imgDaoImpl.do_save(imgVO);
-			log.debug("======do_save======");
-		} else {
-			log.debug("======do_update======");
-			flag = imgDaoImpl.do_update(imgVO);
-		}
+		log.debug("==========do_save==========");
+		imgDao.do_save(imgVO);
+		
+		imgVO.setImg_id(9);
+		imgVO.setImg_num(5);
+		imgVO.setImg_org_nm("test09");
+		imgVO.setImg_path("test09");
+		imgVO.setImg_sv_nm("test09");
+		imgVO.setImg_use_yn(1);
+		
+		log.debug("==========do_update==========");
+		imgDao.do_update(imgVO);
+		
+		imgVO.setImg_id(9);
+		
+		log.debug("==========do_delete==========");
+		imgDao.do_delete(imgVO);
+		
 
 		log.debug("flag: " + flag);
 		
