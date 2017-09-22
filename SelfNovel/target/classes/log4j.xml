@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.sist">
+	<logger name="com.sn">
 		<level value="debug" />
 	</logger>
 	

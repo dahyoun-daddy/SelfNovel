@@ -4,7 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sn.orders.repository.mappers.orders">
 
-	<insert id="do_save" parameterType="CodesVO">
+	<!-- do_save -->
+	<insert id="do_save" parameterType="OrdersVO">
 		INSERT
 		INTO ORDERS
 		  (
@@ -21,18 +22,76 @@
 		    #{u_id},
 		    #{ord_state},
 		    sysdate
-		  );
+		  )
 	</insert>
 	
-	<select id="do_search" parameterType="com.sn.orders.domain.OrdersVO">
+	<!-- do_search -->
+	<!-- parameter로 map을 사용한다. -->
+	<!-- 필요 String: page_num, page_size, isExpert, (expert_id or u_id)-->
+	<!-- 
+		isExpert가 exp_id일시 exp_id가 검색조건
+		isExpert가 u_id일시 u_id가 검색조건
+	 -->
+	<select id="do_search" parameterType="String" resultType="OrdersVO">
+		SELECT
+		  "rsm_id",
+		  "exp_id",
+		  "u_id",
+		  "ord_state",
+		  "ord_reg_dt",
+		  GET_CD_NM('C001',"ord_state") as ord_state_nm,
+		  GET_RS_NM("rsm_id") as rsm_title,
+		  no,
+		  total_cnt
+		FROM (
+	      SELECT A."rsm_id",
+		 		 A."exp_id",
+		  		 A."u_id",
+		  		 A."ord_state",
+		  		 A."ord_reg_dt",
+	             ROW_NUMBER() OVER (ORDER BY A."ord_reg_dt" DESC) AS no,
+	             COUNT(*) OVER() AS total_cnt
+	      FROM ORDERS A
+	      <include refid="orderIdSearchCondition" /> 
+	    )
+		WHERE no BETWEEN (#{PAGE_SIZE}*(#{PAGE_NUM}-1)+1) AND (#{PAGE_SIZE}*(#{PAGE_NUM}))
 	</select>
 	
-	<delete id="do_delete" parameterType="com.sn.orders.domain.OrdersVO">
+	<sql id="orderIdSearchCondition">
+ 		<where>    
+		    <choose>
+		    	<when test="SEARCH_DIV == 'exp'">
+		    		AND A."exp_id"=#{SEARCH_ID}
+		    	</when>
+		    	<when test="SEARCH_DIV == 'user'">
+		    		AND A."u_id"=#{SEARCH_ID}
+		    	</when>
+		    	<otherwise>
+		    	
+		    	</otherwise>
+		    </choose>
+		</where>      	
+ 	</sql>
+	
+	<!-- do_delete -->
+	<!-- 
+		실제 삭제하지는 않으며 플래그만 0으로 바꾸면 될것같은데 플래그를 안만들었네... 
+	-->
+	<delete id="do_delete" parameterType="OrdersVO">
 	</delete>
 	
-	<insert id="do_update" parameterType="com.sn.orders.domain.OrdersVO">
+	<insert id="do_update" parameterType="OrdersVO">
 	</insert>
 
-	<select id="do_searchOne" parameterType="com.sn.orders.domain.OrdersVO">
+	<!-- resume 조회가 생기면 추가해도 될듯 -->
+	<select id="do_searchOne" parameterType="OrdersVO">
 	</select>
+	
+	<!-- do_nextState -->
+	<update id="do_nextState">
+		UPDATE ORDERS
+		SET "ord_state" = ORD_NEXT_STAT("ord_state")
+		WHERE "rsm_id"   = #{rsm_id}
+		  AND "exp_id"   = #{exp_id}
+	</update>
 </mapper>

@@ -16,9 +16,11 @@ public class OrdersVO extends DTO {
 	int	rsm_id			;	//	자소서 아이디(PK)(FK)		
 	String	exp_id		;	//	의뢰 받은 사람(PK)(FK)		
 	String	u_id		;	//	의뢰한 사람		
-	String	ord_state	;	//	상태(코드)		
+	String	ord_state	;	//	상태(코드)
 	String	ord_reg_dt	;	//	작성일		
-
+	
+	String	ord_state_nm;	//	상태(텍스트). db에서 꺼내올 때만 set한다.
+	String 	rsm_title	;	//	이력서 제목.
 	
 	/***********************************************/
 	//constructor
@@ -67,13 +69,25 @@ public class OrdersVO extends DTO {
 	public void setOrd_reg_dt(String ord_reg_dt) {
 		this.ord_reg_dt = ord_reg_dt;
 	}
-	
+	public String getOrd_state_nm() {
+		return ord_state_nm;
+	}
+	public void setOrd_state_nm(String ord_state_nm) {
+		this.ord_state_nm = ord_state_nm;
+	}
+	public String getRsm_title() {
+		return rsm_title;
+	}
+	public void setRsm_title(String rsm_title) {
+		this.rsm_title = rsm_title;
+	}
 	/***********************************************/
 	//method
 	/***********************************************/
 	@Override
 	public String toString() {
-		return "OrderVO [rsm_id=" + rsm_id + ", exp_id=" + exp_id + ", u_id=" + u_id + ", ord_state=" + ord_state
-				+ ", ord_reg_dt=" + ord_reg_dt + "]";
+		return "OrdersVO [rsm_id=" + rsm_id + ", exp_id=" + exp_id + ", u_id=" + u_id + ", ord_state=" + ord_state
+				+ ", ord_reg_dt=" + ord_reg_dt + ", ord_state_nm=" + ord_state_nm + ", rsm_title=" + rsm_title + "]";
 	}
+	
 }

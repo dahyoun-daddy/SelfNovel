@@ -1,5 +1,6 @@
 package com.sn.orders.dao;
 
+import com.sn.common.DTO;
 import com.sn.common.WorkDiv;
 
 /**
@@ -11,4 +12,13 @@ import com.sn.common.WorkDiv;
  */
 public interface OrdersDao extends WorkDiv {
 
+	/**
+	 * do_nextState
+	 * detail: 상태를 다음 값으로 업데이트시켜주는 메소드. sql함수를 사용한다. 최종단계에서 시도할 경우 최종단계를 반환한다. 정해진 값 이외를 입력하면 null을 반환한다.
+	 * 
+	 * 최초작성: 2017-09-22
+	 * @param dto
+	 * @return
+	 */
+	public int do_nextState(DTO dto);
 }
