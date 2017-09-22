@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.sn.codes.domain.CodesVO;
 import com.sn.common.DTO;
 import com.sn.img.domain.ImgVO;
+import com.sn.orders.domain.OrdersVO;
 
 @Repository
 public class ImgDaoImpl implements ImgDao {
@@ -22,6 +23,12 @@ public class ImgDaoImpl implements ImgDao {
 	
 	private final String namespace = "com.sn.img.repository.mappers.imgs";
 	
+	/**
+	 * do_save
+	 * detail: 저장
+	 * @param dto
+	 * @return flag
+	 */
 	@Override
 	public int do_save(DTO dto) {
 		String statement = namespace +".do_save";
@@ -35,6 +42,12 @@ public class ImgDaoImpl implements ImgDao {
 		return sqlSession.insert(statement, imgVO);
 	}
 
+	/**
+	 * do_search
+	 * detail: 다건조회
+	 * @param dto
+	 * @return List
+	 */
 	@Override
 	public List<?> do_search(DTO dto) {
 		String statement = namespace +".do_search";
@@ -49,18 +62,52 @@ public class ImgDaoImpl implements ImgDao {
 		return sqlSession.selectList(statement, imgVO);
 	}
 
+	/**
+	 * do_delete
+	 * detail: 삭제
+	 * @param dto
+	 * @return flag
+	 */
 	@Override
 	public int do_delete(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String statement = namespace +".do_delete";
+		
+		log.debug("in do_delete========================");
+		log.debug("statement: "+statement);
+		log.debug("dto: "+dto.toString());
+		log.debug("=======================================");
+		
+		ImgVO imgVO = (ImgVO)dto;
+		
+		return sqlSession.delete(statement, imgVO);
 	}
 
+	/**
+	 * do_update
+	 * detail: 수정
+	 * @param dto
+	 * @return flag
+	 */
 	@Override
 	public int do_update(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String statement = namespace +".do_update";
+		
+		log.debug("in do_delete========================");
+		log.debug("statement: "+statement);
+		log.debug("dto: "+dto.toString());
+		log.debug("=======================================");
+		
+		ImgVO imgVO = (ImgVO)dto;
+		
+		return sqlSession.update(statement, imgVO);
 	}
 
+	/**
+	 * do_searchOne
+	 * detail: 단건조회
+	 * @param dto
+	 * @return dto
+	 */
 	@Override
 	public DTO do_searchOne(DTO dto) {
 		String statement = namespace +".do_searchOne";

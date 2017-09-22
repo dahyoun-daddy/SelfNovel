@@ -36,7 +36,7 @@ public class testController {
 	CodesDao codesDao;
 	
 	/**
-	 * imgTest
+	 * img Test do_save
 	 */
 	@RequestMapping(value = "/img.do", method = RequestMethod.GET)
 	public String do_save(Locale locale, Model model) {
@@ -55,6 +55,9 @@ public class testController {
 		return "home";
 	}
 	
+	/**
+	 * img Test do_search & do_searchOne
+	 */
 	@RequestMapping(value = "/imgSearch.do", method = RequestMethod.GET)
 	public String do_search(Locale locale, Model model) {
 		ImgVO dto = new ImgVO();
@@ -67,6 +70,28 @@ public class testController {
 		dto.setImg_id(1);
 		ImgVO resultDTO = (ImgVO)imgDao.do_searchOne(dto);
 		log.debug("단건조회: "+resultDTO.toString());
+		
+		return "home";
+	}
+	
+	/**
+	 * img Test do_delete
+	 */
+	@RequestMapping(value = "/imgDelete.do", method = RequestMethod.GET)
+	public String do_delete(Locale locale, Model model) {
+		ImgVO dto = new ImgVO();
+		
+		
+		return "home";
+	}
+	
+	/**
+	 * img Test do_update
+	 */
+	@RequestMapping(value = "/imgUpdate.do", method = RequestMethod.GET)
+	public String do_update(Locale locale, Model model) {
+		ImgVO dto = new ImgVO();
+		
 		
 		return "home";
 	}
