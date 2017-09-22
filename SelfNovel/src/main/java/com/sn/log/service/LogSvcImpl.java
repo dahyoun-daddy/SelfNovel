@@ -7,22 +7,26 @@ import com.sn.common.DTO;
 import com.sn.log.dao.LogDao;
 import com.sn.log.domain.LogVO;
 @Service
-public class LogSvcNotTxImpl implements LogSvc {
+public class LogSvcImpl implements LogSvc {
 	@Autowired
-	LogDao logdao;
+	LogDao logDao;
+	
+    public void setLogDao(LogDao logDao) {
+    	this.logDao = logDao;
+    }	
 
 	@Override
 	public int debug(DTO dto) {
 		LogVO logDto = (LogVO)dto;
 		logDto.setLog_lv("DEBUG");
-		return logdao.do_save(dto);
+		return logDao.do_save(dto);
 	}
 
 	@Override
 	public int error(DTO dto) {
 		LogVO logDto = (LogVO)dto;
 		logDto.setLog_lv("ERROR");
-		return logdao.do_save(dto);
+		return logDao.do_save(dto);
 	}
 
 }

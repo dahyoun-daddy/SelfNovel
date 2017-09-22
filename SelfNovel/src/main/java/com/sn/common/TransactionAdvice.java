@@ -20,8 +20,11 @@ import com.sn.log.service.LogSvc;
 public class TransactionAdvice implements MethodInterceptor {
 	private static Logger log=Logger.getLogger(TransactionAdvice.class);
     PlatformTransactionManager transactionManager;
-    @Autowired
-    LogSvc logSvc;
+
+    LogSvc logSvc;    
+    public void setLogSvc(LogSvc logSvc) {
+    	this.logSvc = logSvc;
+    }
     
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
@@ -44,13 +47,13 @@ public class TransactionAdvice implements MethodInterceptor {
 			//시간측정 끝난시간
 			long endTime = System.currentTimeMillis();
 			log.debug("성능측정 - 소요시간: "+(endTime-startTime)+"ms");
-			//this.logSvc.debug(new LogVO("클래스패스", "성능측정 - 소요시간: "+(endTime-startTime)+"ms", "파람", "아이디", ""));
+			this.logSvc.debug(new LogVO("클래스패스", "성능측정 - 소요시간: "+(endTime-startTime)+"ms", "파람", "아이디", ""));
 			
 			return ret;
 		}catch(RuntimeException e) {
 			this.transactionManager.rollback(status);
 			log.debug("******************after rollback********************");
-			//this.logSvc.debug(new LogVO("클래스패스", "에러", "파람", "아이디", e.getMessage()));
+			this.logSvc.error(new LogVO("클래스패스", "에러", "파람", "아이디", e.getMessage()));
 			
 			throw e;
 		}

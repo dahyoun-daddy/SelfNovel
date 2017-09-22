@@ -19,11 +19,11 @@
 		  )
 		  VALUES
 		  (
-		    #{log_id},
+		    sysdate||#{log_id},
 		    #{log_class_path},
 		    #{log_sql},
 		    #{log_param},
-		    #{log_reg_dt},
+		    sysdate,
 		    #{log_reg_id},
 		    #{log_lv},
 		    #{log_errormsg}

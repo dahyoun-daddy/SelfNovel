@@ -45,7 +45,7 @@ public class OrdersController {
 	public ModelAndView main(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		//Trasjaction test
+		//Transaction test
 //		OrdersVO dto2 = new OrdersVO(1, "sty2002", "1", "1", "1","1");
 //		orderSvc.do_saveTx(dto2);
 		

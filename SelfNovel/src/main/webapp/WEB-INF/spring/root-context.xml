@@ -17,13 +17,23 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
 	<!-- ****************************for transaction**************************** -->
-	  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	 <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     	<property name="dataSource" ref="dataSource"/>
     </bean>
 	
     <bean id="transactionAdvice" class="com.sn.common.TransactionAdvice">
     	<property name="transactionManager" ref="transactionManager" />
+    	<property name="logSvc" ref="logSvc" />
     </bean>
+    
+    <!-- logtable -->
+    <bean id="logSvc" class="com.sn.log.service.LogSvcImpl">
+    	<property name="logDao" ref="logDao" />
+    </bean>	
+    
+    <bean id="logDao" class="com.sn.log.dao.LogDaoImpl">
+    	<property name="sqlSession" ref="sqlSession" />
+    </bean>	
     
     <!-- Tx PointCut -->
     <!-- 

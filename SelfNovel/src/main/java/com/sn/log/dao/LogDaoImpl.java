@@ -32,6 +32,10 @@ public class LogDaoImpl implements LogDao {
 	private SqlSessionTemplate sqlSession;
 	private final String namespace = "com.sn.logs.repository.mappers.logs";
 	
+	public void setSqlSession(SqlSessionTemplate sqlSession) {
+		this.sqlSession = sqlSession;
+	}
+
 	/***********************************************/
 	//method
 	/***********************************************/	
@@ -53,9 +57,10 @@ public class LogDaoImpl implements LogDao {
 		
 		LogVO inUserVO = (LogVO)dto;
 		
-		UUID firstuId= UUID.randomUUID();
-		UUID lastuId= UUID.randomUUID();		
-		inUserVO.setLog_id(firstuId.toString()+lastuId.toString());
+		UUID uId= UUID.randomUUID();		
+		inUserVO.setLog_id(uId.toString());
+		
+		log.debug("inUserVO: "+inUserVO.toString());
 		
 		return sqlSession.insert(statement, inUserVO);
 	}
