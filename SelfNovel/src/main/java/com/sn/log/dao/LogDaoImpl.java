@@ -1,6 +1,5 @@
 package com.sn.log.dao;
 
-import java.util.Hashtable;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sn.common.DTO;
-import com.sn.common.StringUtil;
 import com.sn.log.domain.LogVO;
-import com.sn.orders.domain.OrdersVO;
 
 /**
  * LogDaoImpl 

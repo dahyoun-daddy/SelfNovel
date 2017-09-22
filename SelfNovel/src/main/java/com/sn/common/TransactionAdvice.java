@@ -18,10 +18,24 @@ import com.sn.log.service.LogSvc;
  *
  */
 public class TransactionAdvice implements MethodInterceptor {
+	/***********************************************/
+	//field
+	/***********************************************/
 	private static Logger log=Logger.getLogger(TransactionAdvice.class);
     PlatformTransactionManager transactionManager;
-
-    LogSvc logSvc;    
+    /* for save log */
+    LogSvc logSvc; 
+    
+    
+	/***********************************************/
+	//setter
+	/***********************************************/
+    /**
+     * setLogSvc
+     * TransactionAdvice는 mvc패턴의 일부가 아니기 때문에(상단의 annotation이 없으므로), 별도의 setter로 넣어주어야 동작한다.
+     * 최초작성: 2017-09-22
+     * @param logSvc
+     */
     public void setLogSvc(LogSvc logSvc) {
     	this.logSvc = logSvc;
     }
@@ -30,6 +44,10 @@ public class TransactionAdvice implements MethodInterceptor {
 		this.transactionManager = transactionManager;
 	}
 
+	
+	/***********************************************/
+	//method
+	/***********************************************/
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 		TransactionStatus status=
