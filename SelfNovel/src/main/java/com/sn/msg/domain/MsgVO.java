@@ -22,7 +22,7 @@ public class MsgVO extends DTO {
 	private int	   rsm_id			;//글 아이디
 	private String msg_notify		;//신고 대상
 	
-	private int    read_yn			;//읽음여부
+	private int    msg_read_yn			;//읽음여부
 
 	
 	/***********************************************/
@@ -32,7 +32,7 @@ public class MsgVO extends DTO {
 		super();
 	}
 	public MsgVO(String msg_id, String msg_sender, String msg_receiver, String msg_content, int msg_sep,
-			String msg_reg_dt, int rsm_id, String msg_notify, int read_yn) {
+			String msg_reg_dt, int rsm_id, String msg_notify, int msg_read_yn) {
 		super();
 		this.msg_id = msg_id;
 		this.msg_sender = msg_sender;
@@ -42,7 +42,7 @@ public class MsgVO extends DTO {
 		this.msg_reg_dt = msg_reg_dt;
 		this.rsm_id = rsm_id;
 		this.msg_notify = msg_notify;
-		this.read_yn = read_yn;
+		this.msg_read_yn = msg_read_yn;
 	}	
 	
 	
@@ -97,11 +97,11 @@ public class MsgVO extends DTO {
 	public void setMsg_notify(String msg_notify) {
 		this.msg_notify = msg_notify;
 	}
-	public int getRead_yn() {
-		return read_yn;
+	public int getMsg_read_yn() {
+		return msg_read_yn;
 	}
-	public void setRead_yn(int read_yn) {
-		this.read_yn = read_yn;
+	public void setMsg_read_yn(int msg_read_yn) {
+		this.msg_read_yn = msg_read_yn;
 	}
 
 	
@@ -112,7 +112,7 @@ public class MsgVO extends DTO {
 	public String toString() {
 		return "MsgVO [msg_id=" + msg_id + ", msg_sender=" + msg_sender + ", msg_receiver=" + msg_receiver
 				+ ", msg_content=" + msg_content + ", msg_sep=" + msg_sep + ", msg_reg_dt=" + msg_reg_dt + ", rsm_id="
-				+ rsm_id + ", msg_notify=" + msg_notify + ", read_yn=" + read_yn + "]";
+				+ rsm_id + ", msg_notify=" + msg_notify + ", msg_read_yn=" + msg_read_yn + "]";
 	}	
 	
 	
