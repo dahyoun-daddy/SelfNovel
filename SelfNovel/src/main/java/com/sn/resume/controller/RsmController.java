@@ -21,4 +21,5 @@ public class RsmController {
 	public String do_search(HttpServletRequest req) {
 		return null;
 	}
+	//테스트
 }
