@@ -115,19 +115,19 @@
 	<!-- 전체조회(do_search) : TODO 검색조건 추가할 것 -->
 	<select id="do_search" parameterType="String"
 						   resultType="com.sn.resume.domain.RsmVO">
-		SELECT T1.*
-       , TO_CHAR(T1.reg_dt,'YYYY-MM-DD') AS REG_DT
-       , T1.TOTAL_CNT
-       , T1.RNUM
-		  FROM(                                                     
-				SELECT A.*                                                
-					   , ROW_NUMBER() OVER(ORDER BY A.RSM_REG_DT DESC) as RNUM 
-					   , COUNT(*) OVER () AS TOTAL_CNT                     
-				  FROM RESUME A	
-				  <!-- <include refid="resumeConditionFilter"/> -->
-		          ORDER BY A.RSM_REG_DT DESC
-			  ) T1   			  
-		WHERE RNUM BETWEEN (#{PAGE_SIZE} * (#{PAGE_NUM}-1)+1) AND (#{PAGE_SIZE} * (#{PAGE_NUM}-1)+#{PAGE_SIZE})
+		SELECT T1.*,
+		       TO_CHAR(T1.RSM_REG_DT, 'YYYY-MM-DD') AS REG_DT,    
+		       T1.RNUM AS NO
+		  FROM (
+		        SELECT A.*,
+		               B.U_NAME,
+		               ROW_NUMBER() OVER(ORDER BY A.RSM_REG_DT DESC) AS RNUM,
+		               COUNT(*) OVER() AS TOTALNO
+		          FROM RESUME A, USERS B
+		         WHERE A.U_ID = B.U_ID
+		         <!-- <include refid="resumeConditionFilter"/> -->
+		         ORDER BY A.RSM_REG_DT DESC) T1;      			  
+		 WHERE RNUM BETWEEN (#{PAGE_SIZE} * (#{PAGE_NUM}-1)+1) AND (#{PAGE_SIZE} * (#{PAGE_NUM}-1)+#{PAGE_SIZE})
 	</select>
 </mapper>  
   

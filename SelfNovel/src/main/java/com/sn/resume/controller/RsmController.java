@@ -15,11 +15,5 @@ public class RsmController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	RsmSvc rsmSvc;
-	
-	@RequestMapping(value="resume/do_search.do")
-	public String do_search(HttpServletRequest req) {
-		return null;
-	}
-	//테스트
+	RsmSvc rsmSvc;	
 }

@@ -25,6 +25,7 @@ public class RsmVO extends DTO {
 	private String rsm_count	 ;//조회수
 	private String rsm_use_yn    ;//공개 여부
 	private String rsm_ord_yn    ;//신청 여부
+	private String u_name		 ;//작성자 닉네임
 	
 	/***********************************************/
 	//constructor
@@ -204,6 +205,20 @@ public class RsmVO extends DTO {
 	 */
 	public void setRsm_ord_yn(String rsm_ord_yn) {
 		this.rsm_ord_yn = rsm_ord_yn;
+	}	
+
+	/**
+	 * @return the u_name
+	 */
+	public String getU_name() {
+		return u_name;
+	}
+
+	/**
+	 * @param u_name the u_name to set
+	 */
+	public void setU_name(String u_name) {
+		this.u_name = u_name;
 	}
 
 	/***********************************************/
