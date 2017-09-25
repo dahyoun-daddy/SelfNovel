@@ -1,5 +1,6 @@
 package com.sn.msg.dao;
 
+import com.sn.common.DTO;
 import com.sn.common.WorkDiv;
 /**
  * MsgDao 
@@ -10,5 +11,18 @@ import com.sn.common.WorkDiv;
  *
  */
 public interface MsgDao extends WorkDiv {
-
+	  /**
+	   * do_read
+	   * detail: 읽음 플래그 off
+	   * @param dto
+	   * @return flag
+	   */
+	public int do_read(DTO dto);
+	  /**
+	   * do_count
+	   * detail: 안읽은 메시지 수 조회
+	   * @param dto
+	   * @return flag
+	   */
+	public int do_count(DTO dto);
 }

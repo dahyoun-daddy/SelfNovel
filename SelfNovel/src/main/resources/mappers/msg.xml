@@ -3,5 +3,98 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sn.msg.repository.mappers.msg">
-
+	<insert id="do_save" parameterType="MsgVO">
+		INSERT
+		INTO MESSAGE
+		  (
+		    MSG_ID,
+		    MSG_SENDER,
+		    MSG_RECEIVER,
+		    MSG_CONTENT,
+		    MSG_SEP,
+		    MSG_REG_DT,
+		    RSM_ID,
+		    MSG_NOTIFY,
+		    MSG_READ_YN,
+		    MSG_USE_YN
+		  )
+		  VALUES
+		  (
+		    MSG_SEQ.NEXTVAL,
+		    #{msg_sender},
+		    #{msg_receiver},
+		    #{msg_content},
+		    #{msg_sep},
+		    SYSDATE,
+		    #{rsm_id},
+		    #{msg_notify},
+		    1,
+		    1
+		  )
+	</insert>
+	
+	<!-- do_search -->
+	<!-- 
+		msg_receiver: 
+		PAGE_SIZE	: 
+		PAGE_NUM	:
+	 -->
+	<select id="do_search" parameterType="String">
+		SELECT
+		  msg_id,
+		  msg_sender,
+		  msg_receiver,
+		  msg_content,
+		  msg_sep,
+		  msg_reg_dt,
+		  rsm_id,
+		  msg_notify,
+    	  msg_read_yn,
+     	  msg_use_yn,   
+		  no,
+		  total_cnt
+		FROM (
+	      SELECT A.*,
+	             ROW_NUMBER() OVER (ORDER BY A.msg_reg_dt DESC) AS no,
+	             COUNT(*) OVER() AS total_cnt
+	      FROM MESSAGE A
+	      WHERE A.msg_receiver = #{msg_receiver}
+	      	AND msg_use_yn = 1
+	      ORDER BY A.msg_reg_dt 
+	    )
+		WHERE no BETWEEN (#{PAGE_SIZE}*(#{PAGE_NUM}-1)+1) AND (#{PAGE_SIZE}*(#{PAGE_NUM}))
+	</select>
+	
+	<!-- do_delete -->
+	<!-- 
+		실제 삭제하지는 않으며 플래그만 0으로 바꾸면 됨
+	-->
+	<delete id="do_delete" parameterType="MsgVO">
+		UPDATE MESSAGE
+		SET msg_use_yn = 0
+		WHERE MSG_ID   = #{msg_id}
+	</delete>
+	
+	<!-- do_read -->
+	<!-- 
+		0: 읽음
+		1: 안읽음
+	-->
+	<delete id="do_read" parameterType="MsgVO">
+		UPDATE MESSAGE
+		SET msg_read_yn = 0
+		WHERE MSG_ID   = #{msg_id}
+	</delete>
+	
+	<!-- do_count -->
+	<!-- 
+		안 읽은 메시지 수 반환
+	-->
+	<delete id="do_count" parameterType="MsgVO">
+		SELECT 
+			COUNT(*) AS total_cnt
+	    WHERE A.msg_receiver = #{msg_receiver}
+	      AND msg_use_yn = 1
+	      AND msg_read_yn = 1
+	</delete>
 </mapper>  

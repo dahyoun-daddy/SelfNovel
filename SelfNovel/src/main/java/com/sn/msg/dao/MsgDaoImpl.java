@@ -1,6 +1,5 @@
 package com.sn.msg.dao;
 
-import java.util.Hashtable;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sn.common.DTO;
-import com.sn.common.StringUtil;
 import com.sn.msg.domain.MsgVO;
-import com.sn.orders.domain.OrdersVO;
 /**
  * MsgDaoImpl 
  * detail : 메시지 Dao 구현체
@@ -130,5 +127,43 @@ public class MsgDaoImpl implements MsgDao {
 		
 		MsgVO inUserVO = (MsgVO)dto;
 		return sqlSession.selectOne(statement, inUserVO);
+	}
+	  /**
+	   * do_read
+	   * detail: 읽음 플래그 off
+	   * @param dto
+	   * @return flag
+	   */
+	@Override
+	public int do_read(DTO dto) {
+		//아래의 이름으로 codes.xml에서 해당하는 select를 불러온다.
+		String statement = namespace +".do_read";
+		
+		log.debug("in do_read========================");
+		log.debug("statement: "+statement);
+		log.debug("dto: "+dto.toString());
+		log.debug("=======================================");
+		
+		MsgVO inUserVO = (MsgVO)dto;
+		return sqlSession.selectOne(statement, inUserVO);		
+	}
+	  /**
+	   * do_count
+	   * detail: 읽음 플래그 off
+	   * @param dto
+	   * @return flag
+	   */
+	@Override
+	public int do_count(DTO dto) {
+		//아래의 이름으로 codes.xml에서 해당하는 select를 불러온다.
+		String statement = namespace +".do_count";
+		
+		log.debug("in do_count========================");
+		log.debug("statement: "+statement);
+		log.debug("dto: "+dto.toString());
+		log.debug("=======================================");
+		
+		MsgVO inUserVO = (MsgVO)dto;
+		return sqlSession.selectOne(statement, inUserVO);		
 	}
 }
