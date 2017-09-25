@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.sn.common.DTO;
 import com.sn.msg.domain.MsgVO;
@@ -17,6 +18,7 @@ import com.sn.msg.domain.MsgVO;
  * @author SeulGi <dev.leewisdom92@gmail.com>
  *
  */
+@Repository
 public class MsgDaoImpl implements MsgDao {
 	/***********************************************/
 	//field
