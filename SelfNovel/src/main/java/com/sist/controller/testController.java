@@ -43,6 +43,30 @@ public class testController {
 	CodesDao codesDao;
 	
 	/**
+	 * img Test resume_list
+	 */
+	@RequestMapping(value="resume/resumeList.do")
+	public String resumeList() {
+		log.debug("===================");
+		log.debug("=======resume======");
+		log.debug("===================");
+		
+		return "resume/resume_list";
+	}
+
+	/**
+	 * img Test resume_view
+	 */
+	@RequestMapping(value="resume/resumeview.do")
+	public String resumeview() {
+		log.debug("===================");
+		log.debug("=======resume======");
+		log.debug("===================");
+		
+		return "resume/resume_view";
+	}
+	
+	/**
 	 * img Test do_save
 	 */
 	@RequestMapping(value = "/img.do", method = RequestMethod.GET)
