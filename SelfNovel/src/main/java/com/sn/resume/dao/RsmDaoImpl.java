@@ -1,5 +1,6 @@
 package com.sn.resume.dao;
 
+import java.util.Hashtable;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -28,7 +29,8 @@ public class RsmDaoImpl implements RsmDao {
 	private final String namespace ="com.sn.resume.repository.mappers.resume";
 	
 	/**
-	 * 저장기능
+	 * do_save
+	 * detail : 삽입
 	 */
 	@Override
 	public int do_save(DTO dto) {
@@ -39,43 +41,101 @@ public class RsmDaoImpl implements RsmDao {
 	}
 	
 	/**
-	 * 전체 조회 및 검색기능
+	 * do_search
+	 * detail : 전체 조회 및 검색
 	 */
 	@Override
 	public List<?> do_search(DTO dto) {
-		// TODO
-		return null;
+		String statement = namespace +".do_search";//resume.xml연결
+		RsmVO inRsmVO = (RsmVO)dto;//파라미터 주입
+		
+		Hashtable<String, String> searchParam = null;//검색조건 초기화
+		searchParam = inRsmVO.getParam();//검색조건 주입
+		
+		int page_size = 10;
+		int page_num = 1;
+		
+		if(searchParam.get("pageSize")!=null)//page_size:10,50,100
+			page_size = Integer.parseInt(searchParam.get("pageSize").toString());
+		
+		if(searchParam.get("pageNo") !=null)//page_num:1,2,3,....
+			page_num = Integer.parseInt(searchParam.get("pageNo").toString());
+		
+		searchParam.put("PAGE_SIZE", page_size+"");
+		searchParam.put("PAGE_NUM", page_num+"");
+		
+		String searchWord  = searchParam.get("searchWord").toString();
+		String searchDiv   = searchParam.get("searchDiv").toString();
+		
+		searchParam.put("SEARCH_DIV", searchDiv);
+		searchParam.put("SEARCH_WORD", searchWord);
+		
+		return sqlSession.selectList(statement, searchParam);
 	}
 
 	/**
-	 * 삭제기능
+	 * do_delete
+	 * detail : 삭제
 	 */
 	@Override
 	public int do_delete(DTO dto) {
 		String statement = namespace +".do_delete";//resume.xml연결
 		RsmVO  inRsmVO   = (RsmVO)dto;             //파라미터 주입
 				
-		return sqlSession.insert(statement, inRsmVO);
+		return sqlSession.update(statement, inRsmVO);
 	}
 
 	/**
-	 * 수정기능
+	 * do_update
+	 * detail : 수정
 	 */
 	@Override
 	public int do_update(DTO dto) {
 		String statement = namespace +".do_update";//resume.xml연결
 		RsmVO  inRsmVO   = (RsmVO)dto;             //파라미터 주입
 				
-		return sqlSession.insert(statement, inRsmVO);
+		return sqlSession.update(statement, inRsmVO);
 	}
+	
+	/**
+	 * do_update_recommend
+	 * detail : 추천수 증가
+	 * @param dto
+	 * @return
+	 */
+	@Override
+	public int do_update_recommend(DTO dto) {
+		String statement = namespace +".do_update_recommend";//resume.xml연결
+		RsmVO  inRsmVO   = (RsmVO)dto;//파라미터 주입
+				
+		return sqlSession.update(statement, inRsmVO);
+	}
+	
+	/**
+	 * do_update_count
+	 * detail : 조회수 증가
+	 * @param dto
+	 * @return
+	 */
+	@Override
+	public int do_update_count(DTO dto) {
+		String statement = namespace +".do_update_count";//resume.xml연결
+		RsmVO  inRsmVO   = (RsmVO)dto;//파라미터 주입
+				
+		return sqlSession.update(statement, inRsmVO);
+	}
+	
 
 	/**
-	 * 단건조회 기능
+	 * do_searchOne
+	 * detail : 단건조회 기능
 	 */
 	@Override
 	public DTO do_searchOne(DTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		String statement = namespace +".do_searchOne";//resume.xml연결		
+		RsmVO inRsmVO = (RsmVO)dto;//파라미터 주입
+		
+		return sqlSession.selectOne(statement, inRsmVO);
 	}
 
 }

@@ -9,7 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sn.common.DTO;
+import com.sn.resume.domain.ItmVO;
 
+/**
+ * ItmDaoImpl
+ * detail : 항목 테이블 DaoImpl
+ * @author MinSeok <dev.edwinner@gmail.com>
+ *
+ */
 @Repository
 public class ItmDaoImpl implements ItmDao {
 	
@@ -17,34 +24,59 @@ public class ItmDaoImpl implements ItmDao {
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+	
+	private final String namespace ="com.sn.item.repository.mappers.item";
 
+	/**
+	 * do_save
+	 * detail : 삽입
+	 */
 	@Override
 	public int do_save(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String statement = namespace +".do_save";//resume.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입				
+		return sqlSession.insert(statement, inItmVO);		
 	}
 
+	/**
+	 * do_search
+	 * detail : 검색  
+	 */
 	@Override
 	public List<?> do_search(DTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		String statement = namespace +".do_search";//resume.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입
+		return sqlSession.selectList(statement, inItmVO);
 	}
 
+	/**
+	 * do_delete
+	 * detail : 삭제
+	 */
 	@Override
 	public int do_delete(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String statement = namespace +".do_delete";//resume.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입
+		return sqlSession.update(statement, inItmVO);
 	}
 
+	/**
+	 * do_update
+	 * detail : 수정
+	 */
 	@Override
 	public int do_update(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		String statement = namespace +".do_delete";//resume.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입
+		return sqlSession.update(statement, inItmVO);
 	}
 
+	/**
+	 * 단건 조회
+	 */
 	@Override
 	public DTO do_searchOne(DTO dto) {
-		// TODO Auto-generated method stub
+		//DO NOT USE
 		return null;
 	}
 
