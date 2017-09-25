@@ -57,6 +57,7 @@
 		<table id="userTable" class="table table-bordered table-hover table-condensed">
 			<thead>
 				<tr>
+					<th class="text-center">체크박스</th>
 					<th class="text-center">번호</th>
 					<th class="text-center">제목</th>
 					<th class="text-center">전문가</th>
@@ -74,7 +75,8 @@
 				<c:when test="${ordersList.size()>0}">
 					<c:forEach var="orders" items="${ordersList}" begin="0">
 						<tr>
-							<input type="hidden" name="rsm_id" value="${orders.rsm_id}"/>
+							<input type="hidden" name="rsm_id" value="체크박스"/>
+							<td class="text-center"><c:out value="${orders.no}"/></td>
 							<td class="text-center"><c:out value="${orders.no}"/></td>
 							<td class="text-right"><c:out value="${orders.rsm_title}"/></td>
 							<td class="text-right"><c:out value="${orders.exp_id}"/></td>
