@@ -45,10 +45,22 @@ public class testController {
 	/**
 	 * img Test resume_list
 	 */
+	@RequestMapping(value="expert/expertList.do")
+	public String expertList() {
+		log.debug("===================");
+		log.debug("=======expert======");
+		log.debug("===================");
+		
+		return "expert/expert_list";
+	}
+	
+	/**
+	 * img Test resume_list
+	 */
 	@RequestMapping(value="resume/resumeList.do")
 	public String resumeList() {
 		log.debug("===================");
-		log.debug("=======resume======");
+		log.debug("=======resumeList======");
 		log.debug("===================");
 		
 		return "resume/resume_list";
@@ -60,7 +72,7 @@ public class testController {
 	@RequestMapping(value="resume/resumeview.do")
 	public String resumeview() {
 		log.debug("===================");
-		log.debug("=======resume======");
+		log.debug("=======resumeview======");
 		log.debug("===================");
 		
 		return "resume/resume_view";
