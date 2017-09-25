@@ -1,3 +1,4 @@
+<%@page import="com.sn.common.OrdersUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("utf-8"); %>
@@ -17,7 +18,7 @@
 		//상태변경 쿼리 테스트입니다. 버튼을 클릭하면 해당 row의 정보를 긁어와 던지도록 만들었으니 나중에 view만들때도 재활용하면 될것같습니다.
 		function setFormValue(element){
 			var record = $(element).parents("tr");			
-			var exp_id = $(record).find('td').eq(2).text();
+			var exp_id = $(record).find('td').eq(3).text();//exp_id의 index
 			var rsm_id = $(record).find('input[name=rsm_id]').val();
 			
 			$("#EXP_ID").val(exp_id);
@@ -32,6 +33,11 @@
 			$("#WORK_DIV").val("do_nextState");
 			setFormValue(this);
 		});
+		//수락의 경우
+		$("input[name=signTest]").click(function(){
+			$("#WORK_DIV").val("do_nextState");
+			setFormValue(this);
+		});
 		//거절의 경우
 		$("input[name=rejectTest]").click(function(){
 			$("#WORK_DIV").val("do_reject");
@@ -42,6 +48,27 @@
 			$("#WORK_DIV").val("do_delete");
 			setFormValue(this);
 		});
+		
+		////////////////////////////////////////////////////////////
+		//선택삭제
+		$("#doDeleteList").click(function(){			
+			//체크박스 리스트 갖고온다.
+			var userArray = new Array();
+			$(":checkbox[name='chkList']:checked").each(function(idx,row){
+				// element == this
+				var record = $(row).parents("tr");
+				var id = $(record).find('input[name=rsm_id]').val();
+				
+				console.log(id);
+			});	
+		});
+		
+		/********************************************************/
+		/* allCheck */
+		/********************************************************/		
+	   	 $('#allCheck').on('change', function(){
+			  $("input[name='chkList']").prop('checked', this.checked);
+		 });
 	});
 
 </script>
@@ -57,7 +84,7 @@
 		<table id="userTable" class="table table-bordered table-hover table-condensed">
 			<thead>
 				<tr>
-					<th class="text-center">체크박스</th>
+					<th class="text-center"><input id="allCheck" type="checkbox"/></th>
 					<th class="text-center">번호</th>
 					<th class="text-center">제목</th>
 					<th class="text-center">전문가</th>
@@ -75,8 +102,8 @@
 				<c:when test="${ordersList.size()>0}">
 					<c:forEach var="orders" items="${ordersList}" begin="0">
 						<tr>
-							<input type="hidden" name="rsm_id" value="체크박스"/>
-							<td class="text-center"><c:out value="${orders.no}"/></td>
+							<input type="hidden" name="rsm_id" value="${orders.rsm_id}"/>
+							<td class="text-center"><input type="checkbox" name="chkList"/></td>
 							<td class="text-center"><c:out value="${orders.no}"/></td>
 							<td class="text-right"><c:out value="${orders.rsm_title}"/></td>
 							<td class="text-right"><c:out value="${orders.exp_id}"/></td>
@@ -85,7 +112,26 @@
 							<td class="text-right"><c:out value="${orders.ord_state_nm}"/></td>
 							<td class="text-right"><c:out value="${orders.ord_reg_dt}"/></td>
 							<td class="text-right"><input type="button" name="levelUpTest" value="레벨업!"/></td>
-							<td class="text-right"><input type="button" name="rejectTest" value="거절"/></td>
+							<td class="text-right">
+								<c:choose>
+									<c:when test="${orders.ord_state eq 10}">
+										<input type='button' name='rejectTest' value='거절' disabled='disabled'/>
+									</c:when>
+									<c:when test="${orders.ord_state eq 20}">
+										<input type='button' name='signTest' value='수락'/>
+										<input type='button' name='rejectTest' value='거절'/>
+									</c:when>
+									<c:when test="${orders.ord_state eq 30}">
+										<input type='button' name='signTest' value='첨삭 완료'/>
+									</c:when>
+									<c:when test="${orders.ord_state eq 40}">
+										<input type='button' name='signTest' value='첨삭 완료' disabled='disabled'/>
+									</c:when>
+									<c:when test="${orders.ord_state eq 50}">
+										<input type='button' name='signTest' value='의뢰 완료' disabled='disabled'/>
+									</c:when>																		
+								</c:choose>
+							</td>
 							<td class="text-right"><input type="button" name="deleteTest" value="삭제"/></td>
 						</tr>
 					</c:forEach>
@@ -95,6 +141,7 @@
 				</c:otherwise>
 			</c:choose>
 			</tbody>
-		</table>	
+		</table>
+		<input type='button' id='doDeleteList' value='선택 삭제'/>	
 </body>
 </html>

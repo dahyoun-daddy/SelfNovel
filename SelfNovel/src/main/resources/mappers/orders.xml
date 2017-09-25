@@ -57,7 +57,7 @@
 	             COUNT(*) OVER() AS total_cnt
 	      FROM ORDERS A
 	      <include refid="orderIdSearchCondition" />
-	      ORDER BY A.ord_reg_dt 
+	      ORDER BY A.ord_reg_dt DESC
 	    )
 		WHERE no BETWEEN (#{PAGE_SIZE}*(#{PAGE_NUM}-1)+1) AND (#{PAGE_SIZE}*(#{PAGE_NUM}))
 	</select>
