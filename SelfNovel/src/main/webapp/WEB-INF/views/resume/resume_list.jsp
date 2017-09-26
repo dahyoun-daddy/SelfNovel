@@ -15,7 +15,7 @@
 	***************************/
 	int    bottomCount = 10;//하단에 표시될 페이지 수
 	String searchDiv = "";	//검색구분
-	String searchWord = "";	//검색어
+	String searchWord = "";	//검색어	
 	String page_size = "10";//한 페이지에 표시될 글의 수
 	String page_num = "1";	//페이지 번호
 	int    totalCnt = 0;	//총글수
@@ -29,7 +29,7 @@
 
 	//page_size 및 page_num을 Integer값으로 넘기기 위한 캐스팅
 	int oPage_size = Integer.parseInt(page_size);
-	int oPage_num = Integer.parseInt(page_num);	
+	int oPage_num = Integer.parseInt(page_num);
 %> 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -40,14 +40,18 @@
 <!-- JQuery CDN -->
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <!-- BootStrap CDN -->
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
 
 <script type="text/javascript">
-	//paiging 이동
+
+	/**************************
+	* 페이지네이션 담당 함수                     *
+	***************************/
 	function do_search_page(url, page_num){
 	    console.log(url +"\t"+ page_num);
 	    var frm = document.frm;
@@ -55,6 +59,51 @@
 	    frm.action = url;
 	    frm.submit();
 	}
+	
+	/**************************
+	* Jquery ready            
+	***************************/
+	$(document).ready(function(){	
+		
+		/*******************
+		* 체크박스 유지 처리
+		********************/
+		var searchCat = $("#search_category").val();
+		var chkCat = searchCat.split("&");		
+		$(chkCat).each(function(index, item){
+			$("input[name=categoryChk]:checkbox").each(function(cIndex, cItem){				
+				if(this.value == item){
+					this.checked = true;
+				}
+			});
+		});
+		
+		/**************************
+		* '검색'버튼 클릭시 이벤트
+		* 1. 체크된 모든 카테고리 read
+		* 2. 정렬기준 옵션 read
+		* 3. submit!
+		***************************/
+		$("#btn_search").on("click", function(){
+			var param = "";	
+			$("input[name=categoryChk]:checked").each(function() {
+				if(param == ""){
+					param = $(this).val();
+				}else{
+					param = param + "&" + $(this).val();	
+				}//close if
+			});//close each
+			
+			$("#page_num").val("1");
+			$("#search_category").val(param);
+			
+ 			var frm = document.frm;
+			frm.action = "do_search.do";
+			frm.submit(); 
+
+		});//close btn_search_on_click		
+	});//close document ready
+	
 </script>
 
 <title>Insert title here</title>
@@ -62,46 +111,44 @@
 <body>
 	<h2>자기소개서</h2>
 	<hr/>
-	<form action="#" name="frm" method="post" class="form-inline">
-		<input type="hidden"  name="page_num" id="page_num" value="<%=page_num %>">
+	<form action="#" name="frm" method="post" class="form-inline">		
+		<input type="hidden" name="page_num" id="page_num" value="<%=page_num %>">		
+		<input type="hidden" name="search_category" id="search_category" value="${searchCat}">
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="600px;">
 			<tr>
 				<td style="text-align: center;">분야</td>
 				<td>
-					<input type="checkbox">유통·무역</input>
-					<input type="checkbox">영업고객상담</input>
-					<input type="checkbox">IT인터넷</input>
-					<input type="checkbox">건설</input><br/>
-					<input type="checkbox">생산·제조</input>
-					<input type="checkbox">경영사무</input>
-					<input type="checkbox">전문직</input>
-					<input type="checkbox">서비스</input><br/>
-					<input type="checkbox">디자인</input>
-					<input type="checkbox">미디어</input>
-					<input type="checkbox">의료</input>
-					<input type="checkbox">교육</input>
-					<input type="checkbox">특수계층·공금</input>
+					<input type="checkbox" name="categoryChk" value="1">서비스업
+					<input type="checkbox" name="categoryChk" value="2">제조·화학
+					<input type="checkbox" name="categoryChk" value="3">의료·제약·복지
+					<input type="checkbox" name="categoryChk" value="4">판매·유통
+					<input type="checkbox" name="categoryChk" value="5">교육업
+					<input type="checkbox" name="categoryChk" value="6">건설업
+					<input type="checkbox" name="categoryChk" value="7">IT·웹·통신
+					<input type="checkbox" name="categoryChk" value="8">미디어·디자인
+					<input type="checkbox" name="categoryChk" value="9">은행·금융업
+					<input type="checkbox" name="categoryChk" value="10">기관·협회
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align: center;">검색</td>
 				<td>
 					<input type="text" />
-					<input type="submit" value="검색"/>
+					<button type="button" id="btn_search">검색</button>
 				</td>
 			</tr>
 			<tr>
-				<td style="text-align: center;" colspan="2">총 n건이 검색되었습니다.</td>
+				<td style="text-align: center;" colspan="2">총 ${totalCnt}건이 검색되었습니다.</td>
 			</tr>
 		</table> 
 		<hr/>
 		<div align="right">
-			<select class="form-control input-sm">
-				<option value="">정렬기준</option>
-				<option value="최신순">최신순</option>
-				<option value="조회순">조회순</option>
-				<option value="추천순">추천순</option>
+			<select class="form-control input-sm" id="searchDiv" name="searchDiv">
+				<option value="10">정렬기준</option>
+				<option value="10">최신순</option>
+				<option value="20">조회순</option>
+				<option value="30">추천순</option>
 			</select>
 		</div>
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
@@ -113,33 +160,37 @@
 				<tr>
 					<th colspan="6">..........</th>
 				</tr>
-				<th style="text-align: center;">글번호</th>
-				<th style="text-align: center;">작성자</th>
-				<th style="text-align: center;">제목</th>
-				<th style="text-align: center;">작성일</th>
-				<th style="text-align: center;">조회순</th>
-				<th style="text-align: center;">추천순</th>
+				<tr>
+					<th style="text-align: center;">글번호</th>
+					<th style="text-align: center;">작성자</th>
+					<th style="text-align: center;">제목</th>
+					<th style="text-align: center;">작성일</th>
+					<th style="text-align: center;">조회수</th>
+					<th style="text-align: center;">추천수</th>
+				</tr>
 			</thead>
 			<tbody>
-			<c:choose>
-            <c:when test="${list.size()>0}" >
-                <c:forEach var="rsmVo" items="${list}">
-		                <tr>	                	
-		                    <td class="text-center"><c:out value="${rsmVo.no}"/></td>
-		                    <td class="text-left"><c:out value="${rsmVo.u_name}"/></td>
-		                    <td class="text-left"><c:out value="${rsmVo.rsm_title}"/></td>
-		                    <td class="text-center"><c:out value="${rsmVo.rsm_reg_dt}"/></td>
-		                    <td class="text-right"><c:out value="${rsmVo.rsm_count}"/></td>
-		                    <td class="text-right"><c:out value="${rsmVo.rsm_recommend}"/></td>
-		                </tr>       
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <tr >
-                    <td colspan="99">등록된 게시글이 없습니다.</td>
-                </tr>    
-            </c:otherwise>
-        </c:choose>
+				<!-- c:choose 게시물 List를 출력하는 부분입니다.-->
+				<c:choose>
+		            <c:when test="${list.size()>0}" >
+		                <c:forEach var="rsmVo" items="${list}">
+							<tr>	                	
+								<td class="text-center"><c:out value="${rsmVo.no}"/></td>
+								<td class="text-left"><c:out value="${rsmVo.u_name}"/></td>
+								<td class="text-left"><c:out value="${rsmVo.rsm_title}"/></td>
+								<td class="text-center"><c:out value="${rsmVo.rsm_reg_dt}"/></td>
+								<td class="text-right"><c:out value="${rsmVo.rsm_count}"/></td>
+								<td class="text-right"><c:out value="${rsmVo.rsm_recommend}"/></td>
+							</tr>       
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<tr >
+							<td colspan="99">등록된 게시글이 없습니다.</td>
+		                </tr>    
+		            </c:otherwise>
+	        	</c:choose>	        	
+	        	<!-- //c:choose -->
 			</tbody>
 		</table>
 	</form>

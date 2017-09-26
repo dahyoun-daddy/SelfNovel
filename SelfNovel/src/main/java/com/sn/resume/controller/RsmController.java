@@ -18,8 +18,7 @@ import com.sn.resume.domain.RsmVO;
 
 @Controller
 public class RsmController {
-	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
+	private Logger log = LoggerFactory.getLogger(this.getClass());	
 	
 	@Autowired
 	RsmDao RsmDao;	
@@ -32,14 +31,15 @@ public class RsmController {
 	@RequestMapping(value="resume/do_search.do")
 	public ModelAndView resumeList(HttpServletRequest req) {
 		log.debug("===== RsmDaocontroller.do_search =====");
-		log.debug("dto : " + req.toString());
-		log.debug("======================================");
+		log.debug("req : " + req.toString());
+		log.debug("======================================");			
 		
 		//request로부터 parameter load
 		String p_pageSize = StringUtil.nvl(req.getParameter("page_size"),"10");
 		String p_pageNo  = StringUtil.nvl(req.getParameter("page_num"),"1");
 		String p_searchDiv = StringUtil.nvl(req.getParameter("searchDiv"),"");
-		String p_searchWord = StringUtil.nvl(req.getParameter("searchWord"),"");		
+		String p_searchWord = StringUtil.nvl(req.getParameter("searchWord"),"");
+		String p_searchCat = StringUtil.nvl(req.getParameter("search_category"),"");
 		
 		Hashtable<String, String> searchParam = new Hashtable<String, String>();
 		
@@ -48,6 +48,7 @@ public class RsmController {
 		searchParam.put("pageNo", p_pageNo);
 		searchParam.put("searchDiv", p_searchDiv);
 		searchParam.put("searchWord", p_searchWord);
+		searchParam.put("searchCat", p_searchCat);
 		
 		//Vo생성 후, searchParam set
 		RsmVO inRsmVo = new RsmVO();
@@ -60,9 +61,10 @@ public class RsmController {
 		int totalCnt = 0;
 		if(list !=null && list.size()>0)totalCnt = list.get(0).getTotalNo();
 		
-		ModelAndView modelAndView =new ModelAndView();
-		modelAndView.addObject("list",list );
-		modelAndView.addObject("totalCnt",totalCnt);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("list", list );		
+		modelAndView.addObject("totalCnt", totalCnt);
+		modelAndView.addObject("searchCat", p_searchCat);
 		modelAndView.setViewName("resume/resume_list");
 		
 		return modelAndView;
