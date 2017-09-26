@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<!-- ****************************for transaction**************************** -->
+	 <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dataSource"/>
+    </bean>
+	
+    <bean id="transactionAdvice" class="com.sn.common.TransactionAdvice">
+    	<property name="transactionManager" ref="transactionManager" />
+    	<property name="logSvc" ref="logSvc" />
+    </bean>
+    
+    <!-- logtable -->
+    <bean id="logSvc" class="com.sn.log.service.LogSvcImpl">
+    	<property name="logDao" ref="logDao" />
+    </bean>	
+    
+    <bean id="logDao" class="com.sn.log.dao.LogDaoImpl">
+    	<property name="sqlSession" ref="sqlSession" />
+    </bean>	
+    
+    <!-- Tx PointCut -->
+    <!-- 
+    	조건1: SvcImpl로 끝나는 클래스 이름
+    	조건2: Tx로 끝나는 메소드 이름
+     -->
+    <bean  id="transactionPointcut" 
+        class="com.sn.common.NameMatchClassMethodPointcut" >
+        <property name="mappedClassName" value="*SvcImpl" />
+        <property name="mappedName" value="*Tx"></property>        
+    </bean>
+    
+    <!-- Tx Advisor -->
+    <bean  id="transactionAdvisor"  
+      class="org.springframework.aop.support.DefaultPointcutAdvisor">
+      <property name="advice" ref="transactionAdvice" />
+      <property name="pointcut" ref="transactionPointcut" />
+    </bean>	
+	<!-- ***************************for transaction end************************* -->
+		
+		
+	<!-- ****************************for mybatis**************************** -->	
+	<!-- sqlSession 을 SqlSessionTemplate으로 만든다. -->										
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"											
+        destroy-method="clearCache">											
+        <constructor-arg index="0" ref="sqlSessionFactory" />											
+    </bean>											
+    											
+    <!-- SqlSessionFactoryBean 생성 -->											
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">																														
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>											
+        <property name="dataSource" ref="dataSource"></property>											
+        <property name="mapperLocations" value="classpath:mappers/**/*.xml"></property>										
+    </bean>																				
+    											
+	<!-- Root Context: defines shared resources visible to all other web components -->										
+	<bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource"										
+		destroy-method="close"									
+		p:driverClassName="oracle.jdbc.driver.OracleDriver"									
+		p:url="jdbc:oracle:thin:@211.238.142.168:1521:orcl"									
+		p:username="selfnovel"									
+		p:password="system"									
+		p:maxActive="10"									
+		p:maxIdle="5"									
+		p:maxWait="-1"									
+	/>																	
+	<!-- ****************************for mybatis end ****************************-->
+	
+    <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSourceSpied" />
+        <property name="logFormatter">
+            <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+                <property name="loggingType" value="MULTI_LINE" />
+                <property name="sqlPrefix" value="SQL]         :  "/>
+            </bean>  
+        </property>
+    </bean>	
+</beans>
