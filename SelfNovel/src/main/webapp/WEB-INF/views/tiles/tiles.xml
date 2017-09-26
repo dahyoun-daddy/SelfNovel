@@ -21,5 +21,24 @@
    <definition name="home" extends="base-definition">  
        <put-attribute name="title" value="Welcome" />  
        <put-attribute name="body" value="/WEB-INF/views/home.jsp" />  
-   </definition>    
+   </definition>
+   
+   <!-- Login Page -->
+   <definition name="member/login" extends="base-definition">
+       <put-attribute name="title" value="LOGIN" />
+       <put-attribute name="body" value="/WEB-INF/views/member/login.jsp" />
+   </definition>
+   
+   <!-- Register Page -->
+   <definition name="member/register" extends="base-definition">
+       <put-attribute name="title" value="REGISTER" />
+       <put-attribute name="body" value="/WEB-INF/views/member/register.jsp" />
+   </definition>
+   
+   <!-- Register Page -->
+   <definition name="member/update" extends="base-definition">
+       <put-attribute name="title" value="UPDATE" />
+       <put-attribute name="body" value="/WEB-INF/views/member/update.jsp" />
+   </definition>
+  
 </tiles-definitions>

@@ -9,5 +9,7 @@
 		<typeAlias type="com.sn.orders.domain.OrdersVO" alias="OrdersVO"/> 
 		<typeAlias type="com.sn.log.domain.LogVO" alias="LogVO"/> 
 		<typeAlias type="com.sn.msg.domain.MsgVO" alias="MsgVO"/>
+		<typeAlias type="com.sn.user.domain.UserVO" alias="UserVO"/>
+		<typeAlias type="com.sn.expert.domain.ExpertVO" alias="ExpertVO"/>
 	</typeAliases>
 </configuration>

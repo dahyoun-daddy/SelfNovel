@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sn.expert.repository.mappers.expert">
+
+    <select id="do_searchOne" 
+      parameterType="ExpertVO"
+      resultType="ExpertVO">
+		SELECT exp_id,
+			   u_password,
+			   u_name,
+			   TO_CHAR(u_reg_dt,'YYYY-MM-DD') AS u_reg_dt,
+			   u_level,
+			   u_write_cnt,
+			   u_mod_cnt,
+		       exp_title,
+		       exp_profile,
+		       exp_ctg,
+		       exp_price,
+		       exp_trade
+		  FROM USERS, expert
+		 WHERE u_id = exp_id
+		   AND u_id = '${u_id}'
+		   AND u_password = '${u_password}'
+		   AND u_level = ${u_level}
+    </select>  
+	
+	<update id="do_update" parameterType="ExpertVO"  >
+		UPDATE users
+		   SET u_name = #{u_name, jdbcType=VARCHAR},
+		       u_password = #{u_password, jdbcType=VARCHAR},
+		 WHERE u_id = #{u_id, jdbcType=VARCHAR}
+		
+		UPDATE expert
+		   SET exp_title = #{exp_title, jdbcjdbcType=VARCHAR},
+		   	   exp_profile = #{exp_profile, jdbcType=VARCHAR},
+		   	   exp_ctg = #{exp_ctg, jdbcType=NUMBER},
+		   	   exp_price = #{exp_price, jdbcType=NUMBER}
+		 WHERE exp_id = #{exp_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="do_delete" parameterType="ExpertVO">
+		DELETE FROM users
+         WHERE id = #{u_id}
+	</delete>
+	
+	<update id="do_save" parameterType="ExpertVO">
+		insert into expert(exp_id, exp_title, exp_profile, exp_ctg, exp_price, exp_trade)
+		values(#{exp_id}, #{exp_title}, #{exp_profile}, #{exp_ctg}, #{exp_price}, 0)
+    </update>
+    
+	<select id="do_search" resultType="ExpertVO">
+		SELECT * FROM users t1, expert t2
+		 WHERE t1.u_id = t2.exp_id
+	</select>      
+</mapper>
