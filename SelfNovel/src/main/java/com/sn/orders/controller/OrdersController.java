@@ -19,12 +19,12 @@ import com.sn.orders.service.OrdersSvc;
  * OrdersController 
  * detail : 마이페이지-의뢰 페이지 컨트롤러 
  * 최초작성: 2017-09-22
- * 최종수정: 2017-09-22
+ * 최종수정: 2017-09-22  
  * @author @author SeulGi <dev.leewisdom92@gmail.com>
  *
  */
 @Controller
-public class OrdersController {
+public class OrdersController { 
 	/***********************************************/
 	//field
 	/***********************************************/

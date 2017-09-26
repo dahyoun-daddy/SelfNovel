@@ -28,7 +28,7 @@ public class OrdersDaoImpl implements OrdersDao {
 	//field
 	/***********************************************/
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-	@Autowired
+	@Autowired 
 	private SqlSessionTemplate sqlSession;
 	private final String namespace = "com.sn.orders.repository.mappers.orders";
 	
