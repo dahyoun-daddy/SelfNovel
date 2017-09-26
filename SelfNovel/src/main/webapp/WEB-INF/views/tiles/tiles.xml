@@ -54,5 +54,10 @@
        <put-attribute name="title" value="ORDERS_LIST" />
        <put-attribute name="body" value="/WEB-INF/views/mypage/orders/{1}.jsp" />
    </definition> 
+
+   <definition name="resume/*" extends="base-definition">
+       <put-attribute name="title" value="ORDERS_LIST" />
+       <put-attribute name="body" value="/WEB-INF/views/resume/{1}.jsp" />
+   </definition>    
    
 </tiles-definitions>

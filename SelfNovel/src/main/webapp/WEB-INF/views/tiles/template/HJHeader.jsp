@@ -16,7 +16,7 @@
 <script type="text/javascript">
 	function logout(){
 		$.ajax({
-	        url: "user/do_logout.do",
+	        url: "/controller/user/do_logout.do",
 	        type: 'POST',
 	        success: function(result){
 	        	logoutFrm.submit();
@@ -46,12 +46,12 @@
 					<% if(u_id == null){ %>
 			   		<tr>
 			   			<td>
-			   				<form action="register_user.do" method="POST">
+			   				<form action="/controller/register_user.do" method="POST">
 			  					<input class="btn btn-success" type="submit" value="회원가입">
 							</form>
 			   			</td>
 			   			<td>
-			   				<form action="login_user.do" method="POST">
+			   				<form action="/controller/login_user.do" method="POST">
 			  					<input class="btn btn-success"type="submit" value="로그인">
 							</form>
 			   			</td>
@@ -62,12 +62,17 @@
 			   				<label><%=u_name %>님 환영합니다.</label>&nbsp;
 			   			</td>
 			   			<td>
-			   				<form action="update_user.do" method="POST">
+   			 			  	<form action="/controller/mypage/orders/pagelist.do" method="GET">
+  								<input class="btn btn-success"type="submit" value="내 의뢰 페이지">
+							</form>
+   						</td>
+			   			<td>
+			   				<form action="/controller/update_user.do" method="POST">
 			  					<input class="btn btn-success"type="submit" value="내 정보 수정">
 							</form>
 			   			</td>
 			   			<td>
-			   				<form id="logoutFrm" action="login_user.do" method="POST">
+			   				<form id="logoutFrm" action="/controller/login_user.do" method="POST">
 			   					<input class="btn btn-success" type="submit" value="로그아웃" onclick="logout()">
 			   				</form>
 			   			</td>
@@ -83,7 +88,7 @@
 							</form>
 			   			</td>
 			   			<td>
-			   				<form action="login_user.do" method="POST">
+			   				<form action="/controller/login_user.do" method="POST">
 			  					<input class="btn btn-success"type="submit" value="로그아웃" onclick="logout()">
 							</form>
 			   			</td>
