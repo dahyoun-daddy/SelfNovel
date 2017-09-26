@@ -45,8 +45,15 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public int do_update(DTO dto) {
-		
-		return 0;
+		log.debug("=================================");
+		log.debug(".do_update");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		if(dto.getParam().get("functionSep").equals("name")) {
+			return sqlSession.selectOne(namespace+".do_updateName", (UserVO) dto);
+		} else {
+			return sqlSession.selectOne(namespace+".do_updatePwd", (UserVO) dto);
+		}
 	}
 	
 	@Override

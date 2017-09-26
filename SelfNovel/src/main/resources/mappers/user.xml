@@ -22,10 +22,15 @@
 		   AND u_level = ${u_level}
     </select>  
 	
-	<update id="do_update" parameterType="UserVO"  >
+	<update id="do_updateName" parameterType="UserVO"  >
 		UPDATE USERS
-		   SET u_name = #{u_name, jdbcType=VARCHAR},
-		       u_password = #{u_password, jdbcType=VARCHAR},
+		   SET u_name = #{u_name, jdbcType=VARCHAR}
+		 WHERE u_id = #{u_id, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="do_updatePwd" parameterType="UserVO"  >
+		UPDATE USERS
+		   SET u_password = #{u_password, jdbcType=VARCHAR}
 		 WHERE u_id = #{u_id, jdbcType=VARCHAR}
 	</update>
 	

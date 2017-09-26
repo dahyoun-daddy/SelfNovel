@@ -37,11 +37,6 @@
             	if(result == "fail"){
             		alert("아이디 또는 비밀번호를 확인해 주세요.");
             	} else {
-            		var data = JSON.parse(result);
-            		$("#u_id").val(data.u_id);
-            		$("#u_name").val(data.u_name);
-            		$("#u_level").val(data.u_level);
-            		
             		loginFrm.submit();
             	}
             }
@@ -68,9 +63,6 @@
 		<form id="loginFrm" action="home.do" method="POST" >
 			<input class="btn btn-warning" style="width:30%;" type="button" value="일반 로그인" onclick="n_login()"/><br><br>
 			<input style="width:30%;" type="button" value="구글 로그인" onclick="g_login()"/>
-			<input type="hidden" id="u_id" name="u_id" value="" />
-			<input type="hidden" id="u_name" name="u_name" value="" />
-			<input type="hidden" id="u_level" name="u_level" value="" />
 		</form>
 	</div>
 </body>

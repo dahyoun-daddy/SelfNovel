@@ -47,6 +47,10 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 			res.getWriter().write("fail");
 		} else {
 			res.setCharacterEncoding("UTF-8");
+			req.getSession().setAttribute("u_id", VO.getExp_id());
+			req.getSession().setAttribute("u_name", VO.getU_name());
+			req.getSession().setAttribute("u_level", VO.getU_level());
+			log.debug("asdf: " + VO.getU_id());
 			res.getWriter().write(new Gson().toJson(VO));
 		}
 	}
@@ -54,7 +58,7 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	@RequestMapping(value="expert/do_save.do")
 	public void do_save(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		String path = "c:/exp_profiles";
-
+		
 		File file = new File(path);
 		if(!file.isDirectory()) {
 			file.mkdirs();

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -71,6 +72,9 @@ public class UserController {
 			res.getWriter().write("fail");
 		} else {
 			res.setCharacterEncoding("UTF-8");
+			req.getSession().setAttribute("u_id", VO.getU_id());
+			req.getSession().setAttribute("u_name", VO.getU_name());
+			req.getSession().setAttribute("u_level", VO.getU_level());
 			res.getWriter().write(new Gson().toJson(VO));
 		}
 	}
@@ -114,12 +118,25 @@ public class UserController {
 		}
 	}
 	
+	@RequestMapping(value="user/do_preview.do")
+	public void do_preview(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		UserVO VO = new UserVO();
+		VO.setU_id(req.getParameter("u_id"));
+		
+		VO = (UserVO) userSvc.do_chkId(VO);
+		if( VO == null) {
+			res.getWriter().write("fail");
+		} else {
+			res.getWriter().write(new Gson().toJson(VO));
+		}
+	}
+	
 	@RequestMapping(value="user/send_email.do")
 	public void send_email(HttpServletRequest req, HttpServletResponse res) throws MessagingException, IOException {
 		String from = "sty2003@naver.com";
 		String to = req.getParameter("u_id");
 		String subject = "[SelfNovel]인증 메일입니다.";
-
+		
 		// 인증 번호 생성
 		Random random = new Random();
 		int authNum = random.nextInt(10000) + 1000;
@@ -162,5 +179,34 @@ public class UserController {
 		Transport.send(msg); // 전송
 	
 		res.getWriter().write(""+authNum);
+	}
+	
+	@RequestMapping(value="user/do_logout.do")
+	public void do_logout(HttpServletRequest req) {
+		req.getSession().removeAttribute("u_id");
+		req.getSession().removeAttribute("u_name");
+		req.getSession().removeAttribute("u_level");
+	}
+	
+	@RequestMapping(value="user/do_update.do")
+	public void do_update(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		UserVO VO = new UserVO();
+		String functionSep = req.getParameter("functionSep");
+		Hashtable<String, String> param = new Hashtable<String, String>();
+		param.put("functionSep", functionSep);
+		VO.setParam(param);
+		
+		if(functionSep.equals("name")) {
+			VO.setU_name(req.getParameter("u_name"));
+		} else if(functionSep.equals("password")) {
+			VO.setU_password(req.getParameter("u_password"));
+		}
+		
+		int flag = userSvc.do_update(VO);
+		if(flag > 0) {
+			res.getWriter().write("success");
+		} else {
+			res.getWriter().write("fail");
+		}
 	}
 }

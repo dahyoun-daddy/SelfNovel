@@ -177,7 +177,6 @@
             	if(result == 'fail'){
             		alert("회원가입 실패.");
             	} else if(result == 'success'){
-            		$("#u_level").val($(":input:radio[name=userSep]:checked").val());
                 	registerFrm.submit();	
             	}
             	
@@ -226,7 +225,7 @@
             	if(result == 'fail'){
             		alert("이미 존재하는 아이디(이메일)입니다.");
             		return;
-            	} else if(result == 'success'){
+            	} else{
             		$('#emailAuth_modal').modal({backdrop: 'static', keyboard: false});
 	            	$.ajax({
 	            	        url: "user/send_email.do",
@@ -260,7 +259,7 @@
 	회원가입
 	<hr/>
 	<div align="center" style="width:50%; height:800px; display: inline-block;" >
-		<form action="home.do" method="POST" name="registerFrm" id="registerFrm">
+		<form action="login_user.do" method="POST" name="registerFrm" id="registerFrm">
 		<table>
 			<tr>
 				<td colspan="2">

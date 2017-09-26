@@ -6,16 +6,22 @@
 	String u_name = null;
 	int u_level = 0;
 	
-	if(request.getParameter("u_id") != null) {
-		u_id = request.getParameter("u_id");
-		u_name = request.getParameter("u_name");
-		u_level = Integer.parseInt(request.getParameter("u_level"));
+	if(session.getAttribute("u_id") != null) {
+		u_id = session.getAttribute("u_id").toString();
+		u_name = session.getAttribute("u_name").toString();
+		u_level = Integer.parseInt(session.getAttribute("u_level").toString());
 	}
 %>
 <link href="<c:url value='/resources/css/layout.css' />" rel="stylesheet"></link>
 <script type="text/javascript">
 	function logout(){
-		location.reload();
+		$.ajax({
+	        url: "user/do_logout.do",
+	        type: 'POST',
+	        success: function(result){
+	        	logoutFrm.submit();
+	        }
+        });
 	}
 </script>
 <div>
@@ -61,7 +67,7 @@
 							</form>
 			   			</td>
 			   			<td>
-			   				<form action="login_user.do" method="POST">
+			   				<form id="logoutFrm" action="login_user.do" method="POST">
 			   					<input class="btn btn-success" type="submit" value="로그아웃" onclick="logout()">
 			   				</form>
 			   			</td>
