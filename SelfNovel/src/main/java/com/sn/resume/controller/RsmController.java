@@ -32,6 +32,7 @@ public class RsmController {
 	public ModelAndView resumeList(HttpServletRequest req) {
 		log.debug("===== RsmDaocontroller.do_search =====");
 		log.debug("req : " + req.toString());
+		log.debug("검색어 : " + req.getParameter("searchWord"));
 		log.debug("======================================");			
 		
 		//request로부터 parameter load
@@ -49,6 +50,9 @@ public class RsmController {
 		searchParam.put("searchDiv", p_searchDiv);
 		searchParam.put("searchWord", p_searchWord);
 		searchParam.put("searchCat", p_searchCat);
+		
+		log.debug("=========================");
+		log.debug("p_searchWord" + p_searchWord);
 		
 		//Vo생성 후, searchParam set
 		RsmVO inRsmVo = new RsmVO();

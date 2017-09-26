@@ -112,7 +112,10 @@
 						AND A.RSM_DIV IN 
 						<foreach collection="search_cat" item="cat" index="index" open="(" close=")" separator=",">
 							#{cat}
-						</foreach>
+						</foreach>						
+					</when>
+					<when test="search_word_length > 0 ">
+						AND A.RSM_TITLE LIKE #{search_word} || '%' 
 					</when>
 				</choose>
 		         ORDER BY A.RSM_REG_DT DESC) T1 

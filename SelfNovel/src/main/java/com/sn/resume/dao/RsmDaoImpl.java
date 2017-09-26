@@ -92,8 +92,9 @@ public class RsmDaoImpl implements RsmDao {
 		searchParam.put("search_div", searchDiv);
 		searchParam.put("search_word", searchWord);
 		searchParam.put("search_cat", searchCatList);
+		searchParam.put("search_word_length", searchWord.length());	
 		
-		log.debug("search_cat : " + searchCatList.toString());
+		log.debug("search_word : " + searchWord);
 		
 		return sqlSession.selectList(statement, searchParam);
 	}

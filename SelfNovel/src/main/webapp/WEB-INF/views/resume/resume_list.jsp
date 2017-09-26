@@ -134,7 +134,7 @@
 			<tr>
 				<td style="text-align: center;">검색</td>
 				<td>
-					<input type="text" />
+					<input type="text" id="searchWord" name="searchWord"/>
 					<button type="button" id="btn_search">검색</button>
 				</td>
 			</tr>
