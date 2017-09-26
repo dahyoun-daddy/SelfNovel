@@ -26,6 +26,7 @@ public class RsmVO extends DTO {
 	private String rsm_use_yn    ;//공개 여부
 	private String rsm_ord_yn    ;//신청 여부
 	private String u_name		 ;//작성자 닉네임
+	private String rsm_div		 ;//카테고리
 	
 	/***********************************************/
 	//constructor
@@ -35,7 +36,7 @@ public class RsmVO extends DTO {
 	 * Default Constructor
 	 */
 	public RsmVO() {}
-
+	
 	/**
 	 * @param rsm_id
 	 * @param img_id
@@ -47,9 +48,12 @@ public class RsmVO extends DTO {
 	 * @param rsm_count
 	 * @param rsm_use_yn
 	 * @param rsm_ord_yn
+	 * @param u_name
+	 * @param rsm_div
 	 */
 	public RsmVO(String rsm_id, String img_id, String rsm_title, String rsm_content, String u_id, String rsm_reg_dt,
-			String rsm_recommend, String rsm_count, String rsm_use_yn, String rsm_ord_yn) {
+			String rsm_recommend, String rsm_count, String rsm_use_yn, String rsm_ord_yn, String u_name,
+			String rsm_div) {
 		super();
 		this.rsm_id = rsm_id;
 		this.img_id = img_id;
@@ -60,8 +64,10 @@ public class RsmVO extends DTO {
 		this.rsm_recommend = rsm_recommend;
 		this.rsm_count = rsm_count;
 		this.rsm_use_yn = rsm_use_yn;
-		this.rsm_ord_yn = rsm_ord_yn;		
-	}	
+		this.rsm_ord_yn = rsm_ord_yn;
+		this.u_name = u_name;
+		this.rsm_div = rsm_div;
+	}
 	
 	/***********************************************/
 	//getter and setter
@@ -219,7 +225,21 @@ public class RsmVO extends DTO {
 	 */
 	public void setU_name(String u_name) {
 		this.u_name = u_name;
+	}	
+
+	/**
+	 * @return the rsm_div
+	 */
+	public String getRsm_div() {
+		return rsm_div;
 	}
+
+	/**
+	 * @param rsm_div the rsm_div to set
+	 */
+	public void setRsm_div(String rsm_div) {
+		this.rsm_div = rsm_div;
+	}	
 
 	/***********************************************/
 	//method
@@ -232,7 +252,8 @@ public class RsmVO extends DTO {
 	public String toString() {
 		return "RsmVO [rsm_id=" + rsm_id + ", img_id=" + img_id + ", rsm_title=" + rsm_title + ", rsm_content="
 				+ rsm_content + ", u_id=" + u_id + ", rsm_reg_dt=" + rsm_reg_dt + ", rsm_recommend=" + rsm_recommend
-				+ ", rsm_count=" + rsm_count + ", rsm_use_yn=" + rsm_use_yn + ", rsm_ord_yn=" + rsm_ord_yn + "]";
+				+ ", rsm_count=" + rsm_count + ", rsm_use_yn=" + rsm_use_yn + ", rsm_ord_yn=" + rsm_ord_yn + ", u_name="
+				+ u_name + ", rsm_div=" + rsm_div + "]";
 	}
 	
 }//--RsmVO

@@ -19,7 +19,8 @@
 		    RSM_COUNT,
 		    RSM_RECOMMEND,		    
 		    RSM_USE_YN,
-		    RSM_ORD_YN
+		    RSM_ORD_YN,
+		    RSM_DIV
 		) VALUES (
 		    <!-- #{rsm_id,        jdbcType=NUMBER(8)}         , -->
 		    RESUME_SEQ.NEXTVAL,
@@ -31,7 +32,8 @@
 		    #{rsm_count,     jdbcType=NUMBER(5,0)}       ,
 		    #{rsm_recommend, jdbcType=NUMBER(5,0)}       ,
 		    1,
-			#{rsm_ord_yn,    jdbcType=NUMBER(1,0)}       
+			#{rsm_ord_yn,    jdbcType=NUMBER(1,0)}       ,
+			#{rsm_div,		 jdbcType=VARCHAR2(5 Byte)}  
 		)	
 	</insert>	
 	
@@ -52,10 +54,7 @@
 		UPDATE RESUME 
 		SET IMG_ID        = #{img_id,        jdbcType=NUMBER }           ,
 		    RSM_TITLE     = #{rsm_title,     jdbcType=VARCHAR2(50 CHAR)} ,
-		    RSM_CONTENT   = #{rsm_content,   jdbcType=CLOB }             ,
-		    U_ID          = #{u_id,          jdbcType=VARCHAR2(100 Byte)},
-		    RSM_COUNT     = #{rsm_count,     jdbcType=NUMBER(5,0)}       ,
-		    RSM_RECOMMEND = #{rsm_recommend, jdbcType=NUMBER(5,0)}       ,
+		    RSM_CONTENT   = #{rsm_content,   jdbcType=CLOB }             ,		    
 		    RSM_USE_YN    = #{rsm_use_yn,    jdbcType=NUMBER(1,0)}       ,
 		    RSM_ORD_YN    = #{rsm_ord_yn,    jdbcType=NUMBER(1,0)}
 		WHERE RSM_ID = #{rsm_id, jdbcType=NUMBER(8)}
@@ -89,7 +88,8 @@
 		    RSM_RECOMMEND,
 		    RSM_COUNT,
 		    RSM_USE_YN,
-		    RSM_ORD_YN
+		    RSM_ORD_YN,
+		    RSM_DIV
 		FROM RESUME
 		WHERE ID=#{rsm_id, jdbcType=NUMBER(8)}      
 	</select>
@@ -126,8 +126,8 @@
 		          FROM RESUME A, USERS B
 		         WHERE A.U_ID = B.U_ID
 		         <!-- <include refid="resumeConditionFilter"/> -->
-		         ORDER BY A.RSM_REG_DT DESC) T1;      			  
-		 WHERE RNUM BETWEEN (#{PAGE_SIZE} * (#{PAGE_NUM}-1)+1) AND (#{PAGE_SIZE} * (#{PAGE_NUM}-1)+#{PAGE_SIZE})
+		         ORDER BY A.RSM_REG_DT DESC) T1 
+		 WHERE RNUM BETWEEN (#{page_size} * (#{page_num}-1)+1) AND (#{page_size} * (#{page_num}-1)+#{page_size})
 	</select>
 </mapper>  
   

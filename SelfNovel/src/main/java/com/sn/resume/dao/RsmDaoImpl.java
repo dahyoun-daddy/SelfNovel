@@ -61,14 +61,14 @@ public class RsmDaoImpl implements RsmDao {
 		if(searchParam.get("pageNo") !=null)//page_num:1,2,3,....
 			page_num = Integer.parseInt(searchParam.get("pageNo").toString());
 		
-		searchParam.put("PAGE_SIZE", page_size+"");
-		searchParam.put("PAGE_NUM", page_num+"");
+		searchParam.put("page_size", page_size+"");
+		searchParam.put("page_num", page_num+"");
 		
 		String searchWord  = searchParam.get("searchWord").toString();
 		String searchDiv   = searchParam.get("searchDiv").toString();
 		
-		searchParam.put("SEARCH_DIV", searchDiv);
-		searchParam.put("SEARCH_WORD", searchWord);
+		searchParam.put("search_div", searchDiv);
+		searchParam.put("search_word", searchWord);
 		
 		return sqlSession.selectList(statement, searchParam);
 	}
