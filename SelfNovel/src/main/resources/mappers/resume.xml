@@ -113,7 +113,9 @@
 						<foreach collection="search_cat" item="cat" index="index" open="(" close=")" separator=",">
 							#{cat}
 						</foreach>						
-					</when>
+					</when>					
+				</choose>
+				<choose>
 					<when test="search_word_length > 0 ">
 						AND A.RSM_TITLE LIKE #{search_word} || '%' 
 					</when>
