@@ -45,7 +45,7 @@
 		  GET_CD_NM('C001',ord_state) as ord_state_nm,
 		  GET_RS_NM(rsm_id) as rsm_title,
 		  no,
-		  total_cnt
+		  TOTALNO
 		FROM (
 	      SELECT A.rsm_id,
 		 		 A.exp_id,
@@ -54,7 +54,7 @@
 		  		 A.ord_reg_dt,
 		  		 A.ord_use_yn,
 	             ROW_NUMBER() OVER (ORDER BY A.ord_reg_dt DESC) AS no,
-	             COUNT(*) OVER() AS total_cnt
+	             COUNT(*) OVER() AS TOTALNO
 	      FROM ORDERS A
 	      <include refid="orderIdSearchCondition" />
 	      ORDER BY A.ord_reg_dt DESC

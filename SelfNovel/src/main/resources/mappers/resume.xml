@@ -94,24 +94,6 @@
 		WHERE ID=#{rsm_id, jdbcType=NUMBER(8)}      
 	</select>
 	
-	<!-- 검색조건 : TODO -->
-	<sql id="resumeConditionFilter">    
-		<where>   
-			<choose>
-				<when test="SEARCH_DIV == '10'">
-					A.ID LIKE  #{SEARCH_WORD} || '%'         
-				</when>
-				<when test="SEARCH_DIV == '20'">
-					AND A.name LIKE  #{SEARCH_WORD} || '%'     
-				</when>
-				<when test="SEARCH_DIV == '30'">
-					AND A.u_Level LIKE   #{SEARCH_WORD} || '%'     
-				</when>                        
-				<otherwise></otherwise>
-			</choose>
-		</where>       
-    </sql>
-	
 	<!-- 전체조회(do_search) : TODO 검색조건 추가할 것 -->
 	<select id="do_search" parameterType="String"
 						   resultType="com.sn.resume.domain.RsmVO">
@@ -125,7 +107,19 @@
 		               COUNT(*) OVER() AS TOTALNO
 		          FROM RESUME A, USERS B
 		         WHERE A.U_ID = B.U_ID
-		         <!-- <include refid="resumeConditionFilter"/> -->
+		        <choose>				
+					<when test="search_cat.size != 0">
+						AND A.RSM_DIV IN 
+						<foreach collection="search_cat" item="cat" index="index" open="(" close=")" separator=",">
+							#{cat}
+						</foreach>						
+					</when>					
+				</choose>
+				<choose>
+					<when test="search_word_length > 0 ">
+						AND A.RSM_TITLE LIKE #{search_word} || '%' 
+					</when>
+				</choose>
 		         ORDER BY A.RSM_REG_DT DESC) T1 
 		 WHERE RNUM BETWEEN (#{page_size} * (#{page_num}-1)+1) AND (#{page_size} * (#{page_num}-1)+#{page_size})
 	</select>

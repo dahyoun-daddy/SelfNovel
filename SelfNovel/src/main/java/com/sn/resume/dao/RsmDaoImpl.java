@@ -1,7 +1,10 @@
 package com.sn.resume.dao;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -49,11 +52,30 @@ public class RsmDaoImpl implements RsmDao {
 		String statement = namespace +".do_search";//resume.xml연결
 		RsmVO inRsmVO = (RsmVO)dto;//파라미터 주입
 		
-		Hashtable<String, String> searchParam = null;//검색조건 초기화
-		searchParam = inRsmVO.getParam();//검색조건 주입
+		Hashtable<String, Object> searchParam = new Hashtable<String, Object>();
+
+		//검색조건 주입
+		Set keySet = inRsmVO.getParam().keySet();
+		Iterator iter = keySet.iterator();
+		
+		while(iter.hasNext()) {
+			String key = (String) iter.next();
+			searchParam.put(key, inRsmVO.getParam().get(key));			
+		}
+		
+		String[] searchCat = searchParam.get("searchCat").toString().split("&");
+		List<String> searchCatList = new ArrayList<String>();
+		
+		if(searchCat[0].equals("")) {
+			
+		}else {			
+			for(String cat : searchCat) {
+				searchCatList.add(cat);
+			}
+		}
 		
 		int page_size = 10;
-		int page_num = 1;
+		int page_num = 1;		
 		
 		if(searchParam.get("pageSize")!=null)//page_size:10,50,100
 			page_size = Integer.parseInt(searchParam.get("pageSize").toString());
@@ -65,10 +87,14 @@ public class RsmDaoImpl implements RsmDao {
 		searchParam.put("page_num", page_num+"");
 		
 		String searchWord  = searchParam.get("searchWord").toString();
-		String searchDiv   = searchParam.get("searchDiv").toString();
+		String searchDiv   = searchParam.get("searchDiv").toString();		
 		
 		searchParam.put("search_div", searchDiv);
 		searchParam.put("search_word", searchWord);
+		searchParam.put("search_cat", searchCatList);
+		searchParam.put("search_word_length", searchWord.length());	
+		
+		log.debug("search_word : " + searchWord);
 		
 		return sqlSession.selectList(statement, searchParam);
 	}

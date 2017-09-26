@@ -1,6 +1,7 @@
 package com.sn.orders.controller;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sn.common.StringUtil;
@@ -90,4 +92,43 @@ public class OrdersController {
 
 		return "redirect:list.do";
 	}
+	
+	@RequestMapping(value = "/mypage/orders/pagelist.do", method = RequestMethod.GET)
+	public ModelAndView do_search(HttpServletRequest req) {
+
+		OrdersVO ordersVO = new OrdersVO();
+		Hashtable<String, String> searchParam = new Hashtable<String, String>();// 검색조건
+		
+		searchParam.put("SEARCH_DIV", "user");
+		searchParam.put("SEARCH_ID", "sty2003");	 
+		
+		String p_pageSize = StringUtil.nvl(req.getParameter("PAGE_SIZE"), "10");
+		String p_pageNo = StringUtil.nvl(req.getParameter("PAGE_NUM"), "1");
+		String p_searchDiv = StringUtil.nvl(req.getParameter("searchDiv"), "");
+		String p_searchWord = StringUtil.nvl(req.getParameter("searchWord"), "");
+
+		searchParam.put("pageSize", p_pageSize);
+		searchParam.put("pageNo", p_pageNo);
+		searchParam.put("searchDiv", p_searchDiv);
+		searchParam.put("searchWord", p_searchWord);
+
+		ordersVO.setParam(searchParam);
+
+		List<OrdersVO> ordersList = (List<OrdersVO>) orderSvc.do_search(ordersVO);
+		int TOTALCNT = 0;
+		if (ordersList != null && ordersList.size() > 0)
+			TOTALCNT = ordersList.get(0).getTotalNo();
+		
+		// TO_DO: pageing처리 할것
+		ModelAndView modelAndView = new ModelAndView();
+
+		modelAndView.addObject("ordersList", ordersList);
+		// 총글수
+		modelAndView.addObject("TOTALCNT", TOTALCNT);
+		log.debug("TOTALCNT : "+TOTALCNT);
+		modelAndView.setViewName("/mypage/orders/orders_list");
+
+		return modelAndView;
+	}
+	
 }
