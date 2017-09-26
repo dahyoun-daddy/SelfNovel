@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sn.user.repository.mappers.user">
+	<select id="do_chkId" parameterType="UserVO" resultType="UserVO">
+		SELECT * FROM users WHERE u_id = '${u_id}'
+	</select>
+	
+    <select id="do_searchOne" parameterType="UserVO" resultType="UserVO">
+        SELECT u_id,
+		       u_password,
+		       u_name,
+		       TO_CHAR(u_reg_dt,'YYYY-MM-DD') as u_reg_dt,
+		       u_level,
+		       u_write_cnt,
+		       u_mod_cnt
+		  FROM USERS
+		 WHERE u_id = '${u_id}'
+		   AND u_password = '${u_password}'
+		   AND u_level = ${u_level}
+    </select>  
+	
+	<update id="do_update" parameterType="UserVO"  >
+		UPDATE USERS
+		   SET u_name = #{u_name, jdbcType=VARCHAR},
+		       u_password = #{u_password, jdbcType=VARCHAR},
+		 WHERE u_id = #{u_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="do_delete" parameterType="UserVO">
+		DELETE FROM users
+         WHERE u_id = #{u_id}
+	</delete>
+	
+	<update id="do_save" parameterType="UserVO">
+		INSERT INTO users(u_id, u_password, u_name, u_reg_dt, u_level, u_write_cnt, u_mod_cnt)
+		VALUES(#{u_id},#{u_password},#{u_name},SYSDATE,#{u_level},0,0)
+    </update>
+        
+	<select id="do_search" resultType="UserVO">
+		SELECT * FROM USERS
+	</select>      
+</mapper>
