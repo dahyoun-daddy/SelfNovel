@@ -24,6 +24,29 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
+<script type="text/javascript">
+    $('#itemAdd').click(function(){
+        //alert("aa");
+        
+        var contents = '';
+        contents += '<tr>';
+        contents +=     '<td><input type="text" name="title" /></td>';
+        contents += '</tr>';
+        contents += '<tr height="150px;">';
+        contents +=     '<td><input type="text" name="item" class="item" /></td>';
+        contents += '</tr>';
+        contents += '<tr>';
+        contents +=     '<td><input type="text" name="byte" class="byte" /></td>';
+        contents += '</tr>';
+        
+        $('#AddOption').append(contents); // 추가기능
+       
+        $('.delRow').click(function(){ // 삭제기능
+            $(this).parent().parent().remove(); 
+            //alert("aaa");
+        });
+    });
+  </script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -35,11 +58,18 @@
 		
 			    <tr>
 					<td>분야</td>
-					<td>구분자</td>
+					<td><select name="selectBox" id="selectBox" style="width:150px;" class="select_02">
+						      <c:forEach var="codeVo" items="${list}">
+						         <option value="${codeVo.dtl_cd_nm}">${codeVo.dtl_cd_nm}</option>
+						      </c:forEach>
+				   		</select>
+					</td>
+
+
 				</tr>
 				<tr>
 					<td>제목</td>
-					<td></td>
+					<td><input type="text" /></td>
 				</tr>
 				<tr>
 					<td>ppt첨부</td>
@@ -68,8 +98,13 @@
 								<td align="right">글자수 용량</td>
 							</tr>
 							<tr height="100px;">
-								<td align="right"><input type="button" value="+" /><input type="button" value="-" /></td>
+								<td align="right"><input type="button" value="+" id="itemAdd" />
+								<input type="button" name="delRow" class="delRow" value="-" /></td>
 							</tr>
+							<tbody id="AddOption">
+							
+							</tbody>
+
 					
 					</table><!-- 내용테이블 -->
 				</div> <!-- span1 -->

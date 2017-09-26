@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.sn.codes.dao.CodesDao;
 import com.sn.codes.domain.CodesVO;
@@ -182,5 +183,24 @@ public class testController {
 		log.debug("단건조회: "+resultDTO.toString());
 		
 		return "viewTest/resumTest";
+	}
+	
+	/**
+	 * 구분Test
+	 */
+	@RequestMapping(value = "resume/resumForm.do", method = RequestMethod.GET)
+	public ModelAndView codesView() {
+		
+		CodesVO dto = new CodesVO();
+		dto.setMst_cd_id("C002");	
+		
+		List<CodesVO> list = (List<CodesVO>)codesDao.do_search(dto);
+		log.debug("다건조회: "+list.toString());
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("list",list);
+		modelAndView.setViewName("resume/resume_form");
+		
+		return modelAndView;
 	}
 }
