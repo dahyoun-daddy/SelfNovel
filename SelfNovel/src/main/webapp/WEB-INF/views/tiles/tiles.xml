@@ -40,5 +40,19 @@
        <put-attribute name="title" value="UPDATE" />
        <put-attribute name="body" value="/WEB-INF/views/member/update.jsp" />
    </definition>
-  
+
+
+   <!-- ************************************************************************ -->
+
+   
+   <!-- resume Page-view -->
+   <!-- resume Page-form -->
+   
+   <!-- ************************************************************************ -->
+   <!-- orders Page-list -->
+   <definition name="/mypage/orders/*" extends="base-definition">
+       <put-attribute name="title" value="ORDERS_LIST" />
+       <put-attribute name="body" value="/WEB-INF/views/mypage/orders/{1}.jsp" />
+   </definition> 
+   
 </tiles-definitions>
