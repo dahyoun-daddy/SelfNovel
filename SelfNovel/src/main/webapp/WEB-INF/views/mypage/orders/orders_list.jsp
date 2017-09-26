@@ -38,7 +38,7 @@
 	function do_search_page(url, PAGE_NUM) {
 		console.log(url + "\t" + PAGE_NUM);
 		var testfrm = document.testfrm;
-		testfrm.page_num.value = PAGE_NUM;
+		testfrm.PAGE_NUM.value = PAGE_NUM;
 		testfrm.action = url;
 		testfrm.submit();
 	}
