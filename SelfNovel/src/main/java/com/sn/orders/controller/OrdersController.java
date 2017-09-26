@@ -93,17 +93,17 @@ public class OrdersController {
 		return "redirect:list.do";
 	}
 	
-	@RequestMapping(value = "/mypage/orders/pagelist.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/mypage/orders/pagelist.do", method = RequestMethod.GET)
 	public ModelAndView do_search(HttpServletRequest req) {
 
 		OrdersVO ordersVO = new OrdersVO();
 		Hashtable<String, String> searchParam = new Hashtable<String, String>();// 검색조건
 		
 		searchParam.put("SEARCH_DIV", "user");
-		searchParam.put("SEARCH_ID", "sty2003");	
+		searchParam.put("SEARCH_ID", "sty2003");	 
 		
-		String p_pageSize = StringUtil.nvl(req.getParameter("page_size"), "10");
-		String p_pageNo = StringUtil.nvl(req.getParameter("page_num"), "1");
+		String p_pageSize = StringUtil.nvl(req.getParameter("PAGE_SIZE"), "10");
+		String p_pageNo = StringUtil.nvl(req.getParameter("PAGE_NUM"), "1");
 		String p_searchDiv = StringUtil.nvl(req.getParameter("searchDiv"), "");
 		String p_searchWord = StringUtil.nvl(req.getParameter("searchWord"), "");
 
@@ -115,17 +115,17 @@ public class OrdersController {
 		ordersVO.setParam(searchParam);
 
 		List<OrdersVO> ordersList = (List<OrdersVO>) orderSvc.do_search(ordersVO);
-		int totalCnt = 0;
+		int TOTALCNT = 0;
 		if (ordersList != null && ordersList.size() > 0)
-			totalCnt = ordersList.get(0).getTotalNo();
+			TOTALCNT = ordersList.get(0).getTotalNo();
 		
 		// TO_DO: pageing처리 할것
 		ModelAndView modelAndView = new ModelAndView();
 
 		modelAndView.addObject("ordersList", ordersList);
 		// 총글수
-		modelAndView.addObject("totalCnt", totalCnt);
-		log.debug("totalCnt : "+totalCnt);
+		modelAndView.addObject("TOTALCNT", TOTALCNT);
+		log.debug("TOTALCNT : "+TOTALCNT);
 		modelAndView.setViewName("/mypage/orders/orders_list");
 
 		return modelAndView;

@@ -13,19 +13,19 @@
 	int bottomCount = 10;
 	String searchDiv = "";
 	String searchWord = "";
-	String page_size = "10";
-	String page_num = "1";
+	String PAGE_SIZE = "10";
+	String PAGE_NUM = "1";
 	int totalCnt = 0; //총글수
 
 	searchDiv = StringUtil.nvl(request.getParameter("searchDiv"), "");
 	searchWord = StringUtil.nvl(request.getParameter("searchWord"), "");
-	page_size = StringUtil.nvl(request.getParameter("page_size"), "10");
-	page_num = StringUtil.nvl(request.getParameter("page_num"), "1");
+	PAGE_SIZE = StringUtil.nvl(request.getParameter("PAGE_SIZE"), "10");
+	PAGE_NUM = StringUtil.nvl(request.getParameter("PAGE_NUM"), "1");
 
-	int oPage_size = Integer.parseInt(page_size);
-	int oPage_num = Integer.parseInt(page_num);
+	int oPage_size = Integer.parseInt(PAGE_SIZE);
+	int oPage_num = Integer.parseInt(PAGE_NUM);
 
-	totalCnt = Integer.parseInt(StringUtil.nvl(request.getAttribute("totalCnt").toString(), "0"));
+	totalCnt = Integer.parseInt(StringUtil.nvl(request.getAttribute("TOTALCNT").toString(), "0"));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -35,17 +35,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript">
 	//paiging 이동
-	function do_search_page(url, page_num) {
-		console.log(url + "\t" + page_num);
+	function do_search_page(url, PAGE_NUM) {
+		console.log(url + "\t" + PAGE_NUM);
 		var testfrm = document.testfrm;
-		testfrm.page_num.value = page_num;
+		testfrm.page_num.value = PAGE_NUM;
 		testfrm.action = url;
 		testfrm.submit();
 	}
 
 	function doSearch() {
 		var testfrm = document.testfrm;
-		testfrm.page_num.value = "1";
+		testfrm.PAGE_NUM.value = "1";
 		testfrm.action = "do_search.do";
 		testfrm.submit();
 	}
@@ -111,11 +111,11 @@
 </script>
 </head>
 <body>
-	<form action="workdiv.do" method="post" name="testfrm">
+	<form action="workdiv.do" method="get" name="testfrm">
 		<input type="hidden" id="WORK_DIV" name="WORK_DIV" />
 		<input type="hidden" id="EXP_ID" name="EXP_ID" />
 		<input type="hidden" id="RSM_ID" name="RSM_ID" />
-		<input type="hidden" name="page_num" id="page_num" value="<%=page_num%>">
+		<input type="hidden" name="PAGE_NUM" id="PAGE_NUM" value="<%=PAGE_NUM%>">
 		<input type="hidden" name="file_nm" id="file_nm">
 	</form>
 
