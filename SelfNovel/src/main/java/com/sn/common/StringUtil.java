@@ -91,7 +91,7 @@ public class StringUtil {
 	    String url_i, String scriptName_i) {
 	   int maxNum = 0; // 총 갯수
 	   int currPageNo = 1; // 현재 페이지 번호 : page_num
-	   int rowPerPage = 12; // 한페이지에 보여질 행수 : page_size
+	   int rowPerPage = 10; // 한페이지에 보여질 행수 : page_size
 	   int bottomCount = 10; // 바닥에 보여질 페이지 수: 10
 
 	   maxNum = maxNum_i;
