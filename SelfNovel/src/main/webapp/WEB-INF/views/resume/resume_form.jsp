@@ -48,13 +48,15 @@
 				<tr>
 					<td>내용</td>
 					<td></td>
-			</tr>
+				</tr>
+				<tr>
+					<td colspan="2">
 			
-			
+			<div class="container">
    			<div class="row">
-	   			<div class="span1">
+	   			<div class="col-md-10">
 					<table class="table table-bordered table-hover table-condensed" border="1px" 
-						   cellpadding="2" cellspacing="2" align="center"  width="80%">
+						   cellpadding="2" cellspacing="2" align="center">
 					
 							<tr>
 								<td>제목(Not Null)</td>
@@ -71,18 +73,19 @@
 					
 					</table><!-- 내용테이블 -->
 				</div> <!-- span1 -->
-				<div class="span2">
+				<div class="col-md-2">
 					<table class="table table-bordered table-hover table-condensed" border="1px" 
-						   cellpadding="2" cellspacing="2" align="center"  width="20%">
+						   cellpadding="2" cellspacing="2" align="center">
 						<input type="button" value="▲" /><br/>
 						<input type="button" value="▼" />
 					</table>
 				</div><!-- span2 -->
 			
 			</div> <!-- row div -->
-			
+			</div>
 		
-		
+					</td>
+				</tr>
 		</table><!-- 바깥테이블 -->
 	</div><!-- 바깥테이블 div -->
 	

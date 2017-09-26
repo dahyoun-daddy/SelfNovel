@@ -43,6 +43,18 @@ public class testController {
 	CodesDao codesDao;
 	
 	/**
+	 * img Test resume_view
+	 */
+	@RequestMapping(value="resume/resumeForm.do")
+	public String resumeForm() {
+		log.debug("===================");
+		log.debug("=======resumeview======");
+		log.debug("===================");
+		
+		return "resume/resume_form";
+	}
+	
+	/**
 	 * img Test resume_list
 	 */
 	@RequestMapping(value="expert/expertList.do")
@@ -152,5 +164,23 @@ public class testController {
 		log.debug("단건조회: "+resultDTO.toString());
 		
 		return "home";
+	}
+	
+	/**
+	 * imgTest
+	 */
+	@RequestMapping(value = "/resumTest.do", method = RequestMethod.GET)
+	public String testView(Locale locale, Model model) {
+		CodesVO dto = new CodesVO();
+		dto.setMst_cd_id("C001");
+		
+		List<CodesVO> list = (List<CodesVO>)codesDao.do_search(dto);
+		log.debug("다건조회: "+list.toString());
+		
+		dto.setDtl_cd_id("20");
+		CodesVO resultDTO = (CodesVO)codesDao.do_searchOne(dto);
+		log.debug("단건조회: "+resultDTO.toString());
+		
+		return "viewTest/resumTest";
 	}
 }
