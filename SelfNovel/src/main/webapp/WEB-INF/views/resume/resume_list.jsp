@@ -15,14 +15,14 @@
 	***************************/
 	int    bottomCount = 10;//하단에 표시될 페이지 수
 	String searchDiv = "";	//검색구분
-	String searchWord = "";	//검색어	
+	String searchWord = "";	//검색어
 	String page_size = "10";//한 페이지에 표시될 글의 수
 	String page_num = "1";	//페이지 번호
 	int    totalCnt = 0;	//총글수
 
-	//request로부터 default값 세팅
+	//request로부터 검색어, 검색구분, 페이지 등의 값을 초기화
 	searchDiv  = StringUtil.nvl(request.getParameter("searchDiv"), "");
-	searchWord = StringUtil.nvl(request.getParameter("searchWord"), "");
+	searchWord = StringUtil.nvl(request.getParameter("searchWord"), "");	
 	page_size  = StringUtil.nvl(request.getParameter("page_size"), "10");
 	page_num   = StringUtil.nvl(request.getParameter("page_num"), "1");
 	totalCnt   = Integer.parseInt(StringUtil.nvl(request.getAttribute("totalCnt").toString(), "0"));
@@ -61,6 +61,27 @@
 	}
 	
 	/**************************
+	* 검색 담당 함수                                 *
+	***************************/
+	function do_search(){
+		var param = "";	
+		$("input[name=categoryChk]:checked").each(function() {
+			if(param == ""){
+				param = $(this).val();
+			}else{
+				param = param + "&" + $(this).val();	
+			}//close if
+		});//close each
+		
+		$("#page_num").val("1");
+		$("#search_category").val(param);
+		
+			var frm = document.frm;
+		frm.action = "do_search.do";
+		frm.submit();
+	}
+	
+	/**************************
 	* Jquery ready            
 	***************************/
 	$(document).ready(function(){	
@@ -76,32 +97,34 @@
 					this.checked = true;
 				}
 			});
-		});
+		});		
+		
+		/*******************
+		* 셀렉트박스 유지 처리
+		********************/
+		$("#searchDiv > option[value=" + ${searchDiv} + "]").attr("selected", true);
 		
 		/**************************
 		* '검색'버튼 클릭시 이벤트
-		* 1. 체크된 모든 카테고리 read
-		* 2. 정렬기준 옵션 read
-		* 3. submit!
 		***************************/
 		$("#btn_search").on("click", function(){
-			var param = "";	
-			$("input[name=categoryChk]:checked").each(function() {
-				if(param == ""){
-					param = $(this).val();
-				}else{
-					param = param + "&" + $(this).val();	
-				}//close if
-			});//close each
-			
-			$("#page_num").val("1");
-			$("#search_category").val(param);
-			
- 			var frm = document.frm;
-			frm.action = "do_search.do";
-			frm.submit(); 
-
-		});//close btn_search_on_click		
+			do_search();
+		});//close btn_search_on_click
+		
+		/**************************
+		* '검색구분' 변경시 이벤트
+		***************************/
+		$("#searchDiv").on("change", function(){
+			do_search();
+		});//close searchDiv_on_change
+		
+		/**************************
+		* '글쓰기'버튼 클릭시 이벤트 : TODO
+		***************************/
+		$("btn_write").on("click", function(){
+			//TODO			
+		});//close btn_write_on_click
+		
 	});//close document ready
 	
 </script>
@@ -134,7 +157,7 @@
 			<tr>
 				<td style="text-align: center;">검색</td>
 				<td>
-					<input type="text" id="searchWord" name="searchWord"/>
+					<input type="text" id="searchWord" name="searchWord" value="${searchWord}"/>
 					<button type="button" id="btn_search">검색</button>
 				</td>
 			</tr>
@@ -177,7 +200,8 @@
 							<tr>	                	
 								<td class="text-center"><c:out value="${rsmVo.no}"/></td>
 								<td class="text-left"><c:out value="${rsmVo.u_name}"/></td>
-								<td class="text-left"><c:out value="${rsmVo.rsm_title}"/></td>
+								<!-- TODO : 글 제목에 링크 -->
+								<td class="text-left"><a href="#"><c:out value="${rsmVo.rsm_title}"/></a></td>
 								<td class="text-center"><c:out value="${rsmVo.rsm_reg_dt}"/></td>
 								<td class="text-right"><c:out value="${rsmVo.rsm_count}"/></td>
 								<td class="text-right"><c:out value="${rsmVo.rsm_recommend}"/></td>

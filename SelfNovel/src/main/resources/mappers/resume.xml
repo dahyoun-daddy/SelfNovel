@@ -117,10 +117,25 @@
 				</choose>
 				<choose>
 					<when test="search_word_length > 0 ">
-						AND A.RSM_TITLE LIKE #{search_word} || '%' 
+						AND INSTR(A.RSM_TITLE, #{search_word}) > 0
+						<!-- AND A.RSM_TITLE LIKE #{search_word} || '%' --> 
+					</when>
+				</choose>				
+				<choose>
+					<!-- 최신순 -->
+					<when test="search_div == 10"> 
+						ORDER BY A.RSM_REG_DT DESC	
+					</when>
+					<!-- 조회순 -->
+					<when test="search_div == 20">
+						ORDER BY A.RSM_COUNT DESC
+					</when>
+					<!-- 추천순 -->
+					<when test="search_div == 30">
+						ORDER BY A.RSM_RECOMMEND DESC
 					</when>
 				</choose>
-		         ORDER BY A.RSM_REG_DT DESC) T1 
+		        ) T1 
 		 WHERE RNUM BETWEEN (#{page_size} * (#{page_num}-1)+1) AND (#{page_size} * (#{page_num}-1)+#{page_size})
 	</select>
 </mapper>  

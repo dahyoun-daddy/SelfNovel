@@ -68,6 +68,8 @@ public class RsmController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("list", list );		
 		modelAndView.addObject("totalCnt", totalCnt);
+		modelAndView.addObject("searchWord", p_searchWord);
+		modelAndView.addObject("searchDiv", p_searchDiv);
 		modelAndView.addObject("searchCat", p_searchCat);
 		modelAndView.setViewName("resume/resume_list");
 		
