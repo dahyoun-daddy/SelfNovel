@@ -25,6 +25,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sn.common.DTO;
+import com.sn.common.FileSaveUtil;
+import com.sn.common.FileSaveVO;
+import com.sn.common.StringUtil;
 import com.sn.img.domain.ImgVO;
 import com.sn.img.service.ImgSvc;
 
@@ -45,65 +48,85 @@ public class pptTestController {
 	@RequestMapping(value="ppt/pptUpload.do", method=RequestMethod.POST)
 	public ModelAndView pptUpload(MultipartHttpServletRequest mReq) throws IOException,DataAccessException{
 		ModelAndView modelAndView = new ModelAndView();
+//		
+//		
+//		/*********************************************************************/
+//		//1. ppt를 이미지로 만든다
+//		//2. 저장한 이미지 파일명(경로포함)을 돌려받는다
+//		//2-2. 저장하는 이미지는 ppt이름+번호.png로 한다.
+//		//2-3. 이미지 경로는 jsp에서 contextPath로 받는다
+//		//3. c:foreach문을 돌려 출력해본다
+//		
+//		//4. 위의 과정이 완료되었을 경우 슬라이드형으로 표현해보도록 한번 해본다
+//		List<DTO> list = imgSvc.do_saveMulti(mReq);
+//		//지금은 일단 기존에 쓰던걸 쓴다. 저장경로는 "c:\\file\\"이다.
+//		ImgVO imgVO = (ImgVO)list.get(0);
+//		//이건 이미지 경로+이름 리스트를 저장할 리스트임
+//		List<String> imgList = new ArrayList<String>();
+//		//이건 컨텍스트 경로 구하는 그것이다.
+//		String uploadFilepath = mReq.getSession().getServletContext().getRealPath("resources");
+//		log.debug("==========================================================");
+//		log.debug("uploadFilepath: "+uploadFilepath);
+//		log.debug("==========================================================");
+//		
+//		  //File file=new File("C://file//"+imgVO.get//imgVO.getSave_file_nm());
+//		  File file=new File("C://file//"+imgVO.getImg_sv_nm());
+//	      XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(file));
+//	      
+//	      //getting the dimensions and size of the slide 
+//	      Dimension pgsize = ppt.getPageSize();
+//	      //List<XSLFSlide> slide = ppt.getSlides();
+//	      List<XSLFSlide> slide = ppt.getSlides();
+//	      FileOutputStream out =null;
+//	      
+//	      for (int i = 0; i < slide.size(); i++) {
+//	         BufferedImage img = new BufferedImage(pgsize.width, pgsize.height,BufferedImage.TYPE_INT_RGB);
+//	         Graphics2D graphics = img.createGraphics();
+//
+//	         //clear the drawing area
+//	         graphics.setPaint(Color.white);
+//	         graphics.fill(new Rectangle2D.Float(0, 0, pgsize.width, pgsize.height));
+//
+//	         //render
+//	         slide.get(i).draw(graphics);
+//	         
+//	         //creating an image file as output
+//	         out = new FileOutputStream(uploadFilepath+"/images/ppt_image"+i+".png");
+//	         javax.imageio.ImageIO.write(img, "png", out);
+//	         ppt.write(out);
+//	         
+//	         //여기서 이미지 정보를 저장해서 넘겨줄거다. 앞부분 떼고 넘기는 이유는 부르는 부분의 context 경로로 줄 것이기 때문이다
+//	         imgList.add("images/ppt_image"+i+".png"); 
+//	         log.debug(i+"번째: "+uploadFilepath+"/images/ppt_image"+i+".png");
+//	         
+//	         out.close();
+//	      }
+//	      
+//	      System.out.println("Image successfully created");
+//	      out.close();	
+//	      /*********************************************************************/
 		
+		//1. 먼저 파일유틸을 이용해 파일을 저장하고 파일명을 받는다.
+		String savePath = "C://file//";
+		String resourcesFilepath = mReq.getSession().getServletContext().getRealPath("resources");
 		
-		/*********************************************************************/
-		//1. ppt를 이미지로 만든다
-		//2. 저장한 이미지 파일명(경로포함)을 돌려받는다
-		//2-2. 저장하는 이미지는 ppt이름+번호.png로 한다.
-		//2-3. 이미지 경로는 jsp에서 contextPath로 받는다
-		//3. c:foreach문을 돌려 출력해본다
+		FileSaveUtil fileSaveUtil = new FileSaveUtil();
+		List<FileSaveVO> fileList = fileSaveUtil.do_saveMulti(mReq, savePath);
+		String saveFileName = "";
 		
-		//4. 위의 과정이 완료되었을 경우 슬라이드형으로 표현해보도록 한번 해본다
-		List<DTO> list = imgSvc.do_saveMulti(mReq);
-		//지금은 일단 기존에 쓰던걸 쓴다. 저장경로는 "c:\\file\\"이다.
-		ImgVO imgVO = (ImgVO)list.get(0);
-		//이건 이미지 경로+이름 리스트를 저장할 리스트임
-		List<String> imgList = new ArrayList<String>();
-		//이건 컨텍스트 경로 구하는 그것이다.
-		String uploadFilepath = mReq.getSession().getServletContext().getRealPath("resources");
-		log.debug("==========================================================");
-		log.debug("uploadFilepath: "+uploadFilepath);
-		log.debug("==========================================================");
+		if(fileList!=null) {
+			FileSaveVO fileSaveVO = fileList.get(0);
+			saveFileName = StringUtil.nvl(fileSaveVO.getSaveFileName(), "");
+		}
 		
-		  //File file=new File("C://file//"+imgVO.get//imgVO.getSave_file_nm());
-		  File file=new File("C://file//"+imgVO.getImg_sv_nm());
-	      XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(file));
-	      
-	      //getting the dimensions and size of the slide 
-	      Dimension pgsize = ppt.getPageSize();
-	      //List<XSLFSlide> slide = ppt.getSlides();
-	      List<XSLFSlide> slide = ppt.getSlides();
-	      FileOutputStream out =null;
-	      
-	      for (int i = 0; i < slide.size(); i++) {
-	         BufferedImage img = new BufferedImage(pgsize.width, pgsize.height,BufferedImage.TYPE_INT_RGB);
-	         Graphics2D graphics = img.createGraphics();
-
-	         //clear the drawing area
-	         graphics.setPaint(Color.white);
-	         graphics.fill(new Rectangle2D.Float(0, 0, pgsize.width, pgsize.height));
-
-	         //render
-	         slide.get(i).draw(graphics);
-	         
-	         //creating an image file as output
-	         out = new FileOutputStream(uploadFilepath+"/images/ppt_image"+i+".png");
-	         javax.imageio.ImageIO.write(img, "png", out);
-	         ppt.write(out);
-	         
-	         //여기서 이미지 정보를 저장해서 넘겨줄거다. 앞부분 떼고 넘기는 이유는 부르는 부분의 context 경로로 줄 것이기 때문이다
-	         imgList.add("images/ppt_image"+i+".png"); 
-	         log.debug(i+"번째: "+uploadFilepath+"/images/ppt_image"+i+".png");
-	         
-	         out.close();
-	      }
-	      
-	      System.out.println("Image successfully created");
-	      out.close();	
-	      /*********************************************************************/
+		//2. 이미지 서비스 쪽에 파일의 저장경로를 넘겨준다. 그럼 저장하고 이미지 아이디를 반환한다.
+		int img_id = this.imgSvc.do_savepptTx(saveFileName,savePath+saveFileName,resourcesFilepath);
 		
-	      
+		//3. 반환된 이미지 아이디를 가지고 리스트를 불러온다.
+		ImgVO inVO = new ImgVO();
+		inVO.setImg_id(img_id);		
+		List<?> imgList = imgSvc.do_search(inVO); 
+		
 		modelAndView.setViewName("viewTest/pptTest");
 		modelAndView.addObject("imgList",imgList);
 		return modelAndView;

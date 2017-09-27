@@ -90,7 +90,7 @@
 			
 			  <!-- Wrapper for slides -->
 			  <div class="carousel-inner" role="listbox">
-			    <div class="item active">
+			    <div class="item active"><!-- item중 하나는 반드시 active를 가지고 있어야 한다. -->
 			      <img src="http://localhost:8080//controller/resources/images/ppt_image0.png" alt="...">
 			      <div class="carousel-caption">
 			        ...
@@ -100,7 +100,7 @@
 			    <!-- images -->
 			    <c:forEach var="imgVO" items="${imgList}">
 				    <div class="item">
-				      <img alt="" src="<%=contextPath %>/resources/${imgVO}">
+				      <img alt="" src="<%=contextPath %>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
 				      <div class="carousel-caption">
 				        ...
 				      </div>

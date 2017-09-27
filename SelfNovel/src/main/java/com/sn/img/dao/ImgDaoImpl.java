@@ -122,4 +122,20 @@ public class ImgDaoImpl implements ImgDao {
 		return sqlSession.selectOne(statement, imgVO);
 	}
 
+	/**
+	 * do_getNextSeq
+	 * detail: 이미지 아이디를 위한 시퀀스값 가져옴
+	 * @param dto
+	 * @return dto
+	 */
+	@Override
+	public int do_getNextSeq() {
+		String statement = namespace +".do_getNextSeq";
+		
+		log.debug("in do_getNextSeq========================");
+		log.debug("statement: "+statement);
+		log.debug("=======================================");
+		
+		return sqlSession.selectOne(statement);		
+	}
 }
