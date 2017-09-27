@@ -104,13 +104,8 @@ public class OrdersController {
 		
 		String p_pageSize = StringUtil.nvl(req.getParameter("PAGE_SIZE"), "10");
 		String p_pageNo = StringUtil.nvl(req.getParameter("PAGE_NUM"), "1");
-		String p_searchDiv = StringUtil.nvl(req.getParameter("searchDiv"), "");
-		String p_searchWord = StringUtil.nvl(req.getParameter("searchWord"), "");
-
-		searchParam.put("pageSize", p_pageSize);
-		searchParam.put("pageNo", p_pageNo);
-		searchParam.put("searchDiv", p_searchDiv);
-		searchParam.put("searchWord", p_searchWord);
+		searchParam.put("PAGE_SIZE", p_pageSize);
+		searchParam.put("PAGE_NUM", p_pageNo);
 
 		ordersVO.setParam(searchParam);
 

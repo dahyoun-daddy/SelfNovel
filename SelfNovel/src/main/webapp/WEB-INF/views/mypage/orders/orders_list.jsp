@@ -11,14 +11,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	int bottomCount = 10;
-	String searchDiv = "";
-	String searchWord = "";
 	String PAGE_SIZE = "10";
 	String PAGE_NUM = "1";
 	int totalCnt = 0; //총글수
 
-	searchDiv = StringUtil.nvl(request.getParameter("searchDiv"), "");
-	searchWord = StringUtil.nvl(request.getParameter("searchWord"), "");
 	PAGE_SIZE = StringUtil.nvl(request.getParameter("PAGE_SIZE"), "10");
 	PAGE_NUM = StringUtil.nvl(request.getParameter("PAGE_NUM"), "1");
 
