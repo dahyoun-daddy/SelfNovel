@@ -168,8 +168,8 @@ $(document).ready(function(){
 					</td>
 				</tr>
 			<!-- end 복붙 -->	
-			<tbody id="AddOption"  >
-							
+			<tbody id="AddOption" >
+							 
 			</tbody>		
 		</table><!-- 바깥테이블 -->
 	</div><!-- 바깥테이블 div -->
