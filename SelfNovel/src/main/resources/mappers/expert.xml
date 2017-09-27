@@ -4,11 +4,16 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sn.expert.repository.mappers.expert">
-
+	<select id="do_chkId" parameterType="ExpertVO" resultType="ExpertVO">
+		SELECT * FROM users, expert
+		 WHERE u_id = exp_id
+		   AND u_id='${u_id}'
+	</select>
+	
     <select id="do_searchOne" 
       parameterType="ExpertVO"
       resultType="ExpertVO">
-		SELECT exp_id,
+		SELECT u_id,
 			   u_password,
 			   u_name,
 			   TO_CHAR(u_reg_dt,'YYYY-MM-DD') AS u_reg_dt,
@@ -26,45 +31,23 @@
 		   AND u_password = '${u_password}'
 		   AND u_level = ${u_level}
     </select>
-    
-    <select id="do_chkId" 
-      parameterType="ExpertVO"
-      resultType="ExpertVO">
-		SELECT exp_id,
-			   u_password,
-			   u_name,
-			   TO_CHAR(u_reg_dt,'YYYY-MM-DD') AS u_reg_dt,
-			   u_level,
-			   u_write_cnt,
-			   u_mod_cnt,
-		       exp_title,
-		       exp_profile,
-		       exp_ctg,
-		       exp_price,
-		       exp_trade
-		  FROM USERS, expert
-		 WHERE u_id = exp_id
-		   AND u_id = '${u_id}'
-    </select>
 	
-	<update id="do_update" parameterType="ExpertVO"  >
-		UPDATE users
-		   SET u_name = #{u_name, jdbcType=VARCHAR},
-		       u_password = #{u_password, jdbcType=VARCHAR},
-		 WHERE u_id = #{u_id, jdbcType=VARCHAR}
-		
+	<update id="do_updateName" parameterType="ExpertVO"  >
 		UPDATE expert
-		   SET exp_title = #{exp_title, jdbcjdbcType=VARCHAR},
-		   	   exp_profile = #{exp_profile, jdbcType=VARCHAR},
-		   	   exp_ctg = #{exp_ctg, jdbcType=NUMBER},
-		   	   exp_price = #{exp_price, jdbcType=NUMBER}
-		 WHERE exp_id = #{exp_id, jdbcType=VARCHAR}
+		   SET exp_title = '${exp_title}',
+		   	   exp_ctg = ${exp_ctg},
+		   	   exp_price = ${exp_price}
+		 WHERE exp_id = '${u_id}'
 	</update>
 	
-	<delete id="do_delete" parameterType="ExpertVO">
-		DELETE FROM users
-         WHERE id = #{u_id}
-	</delete>
+	<update id="do_updateProfile" parameterType="ExpertVO"  >
+		UPDATE expert
+		   SET exp_title = '${exp_title}',
+		   	   exp_profile = '${exp_profile}',
+		   	   exp_ctg = ${exp_ctg},
+		   	   exp_price = ${exp_price}
+		 WHERE exp_id = '${u_id}'
+	</update>
 	
 	<update id="do_save" parameterType="ExpertVO">
 		insert into expert(exp_id, exp_title, exp_profile, exp_ctg, exp_price, exp_trade)

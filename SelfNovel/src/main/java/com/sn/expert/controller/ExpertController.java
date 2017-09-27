@@ -2,6 +2,7 @@ package com.sn.expert.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -47,23 +48,35 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 			res.getWriter().write("fail");
 		} else {
 			res.setCharacterEncoding("UTF-8");
-			req.getSession().setAttribute("u_id", VO.getExp_id());
+			req.getSession().setAttribute("u_id", VO.getU_id());
 			req.getSession().setAttribute("u_name", VO.getU_name());
 			req.getSession().setAttribute("u_level", VO.getU_level());
-			log.debug("asdf: " + VO.getU_id());
+			res.getWriter().write(new Gson().toJson(VO));
+		}
+	}
+	
+	@RequestMapping(value="expert/do_preview.do")
+	public void do_preview(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		ExpertVO VO = new ExpertVO();
+		VO.setU_id(req.getParameter("u_id"));
+		
+		VO = (ExpertVO) expertSvc.do_chkId(VO);
+		if( VO == null) {
+			res.getWriter().write("fail");
+		} else {
+			res.setCharacterEncoding("UTF-8");
 			res.getWriter().write(new Gson().toJson(VO));
 		}
 	}
 	
 	@RequestMapping(value="expert/do_save.do")
 	public void do_save(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		String path = "c:/exp_profiles";
+		String path = req.getSession().getServletContext().getRealPath("/resources/exp_profiles");
 		
 		File file = new File(path);
 		if(!file.isDirectory()) {
 			file.mkdirs();
 		}
-		
 		MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
 				new DefaultFileRenamePolicy());
 		
@@ -87,14 +100,72 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		VO.setExp_title(mr.getParameter("exp_title"));
 		VO.setExp_ctg(Integer.valueOf(mr.getParameter("exp_ctg")));
 		VO.setExp_profile(newFileName);
-
-		int flag1 = userSvc.do_save(VO);
-		int flag2 = expertSvc.do_save(VO);
 		
-		if(flag1 <= 0 || flag2 <= 0) {
+		int flag =1;
+		flag *= userSvc.do_save(VO);
+		flag *= expertSvc.do_save(VO);
+		
+		if(flag <= 0) {
 			res.getWriter().write("fail");
 		} else {
 			res.getWriter().write("success");
 		}
 	}
+	
+	@RequestMapping(value="expert/do_update.do")
+	public void do_update(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		String path = req.getSession().getServletContext().getRealPath("/resources/exp_profiles");
+		
+		File file = new File(path);
+		if(!file.isDirectory()) {
+			file.mkdirs();
+		}
+		MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
+				new DefaultFileRenamePolicy());
+		
+		String fileName = mr.getOriginalFileName("exp_profile");
+		String newFileName = null;
+		Hashtable<String, String> param = new Hashtable<String, String>();
+		param.put("functionSep", mr.getParameter("functionSep"));
+		
+		if(fileName != null) {
+			param.replace("functionSep", "profile");
+			newFileName = UUID.randomUUID().toString().replaceAll("-","") + "_" +mr.getOriginalFileName("exp_profile");
+			// 원본이 업로드된 절대경로와 파일명를 구한다.
+			String fullFileName = path + "/" + fileName;
+		    File f1 = new File(fullFileName);
+		    if(f1.exists()) {     // 업로드된 파일명이 존재하면 Rename한다.
+		         File newFile = new File(path + "/" + newFileName);
+		         f1.renameTo(newFile);   // rename...
+		    }
+		}
+		
+		ExpertVO VO = new ExpertVO();
+		VO.setParam(param);
+		VO.setU_id(mr.getParameter("u_id"));
+		VO.setExp_id(mr.getParameter("u_id"));
+		VO.setU_name(mr.getParameter("u_name"));
+		VO.setU_password(mr.getParameter("u_password"));
+		VO.setExp_price(Integer.valueOf(mr.getParameter("exp_price")));
+		VO.setExp_title(mr.getParameter("exp_title"));
+		VO.setExp_ctg(Integer.valueOf(mr.getParameter("exp_ctg")));
+		VO.setExp_profile(newFileName);
+
+		int flag = 1;
+		
+		if(VO.getParam().get("functionSep").equals("password")) {
+			flag = userSvc.do_update(VO);
+		} else {
+			flag *= userSvc.do_update(VO);
+			flag *= expertSvc.do_update(VO);
+		}
+		
+		if(flag <= 0) {
+			res.getWriter().write("fail");
+		} else {
+			req.getSession().setAttribute("u_name", VO.getU_name());
+			res.getWriter().write("success");
+		}
+	}
+	
 }

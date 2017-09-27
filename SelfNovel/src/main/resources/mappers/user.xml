@@ -36,7 +36,7 @@
 	
 	<delete id="do_delete" parameterType="UserVO">
 		DELETE FROM users
-         WHERE u_id = #{u_id}
+         WHERE u_id = '${u_id}'
 	</delete>
 	
 	<update id="do_save" parameterType="UserVO">

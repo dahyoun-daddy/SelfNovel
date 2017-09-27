@@ -37,8 +37,10 @@ public class ExpertSvcImpl implements ExpertSvc{
 
 	@Override
 	public int do_update(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		log.debug("2=======================");
+		log.debug(dto.toString());
+		log.debug("2=======================");	
+		return expertDao.do_update(dto);
 	}
 
 	@Override
@@ -53,6 +55,14 @@ public class ExpertSvcImpl implements ExpertSvc{
 	public List<?> do_search() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public DTO do_chkId(DTO dto) {
+		log.debug("2=======================");
+		log.debug(dto.toString());
+		log.debug("2=======================");	
+		return expertDao.do_chkId(dto);
 	}
 	
 }

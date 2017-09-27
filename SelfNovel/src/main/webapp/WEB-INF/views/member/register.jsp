@@ -17,7 +17,7 @@
 	var re_password = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{4,20}$/;
 	var re_price = /^[0-9_-]{1,6}$/; // 가격 검사식
 	
-	$(document).ready(function(){
+	$(document).ready(function(){		
 		for(var i=1 ; i<8; i++){
 			document.getElementById('item'+i).style.display = "none";
 		}
@@ -154,7 +154,6 @@
 		formData.append("u_id", $("#u_id").val());
 		formData.append("u_password", $("#u_password").val());
 		formData.append("u_name", $("#u_name").val());
-		alert($("#exp_profile")[0].files[0]);
 		formData.append("exp_profile", $("#exp_profile")[0].files[0]);
 		formData.append("exp_title", $("#exp_title").val());
 		formData.append("exp_price", $("#exp_price").val());
@@ -175,7 +174,7 @@
             type: 'POST',
             success: function(result){
             	if(result == 'fail'){
-            		alert("회원가입 실패.");
+            		alert("수정 실패.");
             	} else if(result == 'success'){
                 	registerFrm.submit();	
             	}

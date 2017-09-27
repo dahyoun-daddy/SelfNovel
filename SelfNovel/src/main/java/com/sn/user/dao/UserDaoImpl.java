@@ -39,8 +39,11 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public int do_delete(DTO dto) {
-		
-		return 0;
+		log.debug("=================================");
+		log.debug(".do_update");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		return sqlSession.delete(namespace+".do_delete",(UserVO) dto);
 	}
 
 	@Override
@@ -49,10 +52,10 @@ public class UserDaoImpl implements UserDao {
 		log.debug(".do_update");
 		log.debug("dto.toString(): " + dto.toString());
 		log.debug("=================================");
-		if(dto.getParam().get("functionSep").equals("name")) {
-			return sqlSession.selectOne(namespace+".do_updateName", (UserVO) dto);
+		if(dto.getParam().get("functionSep").equals("password")) {
+			return sqlSession.update(namespace+".do_updatePwd", (UserVO) dto);
 		} else {
-			return sqlSession.selectOne(namespace+".do_updatePwd", (UserVO) dto);
+			return sqlSession.update(namespace+".do_updateName", (UserVO) dto);
 		}
 	}
 	
