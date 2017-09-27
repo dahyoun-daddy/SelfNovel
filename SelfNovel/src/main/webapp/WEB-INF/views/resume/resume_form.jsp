@@ -25,27 +25,69 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-    $('#itemAdd').click(function(){
-        //alert("aa");
-        
-        var contents = '';
-        contents += '<tr>';
-        contents +=     '<td><input type="text" name="title" /></td>';
-        contents += '</tr>';
-        contents += '<tr height="150px;">';
-        contents +=     '<td><input type="text" name="item" class="item" /></td>';
-        contents += '</tr>';
-        contents += '<tr>';
-        contents +=     '<td><input type="text" name="byte" class="byte" /></td>';
-        contents += '</tr>';
-        
-        $('#AddOption').append(contents); // 추가기능
-       
-        $('.delRow').click(function(){ // 삭제기능
-            $(this).parent().parent().remove(); 
-            //alert("aaa");
-        });
+$(document).ready(function(){
+
+    
+    $('.delRow').click(function(){ // 삭제기능
+        $(this).parent().parent().remove(); 
+        //alert("aaa");
     });
+});
+
+
+$("input[name='itemAdd']").on("click",function(){
+    alert("aa");
+
+  
+    
+    var contents = '';
+    contents += '	<tr>                                                                               ';
+    contents += '		<td colspan="2">                                                               ';
+    contents += '                                                                                      ';
+    contents += '<div class="container">                                                               ';
+    contents += '			<div class="row">                                                          ';
+    contents += ' 			<div class="col-md-10">                                                    ';
+    contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
+    contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
+    contents += '		                                                                               ';
+    contents += '				<tr>                                                                   ';
+    contents += '					<td>제목(Not Null)</td>                                             ';
+    contents += '				</tr>                                                                  ';
+    contents += '				<tr height="150px;">                                                   ';
+    contents += '					<td>내용(Not Null)</td>                                             ';
+    contents += '				</tr>                                                                  ';
+    contents += '				<tr>                                                                   ';
+    contents += '					<td align="right">글자수 용량</td>                                   ';
+    contents += '				</tr>                                                                  ';
+    contents += '				<tr height="100px;">                                                   ';
+    contents += '					<td align="right"><input type="button" value="+" name="itemAdd" />   ';
+    contents += '					<input type="button" name="delRow" class="delRow" value="-" /></td>';
+    contents += '				</tr>                                                                  ';
+    contents += '	   </table><!-- 내용테이블 -->                                                       ';
+    contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
+    contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
+    contents += '			   				                                                           ';
+    contents += '                                                                                      ';
+    contents += '		</table>                                                                       ';
+    contents += '		                                                                               ';
+    contents += '		                                                                               ';
+    contents += '	</div> <!-- span1 -->                                                              ';
+    contents += '	<div class="col-md-2">                                                             ';
+    contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
+    contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
+    contents += '			<input type="button" value="▲" /><br/>                                     ';
+    contents += '			<input type="button" value="▼" />                                          ';
+    contents += '		</table>                                                                       ';
+    contents += '	</div><!-- span2 -->                                                               ';
+    contents += '</div> <!-- row div -->                                                               ';
+    contents += '</div><!-- 컨테이너 -->                                                                 ';
+    contents += '		</td>                                                                          ';
+    contents += '	</tr>                                                                              ';
+    
+    $('#AddOption').append(contents); // 추가기능
+   
+
+});
   </script>
 <title>Insert title here</title>
 </head>
@@ -98,15 +140,17 @@
 								<td align="right">글자수 용량</td>
 							</tr>
 							<tr height="100px;">
-								<td align="right"><input type="button" value="+" id="itemAdd" />
+								<td align="right"><input type="button" value="+" name="itemAdd" />
 								<input type="button" name="delRow" class="delRow" value="-" /></td>
 							</tr>
-							<tbody id="AddOption">
-							
-							</tbody>
-
+				   </table><!-- 내용테이블 -->
+					<table class="table table-bordered table-hover table-condensed" border="1px" 
+						   cellpadding="2" cellspacing="2" align="center">
+						   				   
+	
+					</table>
 					
-					</table><!-- 내용테이블 -->
+					
 				</div> <!-- span1 -->
 				<div class="col-md-2">
 					<table class="table table-bordered table-hover table-condensed" border="1px" 
@@ -115,12 +159,14 @@
 						<input type="button" value="▼" />
 					</table>
 				</div><!-- span2 -->
-			
 			</div> <!-- row div -->
-			</div>
-		
+			</div><!-- 컨테이너 -->
 					</td>
 				</tr>
+			<!-- end 복붙 -->	
+			<tbody id="AddOption"  >
+							
+			</tbody>		
 		</table><!-- 바깥테이블 -->
 	</div><!-- 바깥테이블 div -->
 	
