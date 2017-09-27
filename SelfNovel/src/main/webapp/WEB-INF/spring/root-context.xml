@@ -15,6 +15,16 @@
     http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 빈 등록 -->
+	
+	
+	<!-- File Upload:CommonMultipartResolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<property name="maxUploadSize" value="52428800"></property><!-- 바이트 단위 --><!-- 50*1024*1024=50메가 -->
+		<property name="maxInMemorySize" value="52428800"></property>
+	</bean>
+	
 		
 	<!-- ****************************for transaction**************************** -->
 	 <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

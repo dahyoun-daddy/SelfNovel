@@ -9,11 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
@@ -22,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -71,16 +67,16 @@ public class pptTestController {
 		log.debug("==========================================================");
 		
 		  //File file=new File("C://file//"+imgVO.get//imgVO.getSave_file_nm());
-		  File file=new File("C://file//"+imgVO.getImg_path()+"//"+imgVO.getImg_sv_nm());
+		  File file=new File("C://file//"+imgVO.getImg_sv_nm());
 	      XMLSlideShow ppt = new XMLSlideShow(new FileInputStream(file));
 	      
 	      //getting the dimensions and size of the slide 
 	      Dimension pgsize = ppt.getPageSize();
 	      //List<XSLFSlide> slide = ppt.getSlides();
-	      XSLFSlide[] slide = ppt.getSlides();
+	      List<XSLFSlide> slide = ppt.getSlides();
 	      FileOutputStream out =null;
 	      
-	      for (int i = 0; i < slide.length; i++) {
+	      for (int i = 0; i < slide.size(); i++) {
 	         BufferedImage img = new BufferedImage(pgsize.width, pgsize.height,BufferedImage.TYPE_INT_RGB);
 	         Graphics2D graphics = img.createGraphics();
 
@@ -89,7 +85,7 @@ public class pptTestController {
 	         graphics.fill(new Rectangle2D.Float(0, 0, pgsize.width, pgsize.height));
 
 	         //render
-	         slide[i].draw(graphics);
+	         slide.get(i).draw(graphics);
 	         
 	         //creating an image file as output
 	         out = new FileOutputStream(uploadFilepath+"/images/ppt_image"+i+".png");
