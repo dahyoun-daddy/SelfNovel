@@ -78,20 +78,22 @@
 	<select id="do_searchOne" parameterType="com.sn.resume.domain.RsmVO"
 							  resultType="com.sn.resume.domain.RsmVO">
 		SELECT
-		    RSM_ID,
-		    IMG_ID,
-		    RSM_TITLE,
-		    RSM_CONTENT,
-		    U_ID,
-		    RSM_REG_DT,
-		    RSM_COUNT,
-		    RSM_RECOMMEND,
-		    RSM_COUNT,
-		    RSM_USE_YN,
-		    RSM_ORD_YN,
-		    RSM_DIV
-		FROM RESUME
-		WHERE ID=#{rsm_id, jdbcType=NUMBER(8)}      
+		    R.RSM_ID,
+		    R.IMG_ID,
+		    R.RSM_TITLE,
+		    R.RSM_CONTENT,
+		    R.U_ID,
+		    U.U_NAME,
+		    R.RSM_REG_DT,
+		    R.RSM_COUNT,
+		    R.RSM_RECOMMEND,
+		    R.RSM_COUNT,
+		    R.RSM_USE_YN,
+		    R.RSM_ORD_YN,
+		    R.RSM_DIV
+		FROM RESUME R, USERS U
+		WHERE RSM_ID=#{rsm_id}
+		  AND R.U_ID = U.U_ID
 	</select>
 	
 	<!-- 전체조회(do_search) : TODO 검색조건 추가할 것 -->

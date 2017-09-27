@@ -1,5 +1,6 @@
 package com.sn.resume.controller;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -14,19 +15,37 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sn.common.StringUtil;
 import com.sn.resume.dao.RsmDao;
+import com.sn.resume.domain.ItmVO;
 import com.sn.resume.domain.RsmVO;
+import com.sn.resume.service.ItmSvc;
+import com.sn.resume.service.RsmSvc;
+import com.sn.resume.service.RsmSvcImpl;
 
+
+/**
+ * RsmController
+ * detail : 자소서 컨트롤러
+ * 최종수정일 : 2017_09_27
+ * @author MinSeok <dev.edwinner@gmail.com>
+ *
+ */
 @Controller
 public class RsmController {
-	private Logger log = LoggerFactory.getLogger(this.getClass());	
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	RsmDao RsmDao;	
+	RsmSvc rsmSvc;
+	
+	@Autowired
+	ItmSvc itmSvc;
 	
 	/**
-	 * 
+	 * resumeList
+	 * detail : 자소서 게시판 및 검색 기능
+	 * 최종수정일 : 2017_09_27
 	 * @param req
-	 * @return
+	 * @return modelAndView(list, totalCnt, searchWord, searchDiv, searchCat)
+	 * 		   viewName("resume/resume_list); 
 	 */
 	@RequestMapping(value="resume/do_search.do")
 	public ModelAndView resumeList(HttpServletRequest req) {
@@ -51,15 +70,12 @@ public class RsmController {
 		searchParam.put("searchWord", p_searchWord);
 		searchParam.put("searchCat", p_searchCat);
 		
-		log.debug("=========================");
-		log.debug("p_searchWord" + p_searchWord);
-		
 		//Vo생성 후, searchParam set
 		RsmVO inRsmVo = new RsmVO();
 		inRsmVo.setParam(searchParam);
 		
 		//list객체 생성 후, inRsmVo 주입
-		List<RsmVO> list = (List<RsmVO>) RsmDao.do_search(inRsmVo);
+		List<RsmVO> list = (List<RsmVO>) this.rsmSvc.do_search(inRsmVo);
 		
 		//리턴받은 list에서 총 글수 값을 가져와 set
 		int totalCnt = 0;
@@ -74,5 +90,44 @@ public class RsmController {
 		modelAndView.setViewName("resume/resume_list");
 		
 		return modelAndView;
+	}
+	
+	/**
+	 * resumeView
+	 * detail : 상세조회
+	 * @param req
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value="resume/do_searchOne.do")
+	public ModelAndView resumeView(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.do_searchOne =====");
+		log.debug("req : " + req.toString());		
+		log.debug("rsm_id : " + req.getParameter("rsm_id"));
+		log.debug("=========================================");
+		
+		String rsm_id = req.getParameter("rsm_id");
+		
+		//Vo생성 후, rsm_id set
+		RsmVO inRsmVO = new RsmVO();
+		inRsmVO.setRsm_id(rsm_id);
+		
+		//RsmSvc를 통해 해당 자기소개서 호출
+		RsmVO resultVO = (RsmVO) this.rsmSvc.do_searchOne(inRsmVO);		
+		log.debug("result : " + resultVO.toString());
+		
+		//itmVO에 rsm_id를 set
+		ItmVO itmVO = new ItmVO();
+		itmVO.setRsm_id(rsm_id);
+		
+		//ItmSvc를 통해 해당 자기소개서의 항목들 호출
+		List<ItmVO> itmList = (List<ItmVO>) itmSvc.do_search(itmVO);
+		//HashMap<String, String> sizeMap = itmSvc.do_search(itmVO);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("resume/resume_view");
+		modelAndView.addObject("rsmVO", resultVO);		
+		modelAndView.addObject("itmList", itmList);
+		
+		return modelAndView;		
 	}
 }

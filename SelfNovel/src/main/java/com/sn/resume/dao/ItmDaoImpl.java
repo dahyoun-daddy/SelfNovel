@@ -1,6 +1,7 @@
 package com.sn.resume.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class ItmDaoImpl implements ItmDao {
 		String statement = namespace +".do_save";//resume.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입				
 		return sqlSession.insert(statement, inItmVO);		
-	}
+	}	 
 
 	/**
 	 * do_search
@@ -45,9 +46,15 @@ public class ItmDaoImpl implements ItmDao {
 	@Override
 	public List<?> do_search(DTO dto) {
 		String statement = namespace +".do_search";//resume.xml연결
-		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입
+		ItmVO  inItmVO   = (ItmVO)dto;             //파라미터 주입
 		return sqlSession.selectList(statement, inItmVO);
 	}
+	
+	/*public Map<String, String> do_search_count(DTO dto){
+		String statement = namespace + ".do_search_count";
+		ItmVO inItmVO    = (ItmVO)dto;
+		return sqlSession.selectList(statement, inItmVO);
+	}*/
 
 	/**
 	 * do_delete

@@ -201,7 +201,11 @@
 								<td class="text-center"><c:out value="${rsmVo.no}"/></td>
 								<td class="text-left"><c:out value="${rsmVo.u_name}"/></td>
 								<!-- TODO : 글 제목에 링크 -->
-								<td class="text-left"><a href="#"><c:out value="${rsmVo.rsm_title}"/></a></td>
+								<td class="text-left">
+									<a href="do_searchOne.do?rsm_id=${rsmVo.rsm_id}">
+										<c:out value="${rsmVo.rsm_title}"/>
+									</a>
+								</td>
 								<td class="text-center"><c:out value="${rsmVo.rsm_reg_dt}"/></td>
 								<td class="text-right"><c:out value="${rsmVo.rsm_count}"/></td>
 								<td class="text-right"><c:out value="${rsmVo.rsm_recommend}"/></td>
