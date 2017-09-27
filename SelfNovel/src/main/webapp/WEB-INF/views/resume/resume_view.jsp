@@ -75,48 +75,53 @@
 					<br/>
 					<div id="items" align="center">
 					
+					
 					<!-- **************************** forEach 시작부분 **************************** -->
-					<c:forEach begin="0" end="10">
-						<!-- 본문영역 -->
-						<table class="table table-bordered table-hover table-condensed" border="1px" 
-			   				   cellpadding="2" cellspacing="2" align="center" width="550px;">
-							<tr>
-								<td><input type="text" value="제목(ex. 지원동기,입사 후 포부 등)" style="border: 0px;"></td>
-							</tr>
-							<tr>
-								<td><textarea rows="5" cols="80" style="border: 0px;">원본 내용</textarea></td>
-							</tr>
-						</table>
-						<br/>
-						<!-- end 본문영역 -->
-						
-						<!-- 첨삭영역 -->
-						<div>
-							<img src="" width="60px" height="50px" name="doShowEdit">
-							<input type="button" name="doShowEdit" value="첨삭보기">
-							<!-- 임의로 버튼으로 구현을 시도한다. 나중에 이미지 변경시 같은 이름으로 만들어주거나, 아니면 버튼을 이미지로 만들어도 좋다 -->
-							<!-- 2017-09-26 pinkbean -->
-						
-							<!-- 숨겨지는 부분이다. 버튼을 클릭하면 토글된다. -->
-							<div id="editDiv" style="display:none;">
-								<div align="right">
-									<input type="button" value="첨삭하기" class="btn btn-default">
-								</div>
-								<br/>
-								<table
-									   class="table table-bordered table-hover table-condensed" border="1px" 
-					   				   cellpadding="2" cellspacing="2" align="center" width="550px;">
+					<c:forEach var="item" items="${itmList}" begin="0">
+						<c:choose>
+							<c:when test="${item.itm_prd_id eq null}">
+								<!-- 본문영역 -->						
+								<table class="table table-bordered table-hover table-condensed" border="1px" 
+											cellpadding="2" cellspacing="2" align="center" width="550px;">
 									<tr>
-										<td><input type="text" value="제목(ex. 지원동기,입사 후 포부 등)" style="border: 0px;"></td>
+										<td><input type="text" value="${item.itm_title}" style="border: 0px;"></td>
 									</tr>
 									<tr>
-										<td><textarea rows="5" cols="80" style="border: 0px;">첨삭 내용</textarea></td>
+										<td><textarea rows="5" cols="80" style="border: 0px;">"${item.itm_content}"</textarea></td>
 									</tr>
 								</table>
-							</div>
-							<!-- end_editDiv -->
-						</div>
-						<!-- end 첨삭영역 -->
+								<!-- end 본문영역 -->					
+							<br/>
+							</c:when>
+							<c:otherwise>
+							<!-- 첨삭영역 -->
+								<div>
+									<img src="" width="60px" height="50px" name="doShowEdit">
+									<input type="button" name="doShowEdit" value="첨삭보기">
+									<!-- 임의로 버튼으로 구현을 시도한다. 나중에 이미지 변경시 같은 이름으로 만들어주거나, 아니면 버튼을 이미지로 만들어도 좋다 -->
+									<!-- 2017-09-26 pinkbean -->						
+									
+									<!-- 숨겨지는 부분이다. 버튼을 클릭하면 토글된다. -->
+									<div id="editDiv" style="display:none;">
+										<div align="right">
+											<input type="button" value="첨삭하기" class="btn btn-default">
+										</div>
+										<br/>
+										<table class="table table-bordered table-hover table-condensed" border="1px" 
+					   				   			cellpadding="2" cellspacing="2" align="center" width="550px;">
+											<tr>
+												<td><input type="text" value="${item.itm_title}" style="border: 0px;"></td>
+											</tr>
+											<tr>
+												<td><textarea rows="5" cols="80" style="border: 0px;">${item.itm_content}</textarea></td>
+											</tr>
+										</table>
+									</div>
+									<!-- end_editDiv -->
+								</div>
+								<!-- end 첨삭영역 -->
+							</c:otherwise>
+						</c:choose>
 						<br/>
 						<hr/>
 					</c:forEach>
