@@ -47,8 +47,16 @@ private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
 
 	@Override
 	public int do_update(DTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		log.debug("=================================");
+		log.debug(".do_update");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		
+		if(dto.getParam().get("functionSep").equals("name")) {
+			return sqlSession.update(namespace+".do_updateName", (ExpertVO) dto);
+		} else {
+			return sqlSession.update(namespace+".do_updateProfile", (ExpertVO) dto);
+		}
 	}
 
 	@Override
@@ -58,6 +66,14 @@ private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
 		log.debug("dto.toString(): " + dto.toString());
 		log.debug("=================================");
 		return sqlSession.selectOne(namespace+".do_searchOne", (ExpertVO) dto);
+	}
+	
+	public DTO do_chkId(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_chkId");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		return sqlSession.selectOne(namespace+".do_chkId", (ExpertVO) dto);
 	}
 
 }

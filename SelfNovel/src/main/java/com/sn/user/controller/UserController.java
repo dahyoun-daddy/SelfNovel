@@ -127,6 +127,7 @@ public class UserController {
 		if( VO == null) {
 			res.getWriter().write("fail");
 		} else {
+			res.setCharacterEncoding("UTF-8");
 			res.getWriter().write(new Gson().toJson(VO));
 		}
 	}
@@ -190,23 +191,45 @@ public class UserController {
 	
 	@RequestMapping(value="user/do_update.do")
 	public void do_update(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		String path = req.getSession().getServletContext().getRealPath("/resources/exp_profiles");
+		
+		MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
+				new DefaultFileRenamePolicy());
+		
 		UserVO VO = new UserVO();
-		String functionSep = req.getParameter("functionSep");
+		String functionSep = mr.getParameter("functionSep");
 		Hashtable<String, String> param = new Hashtable<String, String>();
 		param.put("functionSep", functionSep);
 		VO.setParam(param);
 		
-		if(functionSep.equals("name")) {
-			VO.setU_name(req.getParameter("u_name"));
-		} else if(functionSep.equals("password")) {
-			VO.setU_password(req.getParameter("u_password"));
-		}
+		VO.setU_id(mr.getParameter("u_id"));
+		VO.setU_name(mr.getParameter("u_name"));
+		VO.setU_password(mr.getParameter("u_password"));
 		
 		int flag = userSvc.do_update(VO);
 		if(flag > 0) {
+			req.getSession().setAttribute("u_name", VO.getU_name());
 			res.getWriter().write("success");
 		} else {
 			res.getWriter().write("fail");
 		}
+	}
+	
+	@RequestMapping(value="user/do_delete.do")
+	public void do_delete(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		UserVO VO = new UserVO();
+		VO.setU_id(req.getParameter("u_id"));
+		log.debug("asdf: " + VO.getU_id());
+		
+		int flag = userSvc.do_delete(VO);
+		
+		if(flag > 0) {
+			req.getSession().removeAttribute("u_id");
+			req.getSession().removeAttribute("u_name");
+			req.getSession().removeAttribute("u_level");
+			res.getWriter().write("success");
+		} else {
+			res.getWriter().write("fail");
+		}		
 	}
 }

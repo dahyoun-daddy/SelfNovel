@@ -29,8 +29,10 @@ public class UserSvcImpl implements UserSvc {
 
 	@Override
 	public int do_delete(DTO dto) {
-		
-		return 0;
+		log.debug("2=======================");
+		log.debug(dto.toString());
+		log.debug("2=======================");	
+		return userDao.do_delete(dto);
 	}
 
 	@Override

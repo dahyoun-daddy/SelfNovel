@@ -13,4 +13,5 @@ public interface ExpertSvc {
 	int do_update(DTO dto);
 	DTO do_searchOne(DTO dto) throws IOException;
 	List<?> do_search();
+	DTO do_chkId(DTO dto);
 }
