@@ -49,12 +49,6 @@ public class ItmDaoImpl implements ItmDao {
 		ItmVO  inItmVO   = (ItmVO)dto;             //파라미터 주입
 		return sqlSession.selectList(statement, inItmVO);
 	}
-	
-	/*public Map<String, String> do_search_count(DTO dto){
-		String statement = namespace + ".do_search_count";
-		ItmVO inItmVO    = (ItmVO)dto;
-		return sqlSession.selectList(statement, inItmVO);
-	}*/
 
 	/**
 	 * do_delete

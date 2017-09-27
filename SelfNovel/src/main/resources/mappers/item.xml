@@ -54,13 +54,29 @@
 		       u_id,
 		       itm_reg_dt,
 		       itm_seq,
+		       itm_use_yn               
+		FROM item
+		WHERE rsm_id = 9        
+		  AND itm_use_yn = 1		            
+		START WITH itm_prd_id IS NULL
+		CONNECT BY PRIOR itm_form_id = itm_prd_id
+        ORDER SIBLINGS BY ITM_SEQ
+<!-- 		SELECT rsm_id,
+		       itm_form_id,
+		       itm_prd_id,
+		       itm_title,       
+		       itm_content,
+		       u_id,
+		       itm_reg_dt,
+		       itm_seq,
 		       itm_use_yn,               
                COUNT(*) OVER(PARTITION BY level) AS totalNo
 		FROM item
 		WHERE rsm_id = 9
-		  AND itm_use_yn = 1
+		  AND itm_use_yn = 1		  
 		START WITH itm_prd_id IS NULL
 		CONNECT BY PRIOR itm_form_id = itm_prd_id
+		ORDER SIBLINGS BY itm_sq -->
 	</select>
 	
 	<!-- 작성자 기반 조회(Search) -->

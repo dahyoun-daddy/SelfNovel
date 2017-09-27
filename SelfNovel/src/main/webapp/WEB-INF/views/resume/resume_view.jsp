@@ -30,8 +30,15 @@
 			var parent = $(this).parent();
 			var editDiv = $(parent).find("#editDiv");
 			editDiv.toggle();
-		});
-	});
+		});//close doShowEdit_click
+		
+		//첨삭버튼 클릭 이벤트
+		$("form[name=frm]").on("click", "#btnAddResume", function(){	
+			alert("good");
+		});//close btnAddResume_click
+		
+	});//close .ready(function)
+	
 </script>
 <title>Insert title here</title>
 </head>
@@ -90,7 +97,11 @@
 										<td><textarea rows="5" cols="80" style="border: 0px;">"${item.itm_content}"</textarea></td>
 									</tr>
 								</table>
-								<!-- end 본문영역 -->					
+								<!-- end 본문영역 -->
+								<div align="right">
+									<input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default">
+								</div>
+								<br/>
 							<br/>
 							</c:when>
 							<c:otherwise>
@@ -102,11 +113,7 @@
 									<!-- 2017-09-26 pinkbean -->						
 									
 									<!-- 숨겨지는 부분이다. 버튼을 클릭하면 토글된다. -->
-									<div id="editDiv" style="display:none;">
-										<div align="right">
-											<input type="button" value="첨삭하기" class="btn btn-default">
-										</div>
-										<br/>
+									<div id="editDiv" style="display:none;">										
 										<table class="table table-bordered table-hover table-condensed" border="1px" 
 					   				   			cellpadding="2" cellspacing="2" align="center" width="550px;">
 											<tr>
