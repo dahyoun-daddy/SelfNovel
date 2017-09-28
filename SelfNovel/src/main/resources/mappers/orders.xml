@@ -35,31 +35,20 @@
 		isExpert가 u_id일시 u_id가 검색조건
 	 -->
 	<select id="do_search" parameterType="String" resultType="OrdersVO">
-		SELECT
-		  rsm_id,
-		  exp_id,
-		  u_id,
-		  ord_state,
-		  ord_reg_dt,
-		  ord_use_yn,
-		  GET_CD_NM('C001',ord_state) as ord_state_nm,
-		  GET_RS_NM(rsm_id) as rsm_title,
-		  no,
-		  TOTALNO
-		FROM (
+		<include refid="com.sn.common.pagingPre"/>
 	      SELECT A.rsm_id,
 		 		 A.exp_id,
 		  		 A.u_id,
 		  		 A.ord_state,
 		  		 A.ord_reg_dt,
 		  		 A.ord_use_yn,
-	             ROW_NUMBER() OVER (ORDER BY A.ord_reg_dt DESC) AS no,
-	             COUNT(*) OVER() AS TOTALNO
+	             ROW_NUMBER() OVER (ORDER BY A.ord_reg_dt DESC) AS RNUM,
+	             GET_CD_NM('C001',ord_state) as ord_state_nm,
+		  		 GET_RS_NM(rsm_id) as rsm_title
 	      FROM ORDERS A
 	      <include refid="orderIdSearchCondition" />
 	      ORDER BY A.ord_reg_dt DESC
-	    )
-		WHERE no BETWEEN (#{PAGE_SIZE}*(#{PAGE_NUM}-1)+1) AND (#{PAGE_SIZE}*(#{PAGE_NUM}))
+	    <include refid="com.sn.common.pagingPost" /> 
 	</select>
 	
 	<sql id="orderIdSearchCondition">
