@@ -115,9 +115,10 @@ $(document).ready(function(){
 <body>
 	<h2>form</h2>
 	<hr/>
+
 	<div>
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
-				   cellpadding="2" cellspacing="2" align="center" width="500px;" height="100px;" id="testTable">
+				   cellpadding="2" cellspacing="2" align="center" id="testTable">
 		
 			    <tr>
 					<td>분야</td>
@@ -189,15 +190,21 @@ $(document).ready(function(){
 			<!-- end 복붙 -->	
 			<tbody id="AddOption" >
 							 
-			</tbody>		
+			</tbody>
+			
+			
+			<tr>
+				<td colspan="2">
+				<div align="center">
+					<input type="button" value="작성취소">
+					<input type="button" value="작성완료">
+				</div>	
+				</td>
+			</tr>
+							
 		</table><!-- 바깥테이블 -->
 	</div><!-- 바깥테이블 div -->
-	
-	<div align="center">
-		<tr>
-			<input type="button" value="작성취소">
-			<input type="button" value="작성완료">
-		</tr>
-	</div>
+
+
 </body>
 </html>

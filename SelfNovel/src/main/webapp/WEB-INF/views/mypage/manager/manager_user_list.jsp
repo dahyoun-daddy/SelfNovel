@@ -54,7 +54,7 @@
 			</tr>
 		</table>
 	</form>
-	<h3>총 회원수: <c:out value="">${totalCnt}명</c:out></h3>
+	<h3>총 회원수: <c:out value="${totalCnt}명"/></h3>
 	<hr/>
 	
 	<form action="">
