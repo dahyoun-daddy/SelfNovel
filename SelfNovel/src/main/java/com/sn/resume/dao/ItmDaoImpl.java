@@ -30,14 +30,25 @@ public class ItmDaoImpl implements ItmDao {
 
 	/**
 	 * do_save
-	 * detail : 삽입
+	 * detail : 일반 저장
 	 */
 	@Override
 	public int do_save(DTO dto) {
 		String statement = namespace +".do_save";//resume.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입				
 		return sqlSession.insert(statement, inItmVO);		
-	}	 
+	}
+	
+	/**
+	 * do_save_edit
+	 * detail : 첨삭 저장
+	 */
+	@Override
+	public int do_save_edit(DTO dto) {
+		String statement = namespace +".do_save_edit";//resume.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입				
+		return sqlSession.insert(statement, inItmVO);		
+	}	
 
 	/**
 	 * do_search

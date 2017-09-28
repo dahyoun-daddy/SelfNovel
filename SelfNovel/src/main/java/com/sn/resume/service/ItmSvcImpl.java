@@ -27,7 +27,7 @@ public class ItmSvcImpl implements ItmSvc {
 	private ItmDao itmDao;
 	
 	/**
-	 * 삽입
+	 * 일반 저장
 	 */
 	@Override
 	public int do_save(DTO dto) {
@@ -35,6 +35,18 @@ public class ItmSvcImpl implements ItmSvc {
 		log.debug("dto : " + dto.toString());
 		log.debug("==============================");
 		return itmDao.do_save(dto);
+	}
+	
+
+	/**
+	 * 첨삭 저장
+	 */
+	@Override
+	public int do_save_edit(DTO dto) {
+		log.debug("===== ItmDaoImpl.do_save_edit =====");
+		log.debug("dto : " + dto.toString());
+		log.debug("===================================");
+		return itmDao.do_save_edit(dto);
 	}
 
 	/**
@@ -76,5 +88,4 @@ public class ItmSvcImpl implements ItmSvc {
 		//Don't use it
 		return null;
 	}
-
 }

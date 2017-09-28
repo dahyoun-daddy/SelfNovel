@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sn.common.StringUtil;
@@ -129,5 +130,33 @@ public class RsmController {
 		modelAndView.addObject("itmList", itmList);
 		
 		return modelAndView;		
+	}
+	
+	/**
+	 * doSaveItm
+	 * detail : 첨삭 저장 메소드
+	 * 최초작성   : 2017-09-28	
+	 * @param req
+	 * @return flag(1: 성공 other: 실패)
+	 */
+	@RequestMapping(value="resume/do_save_edit.do")
+	@ResponseBody
+	public int doSaveEdit(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.do_save_edit =====");
+		log.debug("req : " + req.toString());
+		log.debug("=========================================");
+		
+		//Vo 생성 후 request에서 받은 parameter를 세팅한다.
+		ItmVO inItmVo = new ItmVO();
+		inItmVo.setRsm_id(req.getParameter("rsm_id"));
+		inItmVo.setItm_prd_id(req.getParameter("itm_prd_id"));
+		inItmVo.setItm_title(req.getParameter("itm_title"));
+		inItmVo.setItm_content(req.getParameter("itm_content"));
+		inItmVo.setU_id(req.getParameter("u_id"));
+		
+		//itmSvc를 통해 do_save메소드 호출
+		int flag = itmSvc.do_save_edit(inItmVo);
+		
+		return 0;	
 	}
 }

@@ -32,10 +32,56 @@
 			editDiv.toggle();
 		});//close doShowEdit_click
 		
-		//첨삭버튼 클릭 이벤트
-		$("form[name=frm]").on("click", "#btnAddResume", function(){	
-			alert("good");
+		/**************************
+		* '첨삭'버튼 클릭시 이벤트
+		***************************/
+		$("form[name=frm]").on("click", "#btnAddResume", function(){
+			var selected = $(this).parent().parent().parent();	   //현재 선택된 항목
+			var sel_title = selected.find("#itm_title").val();	   //선택된 항목의 제목
+			var sel_content = selected.find("#itm_content").html();//첨삭 선택된 항목의 내용
+			var sel_id = selected.find("#itm_form_id").val();	   //첨삭 선택된 항목의 id
+			
+			$("#modalTitleOrigin").val(sel_title);
+			$("#modalContentOrigin").val(sel_content);
+			$("#modalTitleNew").val(sel_title);
+			$("#modalContentNew").val(sel_content);
+			$("#modalItmId").val(sel_id);
+			$("#itmModal").modal();
 		});//close btnAddResume_click
+		
+		/**************************
+		* '작성'버튼 클릭시 이벤트 :
+		* detail : do_save
+		***************************/
+		$("#btnItmSave").on("click", function(){			
+			var rsm_id = $("#rsm_id").val();
+			var itm_title = $("#modalTitleNew").val();
+			var itm_content = $("#modalContentNew").val();
+			var itm_prd_id = $("#modalItmId").val();
+			var u_id = $("#u_id").val();//TODO : 세션에서 작성자 아이디 받아오도록 수정할 것
+			
+			$.ajax({
+				type : "POST",
+				url : "do_save_edit.do",
+				dataType : "html",
+				data : {
+					"rsm_id" : rsm_id,
+					"itm_prd_id" : itm_prd_id,
+					"itm_title" : itm_title,
+					"itm_content" : itm_content,
+					"u_id" : u_id,
+					"itm_seq" : "0"
+					},
+				success : function(data){
+					var flag = ($.trim(data));
+					$(".modal").modal("hide");
+					location.reload();					
+				},
+				error : function(data){
+					//에러
+				}
+			})//close ajax
+		});//close btnItmSave_on_click		
 		
 	});//close .ready(function)
 	
@@ -46,6 +92,7 @@
 	<h2>자기소개서 view</h2>
 	<hr/>
 	<form action="#" name="frm" method="post" class="form-inline">
+		<input type="hidden" id="rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
 		<table class="table table-bordered table-hover table-condensed" border="1px" align="center" width="600px;">
 			<tr>				
 				<td align="right" colspan="3">
@@ -59,14 +106,13 @@
 					<!-- <input type="text" value="제목,분야" style="border: 0px;">-->
 					<input type="text" value="${rsmVO.rsm_title}" style="border: 0px;">
 				</td>
-				<td align="right" width="15%">
-					<!-- <input type="text" value="작성일" style="text-align: right; border: 0px;"> -->
-					<input type="text" value="${rsmVO.rsm_reg_dt}" style="text-align: right; border: 0px;">
+				<td align="right" width="15%">					
+					<input type="text" style="text-align: right; border: 0px;" value="${rsmVO.rsm_reg_dt}">
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align: center;">작성자</td>
-				<td colspan="2"><input value="${rsmVO.u_name}" type="text" style="border: 0px;"></td>				
+				<td colspan="2"><input type="text" id="u_name" style="border: 0px;" value="${rsmVO.u_name}" ></td>				
 			</tr>
 			<tr>
 				<td style="text-align: center;">내용</td>
@@ -89,18 +135,24 @@
 							<c:when test="${item.itm_prd_id eq null}">
 								<!-- 본문영역 -->						
 								<table class="table table-bordered table-hover table-condensed" border="1px" 
-											cellpadding="2" cellspacing="2" align="center" width="550px;">
+											cellpadding="2" cellspacing="2" align="center" width="550px;">									
 									<tr>
-										<td><input type="text" value="${item.itm_title}" style="border: 0px;"></td>
+										<td>
+											<input id="itm_title" type="text" value="${item.itm_title}" style="border: 0px;">
+											<input type="hidden" id="itm_form_id" value="${item.itm_form_id}"><!-- 항목 아이디 -->
+										</td>
+										
 									</tr>
 									<tr>
-										<td><textarea rows="5" cols="80" style="border: 0px;">"${item.itm_content}"</textarea></td>
+										<td><textarea id="itm_content" rows="5" cols="80" style="border: 0px;">${item.itm_content}</textarea></td>
+									</tr>
+									<tr>
+										<td style="float: right;">
+											<input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default">											
+										</td>
 									</tr>
 								</table>
-								<!-- end 본문영역 -->
-								<div align="right">
-									<input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default">
-								</div>
+								<!-- end 본문영역 -->								
 								<br/>
 							<br/>
 							</c:when>
@@ -116,11 +168,23 @@
 									<div id="editDiv" style="display:none;">										
 										<table class="table table-bordered table-hover table-condensed" border="1px" 
 					   				   			cellpadding="2" cellspacing="2" align="center" width="550px;">
+					   				   		<tr>
+					   				   			<td>작성자</td>
+					   				   			<td><input type="text" id="u_id" value="${item.u_id}" style="border: 0px;"></td>
+					   				   			<td>작성일</td>
+					   				   			<td><input type="text" id="item_reg_dt" value="${item.itm_reg_dt}" style="border: 0px;"></td>
+					   				   		</tr>
 											<tr>
-												<td><input type="text" value="${item.itm_title}" style="border: 0px;"></td>
+												<td colspan="4">
+													<input type="text" id="itm_title" value="${item.itm_title}" style="border: 0px;">
+													<input type="hidden" id="itm_form_id" value="${item.itm_form_id}"><!-- 항목 아이디 -->
+													<input type="hidden" id="itm_prd_id" value="${item.itm_prd_id}"><!-- 상위항목 아이디 -->
+												</td>
 											</tr>
 											<tr>
-												<td><textarea rows="5" cols="80" style="border: 0px;">${item.itm_content}</textarea></td>
+												<td colspan="4">
+													<textarea rows="5" cols="80" style="border: 0px;">${item.itm_content}</textarea>
+												</td>
 											</tr>
 										</table>
 									</div>
@@ -132,12 +196,72 @@
 						<br/>
 						<hr/>
 					</c:forEach>
-					<!-- **************************** end forEach **************************** -->
-					
+					<!-- **************************** end forEach **************************** -->					
 					</div>
 				</td>
 			</tr>
 		</table>
 	</form>
+	
+	<!-- 첨삭하기 Modal Window -->
+	<div id="itmModal" class="modal fade" role="dialog">
+		<form name="itmModalFrm">
+		<!-- modal-dialog -->
+  		<div class="modal-dialog">
+    		<!-- Modal content-->    		
+	    	<div class="modal-content">
+	    		<!-- modal-header -->
+				<div class="modal-header">
+	        		<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+	        		<h4 class="modal-title">첨삭하기</h4>
+	      		</div>
+	      		<!-- //modal-header -->
+	      		<!-- modal-body -->
+				<div class="modal-body">
+					<input type="text" id="modalItmId">
+					<h3>원본</h3>
+					<table class="table table-bordered table-hover table-condensed" border="1px" 
+					   				   			cellpadding="2" cellspacing="2" align="center" width="100%">
+						<tr>
+							<td>
+								<input id="modalTitleOrigin" type="text" style="width:100%; border: 0px;" readonly>
+							</td>					
+						</tr>
+						<tr>
+							<td>
+								<textarea id="modalContentOrigin" style="width:100%; border: 0px;" readonly></textarea>
+							</td>
+						</tr>
+					</table>					
+					<br>		
+					<h3>첨삭하기</h3>							
+					<table class="table table-bordered table-hover table-condensed" border="1px" 
+					   				   			cellpadding="2" cellspacing="2" align="center" width="100%">
+						<tr>
+							<td>
+								<input id="modalTitleNew" type="text" style="width:100%; border: 0px;">
+							</td>					
+						</tr>
+						<tr>
+							<td>
+								<textarea id="modalContentNew" style="width:100%; border: 0px;"></textarea>
+							</td>
+						</tr>
+					</table>									
+					<br>					
+			    </div>
+			    <!-- //modal-body -->
+				<div class="modal-footer">
+					<button id="btnItmSave" type="button" class="btn btn-default">작성완료</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				</div>
+				<!-- //modal-footer -->	
+			</div>	
+			<!-- //Modal content-->		
+		</div>
+		<!-- //Modal dialog -->
+		</form>
+	</div>	
+	<!-- //Modal -->
 </body>
 </html>
