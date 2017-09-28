@@ -26,19 +26,19 @@
 
 <script type="text/javascript">
 $(function() {
-    $('#content').keyup(function (e){
+    $('#content_').keyup(function (e){
         var content = $(this).val();
         $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
         $('#counter').html(content.length );
     });
-    $('#content').keyup();
-});
+    
 
+    $('#content_').keyup();
+});
 </script>
 
 <script type="text/javascript">
 $(document).ready(function(){
-
     
     $("#testTable").on("click",".delRow",function(){// 삭제기능	
         //$(this).parent().parent().remove(); 
@@ -49,7 +49,6 @@ $(document).ready(function(){
     
     $("#testTable").on("click","#itemAdd",function(){
         //alert("aa");
-
       
         
         var contents = '';
@@ -66,10 +65,10 @@ $(document).ready(function(){
         contents += '					<td><input type="text" value="제목(Not Null)"/></td>                ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr height="150px;">                                                   ';
-        contents += '				<td><textarea  id="content"  rows="10" cols="100" >내용(Not Null)</textarea></td>   ';
+        contents += '				<td><textarea  name="content"  rows="10" cols="100" >내용(Not Null)</textarea></td>   ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr>                                                                   ';
-        contents += '					<td align="right">글자수 용량:<span id="counter">###</span></td>       ';
+        contents += '					<td align="right">글자수 용량:<span name="counter" id="counter">###</span></td>       ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr height="100px;">                                                   ';
         contents += '					<td align="right"><input type="button" value="+" id="itemAdd" />   ';
@@ -98,12 +97,18 @@ $(document).ready(function(){
         
         $('#AddOption').append(contents); // 추가기능
        
-
     });
+    
+    $("#testTable").on("keyup","textarea[name='content']",function (){
+        var content = $(this).val();        
+        $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
+        
+        var tbl = $(this).parent().parent().parent().parent();
+        counter = $(tbl).find("#counter");
+        $(counter).html(content.length );
+    });
+    
 });
-
-
-
   </script>
 <title>Insert title here</title>
 </head>
@@ -150,12 +155,12 @@ $(document).ready(function(){
 								<td><input type="text" value="제목(Not Null)"/> </td>
 							</tr>
 							<tr height="150px;">
-								<td><textarea  id="content"  rows="10" cols="100" >내용(Not Null)</textarea>
+								<td><textarea  name="content"  rows="10" cols="100" >내용(Not Null)</textarea>
 								</td>
 							</tr>
 							
 							<tr>
-								<td align="right">글자수 용량:<span id="counter">###</span></td>
+								<td align="right">글자수 용량:<span id="counter" name="counter">###</span></td>
 							</tr>
 							<tr height="100px;">
 								<td align="right"><input type="button" value="+" id="itemAdd" />

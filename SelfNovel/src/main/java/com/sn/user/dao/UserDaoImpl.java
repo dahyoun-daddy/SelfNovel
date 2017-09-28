@@ -34,10 +34,11 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<?> do_search(DTO dto) {
 		log.debug("=================================");
-		log.debug(".do_update");
+		log.debug(".do_search");
 		log.debug("dto.toString(): " + dto.toString());
 		log.debug("=================================");
-		return sqlSession.selectList(namespace+".do_search",(UserVO) dto);
+		UserVO userDTO = (UserVO) dto;
+		return sqlSession.selectList(namespace+".do_search", userDTO.getParam());
 	}
 
 	@Override

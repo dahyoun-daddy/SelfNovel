@@ -23,9 +23,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<table class="table table-bordered table-hover table-condensed" border="1px" align="center" style="width: 610px;">
+	<table class="table table-bordered table-hover table-condensed" border="1px" align="center" ><!-- style="width: 610px;" -->
 		<tr>
-			<td align="center"><img src="../resources/img/main.jpg" width="600px;" height="300px;"/></td>
+			<td align="center"><img src="../resources/img/main.jpg" /></td><!-- width="600px;" height="300px;" -->
 		</tr>
 		<tr>
 			<td>
@@ -47,7 +47,7 @@
 								<td>
 									<div>
 										<br/>
-										<table class="table table-bordered table-hover table-condensed" border="1px" align="center">
+										<table class="table table-bordered table-hover table-condensed" border="1px" align="center" style="width: 200px;">
 											<tr>
 												<td colspan="2">
 													<img src="" width="190px;" height="150px;">
