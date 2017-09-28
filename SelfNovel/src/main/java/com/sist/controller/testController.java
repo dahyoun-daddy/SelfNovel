@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sn.codes.dao.CodesDao;
 import com.sn.codes.domain.CodesVO;
+import com.sn.expert.dao.ExpertDaoImpl;
 import com.sn.img.dao.ImgDao;
 import com.sn.img.dao.ImgDaoImpl;
 import com.sn.img.domain.ImgVO;
@@ -42,6 +43,18 @@ public class testController {
 	
 	@Autowired
 	CodesDao codesDao;
+	
+	@Autowired
+	ExpertDaoImpl expertDaoImpl;
+	
+	@RequestMapping(value="main/main.do")
+	public String main() {
+		log.debug("===================");
+		log.debug("========main=======");
+		log.debug("===================");
+		
+		return "main/main_view";
+	}
 	
 	/**
 	 * img Test resume_view
