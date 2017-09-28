@@ -71,26 +71,43 @@
 	<!-- 조회(Search) -->
 	<select id="do_search" parameterType="com.sn.resume.domain.ItmVO"
 							  resultType="com.sn.resume.domain.ItmVO">
-		SELECT *
-		  FROM ( 
-                SELECT I.RSM_ID,
-                       I.ITM_FORM_ID,
-                       I.ITM_PRD_ID,
-                       I.ITM_TITLE,       
-                       I.ITM_CONTENT,
-                       I.U_ID,               
-                       U.U_NAME,
-                       I.ITM_REG_DT,
-                       I.ITM_SEQ,
-                       I.ITM_USE_YN
-                  FROM ITEM I, USERS U
-                 WHERE I.U_ID = U.U_ID  
-                ) T1
-        WHERE T1.RSM_ID = #{rsm_id}
-		  AND T1.ITM_USE_YN = 1		            
-		START WITH T1.ITM_PRD_ID IS NULL
-		CONNECT BY PRIOR T1.ITM_FORM_ID = T1.ITM_PRD_ID
-        ORDER SIBLINGS BY T1.ITM_SEQ
+SELECT a1.*,
+       b1.totalNo
+  FROM (SELECT i.rsm_id,
+               i.itm_form_id,
+               i.itm_prd_id,
+               i.itm_title,
+               i.itm_content,
+               i.u_id,
+               u.u_name,
+               i.itm_reg_dt,
+               i.itm_seq,
+               i.itm_use_yn,
+               LEVEL AS lvl,
+               ROWNUM AS NO
+          FROM item i, users u
+         WHERE rsm_id = #{rsm_id}
+           AND i.u_id = u.u_id
+           AND itm_use_yn = 1
+          START WITH itm_prd_id IS NULL
+          CONNECT BY PRIOR itm_form_id = itm_prd_id)  a1,
+       (SELECT *    
+          FROM (SELECT root,
+                       COUNT(itm_form_id) OVER(PARTITION BY root ORDER BY lvl DESC ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)  AS totalNo,                  
+                       itm_prd_id,
+                       itm_form_id                  
+                  FROM ( SELECT CONNECT_BY_ROOT ( itm_form_id ) root,                     
+                                itm_prd_id,
+                                itm_form_id,
+                                LEVEL AS lvl
+                           FROM item                
+                          WHERE rsm_id = #{rsm_id}
+                        CONNECT BY itm_prd_id = PRIOR itm_form_id                     
+                       )           
+                )
+          WHERE itm_form_id = root) b1
+  WHERE a1.itm_form_id = b1.itm_form_id
+  ORDER BY a1.NO 
 	</select>
 	
 	<!-- 작성자 기반 조회(Search) -->
