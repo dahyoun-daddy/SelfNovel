@@ -52,9 +52,10 @@ public class UserSvcImpl implements UserSvc {
 	}
 
 	@Override
-	public List<?> do_search() {
-		
-		return null;
+	public List<?> do_search(DTO dto) {
+		log.debug("2=======================");
+		log.debug("2=======================");	
+		return userDao.do_search(dto);
 	}
 	
 	@Override

@@ -47,7 +47,7 @@ public class testController {
 	@Autowired
 	ExpertDaoImpl expertDaoImpl;
 	
-	@RequestMapping(value="main/main.do")
+	@RequestMapping(value="main/main01.do")
 	public String main() {
 		log.debug("===================");
 		log.debug("========main=======");

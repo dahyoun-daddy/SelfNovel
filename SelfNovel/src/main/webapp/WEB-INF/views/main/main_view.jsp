@@ -34,7 +34,7 @@
 						<b>전문가 랭킹</b>
 					</h3>
 					<hr/>
-					<table align="center" style="width: 610px;">
+					<table align="center"><!--  style="width: 610px;" -->
 						<thead>
 							<tr>
 								<th style="text-align: center;">1위</th>
@@ -47,7 +47,7 @@
 								<td>
 									<div>
 										<br/>
-										<table class="table table-bordered table-hover table-condensed" border="1px" align="center" style="width: 200px;">
+										<table class="table table-bordered table-hover table-condensed" border="1px" align="center">
 											<tr>
 												<td colspan="2">
 													<img src="" width="190px;" height="150px;">

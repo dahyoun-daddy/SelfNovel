@@ -90,7 +90,7 @@ public class OrdersController {
 			orderSvc.do_deleteTx(dto);
 		}
 
-		return "redirect:list.do";
+		return "redirect:pagelist.do";
 	}
 	
 	@RequestMapping(value = "/mypage/orders/pagelist.do", method = RequestMethod.GET)
