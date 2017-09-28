@@ -1,5 +1,4 @@
 <%@page import="com.sn.common.StringUtil"%>
-<%@page import="com.sn.common.OrdersUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
