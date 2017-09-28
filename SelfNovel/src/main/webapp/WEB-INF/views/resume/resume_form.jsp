@@ -25,6 +25,18 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
+$(function() {
+    $('#content').keyup(function (e){
+        var content = $(this).val();
+        $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
+        $('#counter').html(content.length );
+    });
+    $('#content').keyup();
+});
+
+</script>
+
+<script type="text/javascript">
 $(document).ready(function(){
 
     
@@ -51,19 +63,19 @@ $(document).ready(function(){
         contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
         contents += '		                                                                               ';
         contents += '				<tr>                                                                   ';
-        contents += '					<td>제목(Not Null)</td>                                             ';
+        contents += '					<td><input type="text" value="제목(Not Null)"/></td>                ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr height="150px;">                                                   ';
-        contents += '					<td>내용(Not Null)</td>                                             ';
+        contents += '				<td><textarea  id="content"  rows="10" cols="100" >내용(Not Null)</textarea></td>   ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr>                                                                   ';
-        contents += '					<td align="right">글자수 용량</td>                                   ';
+        contents += '					<td align="right">글자수 용량:<span id="counter">###</span></td>       ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr height="100px;">                                                   ';
         contents += '					<td align="right"><input type="button" value="+" id="itemAdd" />   ';
         contents += '					<input type="button" name="delRow" class="delRow" value="-" /></td>';
         contents += '				</tr>                                                                  ';
-        contents += '	   </table><!-- 내용테이블 -->                                                       ';
+        contents += '	   </table><!-- 내용테이블 -->                                                       '; 
         contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
         contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
         contents += '			   				                                                           ';
@@ -135,13 +147,15 @@ $(document).ready(function(){
 						   cellpadding="2" cellspacing="2" align="center">
 					
 							<tr>
-								<td>제목(Not Null)</td>
+								<td><input type="text" value="제목(Not Null)"/> </td>
 							</tr>
 							<tr height="150px;">
-								<td>내용(Not Null)</td>
+								<td><textarea  id="content"  rows="10" cols="100" >내용(Not Null)</textarea>
+								</td>
 							</tr>
+							
 							<tr>
-								<td align="right">글자수 용량</td>
+								<td align="right">글자수 용량:<span id="counter">###</span></td>
 							</tr>
 							<tr height="100px;">
 								<td align="right"><input type="button" value="+" id="itemAdd" />
