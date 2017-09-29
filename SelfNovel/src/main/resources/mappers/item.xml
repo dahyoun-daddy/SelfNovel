@@ -110,6 +110,24 @@ SELECT a1.*,
   ORDER BY a1.NO 
 	</select>
 	
+	<!-- 하위 항목 조회(do_search_chlid) -->
+	<select id="do_search_child" parameterType="com.sn.resume.domain.ItmVO"
+								resultType="com.sn.resume.domain.ItmVO">
+		SELECT i.rsm_id,
+		       i.itm_form_id,
+		       i.itm_prd_id,
+		       i.itm_title,       
+		       i.itm_content,
+		       i.u_id,
+               u.u_name,
+		       i.itm_reg_dt,
+		       i.itm_seq,
+		       i.itm_use_yn
+		FROM item i, users u        
+		WHERE itm_prd_id = #{itm_prd_id}        
+          AND i.u_id = u.u_id
+		  AND itm_use_yn = 1
+	</select>	
 	<!-- 작성자 기반 조회(Search) -->
 	<select id="do_search_expert" parameterType="com.sn.resume.domain.ItmVO"
 							  resultType="com.sn.resume.domain.ItmVO">

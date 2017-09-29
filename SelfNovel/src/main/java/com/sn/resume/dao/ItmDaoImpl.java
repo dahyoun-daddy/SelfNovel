@@ -60,6 +60,16 @@ public class ItmDaoImpl implements ItmDao {
 		ItmVO  inItmVO   = (ItmVO)dto;             //파라미터 주입
 		return sqlSession.selectList(statement, inItmVO);
 	}
+	
+	/**
+	 * do_search_child
+	 * detail : 하위항목 검색
+	 */	
+	public List<?> do_search_child(DTO dto) {
+		String statement = namespace +".do_search_child";//resume.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;             //파라미터 주입
+		return sqlSession.selectList(statement, inItmVO);
+	}
 
 	/**
 	 * do_delete

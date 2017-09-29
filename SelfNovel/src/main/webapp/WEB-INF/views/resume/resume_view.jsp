@@ -14,6 +14,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <!-- 부트스트랩 -->
 <link href="<%=contextPath%>/resources/css/bootstrap.css"
 	rel="stylesheet">
@@ -22,13 +23,44 @@
 <script type="text/javascript" src="<%=contextPath%>/resources/js/jquery-3.2.1.js"></script>
 <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
 <script src="<%=contextPath%>/resources/js/bootstrap.min.js"></script>
+
+<script src="<%=contextPath%>/resources/js/jquery.bootpag.js"></script>
+
 <script type="text/javascript">
 
-	$(function() {
+	$(function() {       
+		
 		//첨삭부분의 히든속성을 토글시켜주는 메소드
-		$("input[name=doShowEdit]").on("click",function(){
+		$("form[name=frm]").on("click", "#doShowEdit", function(){			
 			var parent = $(this).parent();
-			var editDiv = $(parent).find("#editDiv");
+			var editDiv = $(parent).find(".editDiv");		
+			var content = $(parent).find("#content");
+			var page = $(parent).find("#page-selection");
+			var itm_prd_id = $(parent).parent().parent().find("#itm_form_id").val();
+			var itm_childs = $(parent).parent().parent().find("#itm_childs").val();
+			
+			$.ajax({				
+				type : "POST",
+				url : "do_search_child.do",
+				dataType : "html",
+				data : {"itm_prd_id" : itm_prd_id},
+				success : function(data){
+					var jData = JSON.parse(data);
+					
+					content.append(jData[0].itm_title);
+					//텍스트 페이징
+			        $(page).bootpag({
+			            total: itm_childs
+			        }).on("page", function(event, num){
+			        	console.log(num);
+			        	content.empty();
+			        	content.append(jData[num-1].itm_title);
+			        });
+				},
+				error : function(){
+					
+				}
+			});
 			editDiv.toggle();
 		});//close doShowEdit_click
 		
@@ -81,8 +113,7 @@
 					//에러
 				}
 			})//close ajax
-		});//close btnItmSave_on_click		
-		
+		});//close btnItmSave_on_click
 	});//close .ready(function)
 	
 </script>
@@ -91,6 +122,7 @@
 <body>
 	<h2>자기소개서 view</h2>
 	<hr/>
+	<div id="good"></div>
 	<form action="#" name="frm" method="post" class="form-inline">
 		<input type="hidden" id="rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
 		<table class="table table-bordered table-hover table-condensed" border="1px" align="center" width="600px;">
@@ -127,11 +159,9 @@
 					</div>
 					<br/>
 					<div id="items" align="center">
-					
-					
-					<!-- **************************** forEach 시작부분 **************************** -->
-					<c:forEach var="item" items="${itmList}" begin="0">
-						<c:choose>
+					<!-- **************************** forEach 시작부분 **************************** -->					
+					<c:forEach var="item" items="${itmList}">
+						<c:choose>							
 							<c:when test="${item.itm_prd_id eq null}">
 								<!-- 본문영역 -->						
 								<table class="table table-bordered table-hover table-condensed" border="1px" 
@@ -140,6 +170,7 @@
 										<td>
 											<input id="itm_title" type="text" value="${item.itm_title}" style="border: 0px;">
 											<input type="hidden" id="itm_form_id" value="${item.itm_form_id}"><!-- 항목 아이디 -->
+											<input type="hidden" id="itm_childs" value="${item.totalNo}"><!-- 하위노드 개수 -->
 										</td>
 										
 									</tr>
@@ -151,50 +182,26 @@
 											<input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default">											
 										</td>
 									</tr>
+									<c:if test="${item.totalNo ne '0'}">
+										<!-- <img src="" width="60px" height="50px" name="doShowEdit" id="doShowEdit">-->
+										<tr>
+											<td>
+												<input type="button" name="doShowEdit" id="doShowEdit" value="첨삭보기">
+												<!-- 임의로 버튼으로 구현을 시도한다. 나중에 이미지 변경시 같은 이름으로 만들어주거나, 아니면 버튼을 이미지로 만들어도 좋다 -->
+												<!-- 2017-09-26 pinkbean -->																		
+												<!-- 숨겨지는 부분이다. 버튼을 클릭하면 토글된다. -->
+												<div id="editDiv" style="display:none;" class="editDiv">
+													<div id="content"></div>
+													<div id="page-selection"></div>													
+												</div>																								
+											<!-- end_editDiv -->
+											</td>
+										</tr>								
+									</c:if>
 								</table>
 								<!-- end 본문영역 -->								
-								<br/>
-							<br/>
 							</c:when>
-							<c:otherwise>
-							<!-- 첨삭영역 -->
-								<div>
-									<img src="" width="60px" height="50px" name="doShowEdit">
-									<input type="button" name="doShowEdit" value="첨삭보기">
-									<!-- 임의로 버튼으로 구현을 시도한다. 나중에 이미지 변경시 같은 이름으로 만들어주거나, 아니면 버튼을 이미지로 만들어도 좋다 -->
-									<!-- 2017-09-26 pinkbean -->						
-									
-									<!-- 숨겨지는 부분이다. 버튼을 클릭하면 토글된다. -->
-									<div id="editDiv" style="display:none;">										
-										<table class="table table-bordered table-hover table-condensed" border="1px" 
-					   				   			cellpadding="2" cellspacing="2" align="center" width="550px;">
-					   				   		<tr>
-					   				   			<td>작성자</td>
-					   				   			<td><input type="text" id="u_id" value="${item.u_id}" style="border: 0px;"></td>
-					   				   			<td>작성일</td>
-					   				   			<td><input type="text" id="item_reg_dt" value="${item.itm_reg_dt}" style="border: 0px;"></td>
-					   				   		</tr>
-											<tr>
-												<td colspan="4">
-													<input type="text" id="itm_title" value="${item.itm_title}" style="border: 0px;">
-													<input type="hidden" id="itm_form_id" value="${item.itm_form_id}"><!-- 항목 아이디 -->
-													<input type="hidden" id="itm_prd_id" value="${item.itm_prd_id}"><!-- 상위항목 아이디 -->
-												</td>
-											</tr>
-											<tr>
-												<td colspan="4">
-													<textarea rows="5" cols="80" style="border: 0px;">${item.itm_content}</textarea>
-												</td>
-											</tr>
-										</table>
-									</div>
-									<!-- end_editDiv -->
-								</div>
-								<!-- end 첨삭영역 -->
-							</c:otherwise>
-						</c:choose>
-						<br/>
-						<hr/>
+						</c:choose>						
 					</c:forEach>
 					<!-- **************************** end forEach **************************** -->					
 					</div>

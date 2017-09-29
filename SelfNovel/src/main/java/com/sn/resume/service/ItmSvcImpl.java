@@ -59,6 +59,16 @@ public class ItmSvcImpl implements ItmSvc {
 		log.debug("================================");
 		return itmDao.do_search(dto);
 	}
+	
+	/**
+	 * 조회
+	 */	
+	public List<?> do_search_child(DTO dto) {
+		log.debug("===== ItmDaoImpl.do_search_child =====");
+		log.debug("dto : " + dto.toString());
+		log.debug("======================================");
+		return itmDao.do_search_child(dto);
+	}
 
 	/**
 	 * 삭제

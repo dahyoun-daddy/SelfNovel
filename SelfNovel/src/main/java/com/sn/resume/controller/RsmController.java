@@ -133,6 +133,32 @@ public class RsmController {
 	}
 	
 	/**
+	 * resumeView
+	 * detail : 상세조회
+	 * @param req
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value="resume/do_search_child.do")
+	@ResponseBody
+	public List<ItmVO> do_searchChild(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.do_search_child =====");
+		log.debug("req : " + req.toString());		
+		log.debug("rsm_id : " + req.getParameter("rsm_id"));
+		log.debug("============================================");
+		
+		String itm_prd_id = req.getParameter("itm_prd_id");
+		
+		//itmVO에 rsm_id를 set
+		ItmVO itmVO = new ItmVO();
+		itmVO.setItm_prd_id(itm_prd_id);
+		
+		//ItmSvc를 통해 해당 자기소개서의 항목들 호출
+		List<ItmVO> itmList = (List<ItmVO>) itmSvc.do_search_child(itmVO);
+		
+		return itmList;
+	}
+	
+	/**
 	 * doSaveItm
 	 * detail : 첨삭 저장 메소드
 	 * 최초작성   : 2017-09-28	
