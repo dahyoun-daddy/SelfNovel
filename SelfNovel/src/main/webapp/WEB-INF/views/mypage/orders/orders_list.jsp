@@ -14,8 +14,8 @@
 	String PAGE_NUM = "1";
 	int totalCnt = 0; //총글수
 
-	PAGE_SIZE = StringUtil.nvl(request.getParameter("PAGE_SIZE"), "10");
-	PAGE_NUM = StringUtil.nvl(request.getParameter("PAGE_NUM"), "1");
+	PAGE_SIZE = StringUtil.nvl(request.getAttribute("PAGE_SIZE").toString(), "10");
+	PAGE_NUM = StringUtil.nvl(request.getAttribute("PAGE_NUM").toString(), "1");
 
 	int oPage_size = Integer.parseInt(PAGE_SIZE);
 	int oPage_num = Integer.parseInt(PAGE_NUM);
@@ -50,8 +50,8 @@
 		//2017-09-22
 		//상태변경 쿼리 테스트입니다. 버튼을 클릭하면 해당 row의 정보를 긁어와 던지도록 만들었으니 나중에 view만들때도 재활용하면 될것같습니다.
 		function setFormValue(element) {
-			var record = $(element).parents("tr");
-			var exp_id = $(record).find('td').eq(3).text();//exp_id의 index
+			var record = $(element).parents("#ordersInfoTr");
+			var exp_id = $(record).find('td').eq(3).text();//exp_id의 index			
 			var rsm_id = $(record).find('input[name=rsm_id]').val();
 
 			$("#EXP_ID").val(exp_id);
@@ -136,7 +136,7 @@
 			<c:choose>
 				<c:when test="${ordersList.size()>0}">
 					<c:forEach var="orders" items="${ordersList}" begin="0">
-						<tr>
+						<tr id="ordersInfoTr">
 							<input type="hidden" name="rsm_id" value="${orders.rsm_id}" />
 							<td class="text-center"><input type="checkbox" name="chkList" /></td>
 							<td class="text-center"><c:out value="${orders.no}" /></td>

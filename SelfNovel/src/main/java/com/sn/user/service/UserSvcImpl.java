@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.sn.common.DTO;
 import com.sn.user.dao.UserDao;
+import com.sn.user.domain.UserVO;
 
 @Service
 public class UserSvcImpl implements UserSvc {
@@ -64,5 +65,20 @@ public class UserSvcImpl implements UserSvc {
 		log.debug(dto.toString());
 		log.debug("2=======================");	
 		return userDao.do_chkId(dto);
+	}
+	
+	/**
+	 * 다중 유저 강제탈퇴
+	 * 최초작성: 2017-09-29
+	 * 작성자: 이슬기
+	 * @param dto
+	 * @return
+	 */
+	public int do_deleteTx(List<?> list) {
+		for(int i=0;i<list.size();i++) {
+			UserVO dto = (UserVO)list.get(i);
+			userDao.do_delete(dto);
+		}
+		return list.size();
 	}
 }

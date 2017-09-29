@@ -12,8 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.sn.codes.dao.CodesDao;
+import com.sn.codes.domain.CodesVO;
 import com.sn.common.StringUtil;
 import com.sn.user.domain.UserVO;
 import com.sn.user.service.UserSvc;
@@ -22,7 +27,7 @@ import com.sn.user.service.UserSvc;
  * ManagerController 
  * detail : 유저관리 페이지 컨트롤러
  * 최초작성: 2017-09-28
- * 최종수정: 2017-09-28
+ * 최종수정: 2017-09-29
  * @author @author SeulGi <dev.leewisdom92@gmail.com>
  *
  */
@@ -35,11 +40,18 @@ public class ManagerController {
 	
 	@Autowired
 	private UserSvc userSvc;
+	@Autowired
+	private CodesDao codesDao;
 	
 	/***********************************************/
 	//servlet
 	/***********************************************/
 	
+	/**
+	 * do_search
+	 * @param req
+	 * @return
+	 */
 	@RequestMapping(value = "/mypage/manager/manager_user_list.do", method = RequestMethod.GET)
 	public ModelAndView do_search(HttpServletRequest req) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -48,6 +60,7 @@ public class ManagerController {
 		String PAGE_NUM = StringUtil.nvl(req.getParameter("PAGE_NUM"), "1");
 		String SEARCH_DIV = StringUtil.nvl(req.getParameter("SEARCH_DIV"), "");
 		String SEARCH_WORD = StringUtil.nvl(req.getParameter("SEARCH_WORD"), "");
+		String ORDER_DIV = StringUtil.nvl(req.getParameter("ORDER_DIV"), "");
 		String totalCnt = StringUtil.nvl(req.getParameter("totalCnt"), "0");
 		
 		UserVO inVO = new UserVO();
@@ -56,24 +69,50 @@ public class ManagerController {
 		param.put("PAGE_NUM", PAGE_NUM);
 		param.put("SEARCH_DIV", SEARCH_DIV);
 		param.put("SEARCH_WORD", SEARCH_WORD);
+		param.put("ORDER_DIV", ORDER_DIV);
 		param.put("totalCnt", totalCnt);
 		inVO.setParam(param);
+		log.debug(param.toString());
 		
+		//userList
 		List<?> list = userSvc.do_search(inVO);
 		if(list.size()>0) {
 			UserVO userVO = (UserVO) list.get(0);
 			totalCnt = String.valueOf(userVO.getTotalNo());
 			log.debug("totalCnt1: "+totalCnt);
 		}
-		log.debug("totalCnt2: "+totalCnt);
+		
+		//codeList
+		CodesVO inVoCodes = new CodesVO();
+		inVoCodes.setMst_cd_id("C003");	
+		List<?> codeList = codesDao.do_search(inVoCodes);
+
 		modelAndView.addObject("userList",list);
+		modelAndView.addObject("codeList",codeList);
 		modelAndView.addObject("PAGE_SIZE",PAGE_SIZE);
 		modelAndView.addObject("PAGE_NUM",PAGE_NUM);
 		modelAndView.addObject("SEARCH_DIV",SEARCH_DIV);
 		modelAndView.addObject("SEARCH_WORD",SEARCH_WORD);
+		modelAndView.addObject("ORDER_DIV",ORDER_DIV);
 		modelAndView.addObject("totalCnt",totalCnt); //나중에 리스트로부터 토탈카운트 받아서 전달해야함		
 		modelAndView.setViewName("/mypage/manager/manager_user_list");
 		return modelAndView;
 	}
 	
+	/**
+	 * do_delete
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value = "/mypage/manager/do_delete.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String do_delete(HttpServletRequest req) {
+		String data = StringUtil.nvl(req.getParameter("data"), "");				
+		Gson gson = new Gson();
+		List<UserVO> list = gson.fromJson(data, new TypeToken<List<UserVO>>(){}.getType());	
+		
+		log.debug("list size-controller: "+list.toString());
+		
+		return String.valueOf(userSvc.do_deleteTx(list));
+	}
 }

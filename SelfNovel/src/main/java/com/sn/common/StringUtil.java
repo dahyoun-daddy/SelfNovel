@@ -12,6 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sn.codes.domain.CodesVO;
+
+/**
+ * StringUtil 
+ * detail : 텍스트 유틸
+ * 최초작성: 2017-09-22
+ * 최종수정: 2017-09-29  
+ * @author @author SeulGi <dev.leewisdom92@gmail.com>
+ *
+ */
 public class StringUtil {
 	private static Logger log = LoggerFactory.getLogger("");
 	
@@ -19,6 +29,49 @@ public class StringUtil {
 	public static String getUuid() {
 		return UUID.randomUUID().toString().replaceAll("-","");
 	}
+
+	
+	/**
+	 * 
+	 * @param list
+	 * @param page_size
+	 * @param selectNm
+	 * @param allYN
+	 * @return
+	 */
+	public static String mkSelect(List<CodesVO> list, String value,
+			String selectNm,
+			boolean allYN){
+		/*
+		 * <select name="page">
+		 *      <option value="">전체</option>
+		 * 		<option value="10">10</option>
+		 * </select>
+		 */
+		
+		StringBuilder sb=new StringBuilder();
+		
+		sb.append("<select class='form-control input-sm' name='"+selectNm+"' > \n");
+		//전체 처리: allYN=true
+		if(allYN == true) 	sb.append("<option value=''>=전체=</option>\n");
+		/*
+		 * <option value="<%=dto.getDtl_cd_id() %>"  
+				    				<%if(page_size.equals(dto.getDtl_cd_id()))out.print("selected='selected'"); %>>
+				    			<%=dto.getDtl_cd_nm() %></option>
+		 */
+		for(CodesVO dto:list){
+			sb.append("<option value='"+dto.getDtl_cd_id()+"' ");
+			if(value.equals(dto.getDtl_cd_id())){
+				sb.append("selected='selected'");	
+			}
+			sb.append(">");
+			sb.append(dto.getDtl_cd_nm());
+			sb.append("</option>\n");
+		}
+		sb.append("</select>  \n");
+		System.out.println(sb.toString());
+		return sb.toString();
+	}	
 	
 	/**
 	 * nvl

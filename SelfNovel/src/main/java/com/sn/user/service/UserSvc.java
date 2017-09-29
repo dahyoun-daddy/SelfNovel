@@ -14,4 +14,13 @@ public interface UserSvc {
 	DTO do_searchOne(DTO dto) throws IOException;
 	List<?> do_search(DTO dto);
 	DTO do_chkId(DTO dto);
+	
+	/**
+	 * 다중 유저 강제탈퇴
+	 * 최초작성: 2017-09-29
+	 * 작성자: 이슬기
+	 * @param dto
+	 * @return
+	 */
+	int do_deleteTx(List<?> list);
 }

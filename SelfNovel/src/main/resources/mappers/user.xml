@@ -56,15 +56,15 @@
 		       ROW_NUMBER() OVER (ORDER BY A.u_reg_dt DESC) AS RNUM
 		  FROM USERS A
 		 <include refid="userSearchCondition" />
-		 ORDER BY A.u_reg_dt DESC
+		 <include refid="userOrderCondition" />
 		 <include refid="com.sn.common.pagingPost" />
 	</select>
 	
  	<sql id="userSearchCondition">
  		<where>    
 		    <choose>
-		    	<when test="SEARCH_DIV == 'id'">
-		    		AND A.u_id = ${SEARCH_WORD}
+		    	<when test="SEARCH_WORD != ''">
+		    		AND A.u_id LIKE '${SEARCH_WORD}'
 		    	</when>
 		    	<otherwise>
 		    	
@@ -72,5 +72,20 @@
 		    </choose>
 		</where>      	
  	</sql>	
-	
+ 	<sql id="userOrderCondition">  
+		<choose>
+		  	<when test="ORDER_DIV == '20'">
+		   		ORDER BY A.u_write_cnt DESC
+		  	</when>
+		  	<when test="ORDER_DIV == '30'">
+		   		ORDER BY A.u_mod_cnt DESC
+		  	</when>	
+		  	<when test="ORDER_DIV == '10'">
+		   		ORDER BY A.u_reg_dt DESC
+		  	</when>			  			  		    	
+		   	<otherwise>
+		   		ORDER BY A.u_reg_dt DESC
+		   	</otherwise>
+		</choose>    	
+ 	</sql>		
 </mapper>

@@ -118,6 +118,8 @@ public class OrdersController {
 		ModelAndView modelAndView = new ModelAndView();
 
 		modelAndView.addObject("ordersList", ordersList);
+		modelAndView.addObject("PAGE_SIZE", p_pageSize);
+		modelAndView.addObject("PAGE_NUM", p_pageNo);
 		// 총글수
 		modelAndView.addObject("TOTALCNT", TOTALCNT);
 		log.debug("TOTALCNT : "+TOTALCNT);

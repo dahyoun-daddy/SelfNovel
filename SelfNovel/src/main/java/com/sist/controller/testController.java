@@ -216,4 +216,23 @@ public class testController {
 		
 		return modelAndView;
 	}
+	
+	/**
+	 * 구분Test
+	 */
+	@RequestMapping(value = "test.do", method = RequestMethod.GET)
+	public ModelAndView codesView2() {
+		
+		CodesVO dto = new CodesVO();
+		dto.setMst_cd_id("C002");	
+		
+		List<CodesVO> list = (List<CodesVO>)codesDao.do_search(dto);
+		log.debug("다건조회: "+list.toString());
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("list",list);
+		modelAndView.setViewName("testSlider");
+		
+		return modelAndView;
+	}
 }
