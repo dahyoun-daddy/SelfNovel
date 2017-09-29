@@ -42,11 +42,35 @@
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+	$(document).ready(function() {
+		var searchCategoryNum_t = '${searchCategoryNum}';
+		var searchWord = '<%=request.getAttribute("searchWord")%>'+'';
+		var arr = searchCategoryNum_t.split("|");
+		var i=1;
+		
+		if(searchWord != null && searchWord != ""){
+			$("#searchWord_1").val(${searchWord}+"");	
+		}
+		$('input:checkbox[id="searchCategory_1"]').each(function() {
+		     if(this.value == arr[i]){
+		            this.checked = true;
+		            i++;
+		      }
+		 });
+		
+		$("#searchDiv_1").change(function(){
+	           do_search();
+		});
+	});
+	
 	function do_search(){
 		var searchCategory = "";
+		var searchCategoryNum = "|";
+		
 		$('input:checkbox[id="searchCategory_1"]').each(function() {
 		      if(this.checked){
 		            searchCategory += "exp_ctg = " + this.value + " OR ";
+		            searchCategoryNum += this.value + "|";
 		      }
 		 });
 		if(searchCategory != ""){
@@ -56,6 +80,7 @@
 		$("#searchDiv").val($("#searchDiv_1").val());
 		$("#searchWord").val($("#searchWord_1").val());
 		$("#searchCategory").val(searchCategory);
+		$("#searchCategoryNum").val(searchCategoryNum);
 		searchFrm.submit();
 	}
 </script>
@@ -68,6 +93,7 @@
 		<input type="hidden" id="searchDiv" name="searchDiv" value="">
 		<input type="hidden" id="searchWord" name="searchWord" value="">
 		<input type="hidden" id="searchCategory" name="searchCategory" value="">
+		<input type="hidden" id="searchCategoryNum" name="searchCategoryNum" value="">
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="960px;">
 			<tr>
@@ -79,6 +105,7 @@
 			<tr>
 				<td>
 				<div>
+						<% int i=0; %>
 						<c:choose>
             				<c:when test="${rank_list.size()>0}" >
                 				<c:forEach var="expertVO" items="${rank_list}">
@@ -87,7 +114,8 @@
 										<tr>
 											<td colspan="2" align="center">
 												<a href="#">
-													<img src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
+													<img src="<c:url value='/resources/img/rank.png' />" />
+													<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
 												</a>
 											</td>
 										</tr>

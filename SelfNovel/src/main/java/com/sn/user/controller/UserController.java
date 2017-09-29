@@ -81,8 +81,8 @@ public class UserController {
 	
 	@RequestMapping(value="user/do_save.do")
 	public void do_save(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		String path = req.getSession().getServletContext().getRealPath("/exp_profiles");
-
+		String path = req.getSession().getServletContext().getRealPath("/resources/exp_profiles");
+		
 		File file = new File(path);
 		if(!file.isDirectory()) {
 			file.mkdirs();

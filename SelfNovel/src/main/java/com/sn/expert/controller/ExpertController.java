@@ -51,7 +51,9 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		String p_searchWord = StringUtil.nvl(req.getParameter("searchWord"),"");
 		
 		if(!p_searchWord.equals("") && p_searchWord != null) {
-			p_searchWord = "AND instr(exp_title,'" + p_searchWord +"',1,1) > 0";
+			searchParam.put("searchWord","AND instr(exp_title,'" + p_searchWord +"',1,1) > 0");
+		} else {
+			searchParam.put("searchWord", "");
 		}
 		
 		if(p_searchDiv.equals("")) {
@@ -67,7 +69,6 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		searchParam.put("pageSize", p_pageSize);
 		searchParam.put("pageNo", p_pageNo);
 		searchParam.put("searchDiv", p_searchDiv);
-		searchParam.put("searchWord", p_searchWord);
 		searchParam.put("searchCategory", p_searchCategory);
 		
 		VO.setParam(searchParam);
@@ -83,6 +84,8 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		modelAndView.addObject("list",list );
 		modelAndView.addObject("rank_list",rank_list );
 		modelAndView.addObject("totalNo",totalNo);
+		modelAndView.addObject("searchCategoryNum",req.getParameter("searchCategoryNum"));
+		req.setAttribute("searchWord",p_searchWord);
 		modelAndView.setViewName("expert/expert_list");
 		
 		return modelAndView;

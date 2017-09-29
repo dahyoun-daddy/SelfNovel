@@ -161,8 +161,8 @@
 		formData.append("exp_ctg", $("#ext_ctg option:selected").val());
 		
 		var userSep = '';
-		if($(":input:radio[name=userSep]:checked").val() == '1'){ userSep = "user" }
-		else { userSep = "expert" }
+		if($(":input:radio[name=userSep]:checked").val() == '1'){ userSep = "user"; }
+		else { userSep = "expert"; }
 		
 		alert(userSep);
 		
