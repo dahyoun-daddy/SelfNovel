@@ -8,217 +8,193 @@
   //contextPath
   String contextPath = request.getContextPath();
   contextPath = "http://localhost:8080/"+contextPath;  
-%>
-<%-- 
+%> 
 <%
-	int bottomCount = 10;
 	String searchDiv = "";
 	String searchWord = "";
-	String page_size = "10";
+	String searchCategory = "";
+	String page_size = "16";
 	String page_num = "1";
-	int totalCnt = 0; //총글수
-
+	int totalNo = 0;
+	
 	searchDiv = StringUtil.nvl(request.getParameter("searchDiv"), "");
 	searchWord = StringUtil.nvl(request.getParameter("searchWord"), "");
-	page_size = StringUtil.nvl(request.getParameter("page_size"), "10");
+	searchCategory = StringUtil.nvl(request.getParameter("searchCategory"), "");
+	page_size = StringUtil.nvl(request.getParameter("page_size"), "16");
 	page_num = StringUtil.nvl(request.getParameter("page_num"), "1");
-
+	
 	int oPage_size = Integer.parseInt(page_size);
 	int oPage_num = Integer.parseInt(page_num);
-
-	totalCnt = Integer.parseInt(StringUtil.nvl(request.getAttribute("totalCnt").toString(), "0"));
+	
+	if(request.getAttribute("totalNo") != null){
+		totalNo = Integer.parseInt(request.getAttribute("totalNo").toString());
+	} else {
+		totalNo = 0;
+	}
 %> 
---%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="<%=contextPath%>/resources/css/bootstrap.css"
-	rel="stylesheet">
-<link href="<%=contextPath%>/resources/css/bootstrap-theme.min.css" rel="stylesheet">
-<script type="text/javascript" src="<%=contextPath%>/resources/js/jquery-3.2.1.js"></script>
-<script src="<%=contextPath%>/resources/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<link href="<c:url value='/resources/css/layout.css' />" rel="stylesheet"></link>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	function do_search(){
+		var searchCategory = "";
+		$('input:checkbox[id="searchCategory_1"]').each(function() {
+		      if(this.checked){
+		            searchCategory += "exp_ctg = " + this.value + " OR ";
+		      }
+		 });
+		if(searchCategory != ""){
+			searchCategory = "AND (" + searchCategory.substr(0,searchCategory.length-4) + ")";
+		}
+		
+		$("#searchDiv").val($("#searchDiv_1").val());
+		$("#searchWord").val($("#searchWord_1").val());
+		$("#searchCategory").val(searchCategory);
+		searchFrm.submit();
+	}
+</script>
 <title>:::전문가 조회:::</title>
 </head>
 <body>
 	<h2>전문가 조회</h2>
 	<hr/>
-	<form action="#" name="frm" method="post" class="form-inline">
+	<form action="do_search.do" id="searchFrm" name="searchFrm" method="post" class="form-inline">
+		<input type="hidden" id="searchDiv" name="searchDiv" value="">
+		<input type="hidden" id="searchWord" name="searchWord" value="">
+		<input type="hidden" id="searchCategory" name="searchCategory" value="">
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="960px;">
 			<tr>
-				<h5 align="center">전문가 랭킹</h5>
+				<td>
+					<h5 align="center">전문가 랭킹</h5>
+				</td>	
 			</tr>
 			<hr/>
 			<tr>
+				<td>
+				<div>
+						<c:choose>
+            				<c:when test="${rank_list.size()>0}" >
+                				<c:forEach var="expertVO" items="${rank_list}">
+									<table class="table table-bordered table-hover table-condensed" style="width:33%;" border="1px" 
+						   				   cellpadding="2" cellspacing="2" align="left">
+										<tr>
+											<td colspan="2" align="center">
+												<a href="#">
+													<img src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
+												</a>
+											</td>
+										</tr>
+										<tr>
+											<td style="text-align: center;">제목</td>
+											<td>
+												<c:out value="${expertVO.exp_title}"/>
+											</td>
+										</tr>
+										<tr>
+											<td style="text-align: center;">전문분야</td>
+											<td align="center">
+												<c:out value="${expertVO.dtl_cd_nm}"/>
+											</td>
+										</tr>
+									</table>
+						</c:forEach>
+					</c:when>
+				</c:choose>
+				</div>
+				</td>
+			</tr>
+		</table>
+		<table class="table table-bordered table-hover table-condensed" border="1px" 
+			   cellpadding="2" cellspacing="2" align="center" width="960px;">
+			<tr>
 				<td style="text-align: center;">분야</td>
 				<td>
-					<input type="checkbox">유통·무역</input>
-					<input type="checkbox">영업고객상담</input>
-					<input type="checkbox">IT인터넷</input>
-					<input type="checkbox">건설</input><br/>
-					<input type="checkbox">생산·제조</input>
-					<input type="checkbox">경영사무</input>
-					<input type="checkbox">전문직</input>
-					<input type="checkbox">서비스</input><br/>
-					<input type="checkbox">디자인</input>
-					<input type="checkbox">미디어</input>
-					<input type="checkbox">의료</input>
-					<input type="checkbox">교육</input>
-					<input type="checkbox">특수계층·공금</input>
+					<input type="checkbox" id="searchCategory_1" value="1">서비스업
+					<input type="checkbox" id="searchCategory_1" value="2">제조·화학
+					<input type="checkbox" id="searchCategory_1" value="3">의료·제약·복지
+					<input type="checkbox" id="searchCategory_1" value="4">판매·유통
+					<input type="checkbox" id="searchCategory_1" value="5">교육업
+					<input type="checkbox" id="searchCategory_1" value="6">건설업
+					<input type="checkbox" id="searchCategory_1" value="7">IT·웹·통신
+					<input type="checkbox" id="searchCategory_1" value="8">미디어·디자인
+					<input type="checkbox" id="searchCategory_1" value="9">은행·금융업
+					<input type="checkbox" id="searchCategory_1" value="10">기관·협회
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align: center;">검색</td>
 				<td>
-					<input type="text" />
-					<input type="submit" value="검색"/>
+					<input id="searchWord_1" type="text" />
+					<input class="btn btn-success" type="button" value="검색" onclick="do_search()"/>
 				</td>
 			</tr>
 			<tr>
-				<td style="text-align: center;" colspan="2">총 n건이 검색되었습니다.</td>
+				<td style="text-align: center;" colspan="2">총 <c:out value="${list.size()}"/>건이 검색되었습니다.</td>
 			</tr>
 		</table> 
 		<hr/>
 		<div align="right">
-			<select class="form-control input-sm" style="text-align: right;">
+			<select id="searchDiv_1" class="form-control input-sm" style="text-align: right;">
 				<option value="">정렬기준</option>
-				<option value="최신순">최신순</option>
-				<option value="조회순">조회순</option>
-				<option value="추천순">추천순</option>
+				<option value="1">거래완료 건수</option>
+				<option value="2">최신순</option>
+				<option value="3">가격순</option>
 			</select>
 		</div>
 		<br/>
-		<table class="table table-bordered table-hover table-condensed" border="1px" 
-			   cellpadding="2" cellspacing="2" align="center" width="960px;">
+		<table class="table table-bordered table-hover table-condensed" style="width:100%;" border="1px" 
+			   cellpadding="2" cellspacing="2" align="center">
 			<tr>
 				<td>
 					<div>
-						<table class="table table-bordered table-hover table-condensed" border="1px" 
-			   				   cellpadding="2" cellspacing="2">
-							<tr>
-								<td colspan="2" align="center">
-									<img alt="" width="200px" height="200px">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">제목</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">이름&전문분야</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">가격</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-				<td>
-					<div>
-						<table class="table table-bordered table-hover table-condensed" border="1px" 
-			   				   cellpadding="2" cellspacing="2">
-							<tr>
-								<td colspan="2" align="center">
-									<img alt="" width="200px" height="200px">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">제목</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">이름&전문분야</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">가격</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-				<td>
-					<div>
-						<table class="table table-bordered table-hover table-condensed" border="1px" 
-			   				   cellpadding="2" cellspacing="2">
-							<tr>
-								<td colspan="2" align="center">
-									<img alt="" width="200px" height="200px">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">제목</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">이름&전문분야</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">가격</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-				<td>
-					<div>
-						<table class="table table-bordered table-hover table-condensed" border="1px" 
-			   				   cellpadding="2" cellspacing="2">
-							<tr>
-								<td colspan="2" align="center">
-									<img alt="" width="200px" height="200px">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">제목</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">이름(전문분야)</td>
-								<td>
-									<input type="text" size="15" style="border: 0px;">
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">가격</td>
-								<td align="right">
-									<input type="text" size="15" style="border: 0px; text-align: right;">
-								</td>
-							</tr>
-						</table>
+						<c:choose>
+            				<c:when test="${list.size()>0}" >
+                				<c:forEach var="expertVO" items="${list}">
+									<table class="table table-bordered table-hover table-condensed" style="width:25%;" border="1px" 
+						   				   cellpadding="2" cellspacing="2" align="left">
+										<tr>
+											<td colspan="2" align="center">
+												<a href="#">
+													<img src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
+												</a>
+											</td>
+										</tr>
+										<tr>
+											<td style="text-align: center;">제목</td>
+											<td>
+												<c:out value="${expertVO.exp_title}"/>
+											</td>
+										</tr>
+										<tr>
+											<td style="text-align: center;">전문분야</td>
+											<td align="center">
+												<c:out value="${expertVO.dtl_cd_nm}"/>
+											</td>
+										</tr>
+										<tr>
+											<td style="text-align: center;">가격</td>
+											<td style="text-align: right">
+												₩ <c:out value="${expertVO.exp_price}"/>
+											</td>
+										</tr>
+									</table>
+						</c:forEach>
+						</c:when>
+						</c:choose>
 					</div>
 				</td>
 			</tr>
 		</table>
 	</form>
-<%-- 	
 	<div class="form-inline text-center ">
-		<%=StringUtil.renderPaging(totalCnt, oPage_num, oPage_size, bottomCount, "do_search.do", "do_search_page") %>
-	</div> 
---%>
+		<%=StringUtil.renderPaging(totalNo, oPage_num, oPage_size, 10, "do_search.do", "do_search_page") %>
+	</div>
 </body>
 </html>

@@ -12,14 +12,15 @@ public class ExpertVO extends UserVO {
 	private String exp_id;		// 전문가 아이디(=USERS 테이블의 u_id)
 	private String exp_title;	// 프로필 제목
 	private String exp_profile;	// 프로필 사진 파일 이름
-	private int exp_ctg;		// 전문분야
+	private int exp_ctg;		// 전문분야 코드 번호
 	private int exp_price;		// 가격
 	private int exp_trade;		// 거래수
+	private String dtl_cd_nm;	// 전문분야명
 
 	@Override
 	public String toString() {
-		return "ExpertVO [exp_id=" + exp_id + ", exp_title=" + exp_title + ", exp_profile="
-				+ exp_profile + ", exp_ctg=" + exp_ctg + ", exp_price=" + exp_price + ", exp_trade=" + exp_trade + "]";
+		return "ExpertVO [exp_id=" + exp_id + ", exp_title=" + exp_title + ", exp_profile=" + exp_profile + ", exp_ctg="
+				+ exp_ctg + ", exp_price=" + exp_price + ", exp_trade=" + exp_trade + ", dtl_cd_nm=" + dtl_cd_nm + "]";
 	}
 
 	public String getExp_id() {
@@ -68,6 +69,14 @@ public class ExpertVO extends UserVO {
 
 	public void setExp_trade(int exp_trade) {
 		this.exp_trade = exp_trade;
+	}
+
+	public String getDtl_cd_nm() {
+		return dtl_cd_nm;
+	}
+
+	public void setDtl_cd_nm(String dtl_cd_nm) {
+		this.dtl_cd_nm = dtl_cd_nm;
 	}
 
 }

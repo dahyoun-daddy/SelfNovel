@@ -52,9 +52,11 @@ public class ExpertSvcImpl implements ExpertSvc{
 	}
 
 	@Override
-	public List<?> do_search() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<?> do_search(DTO dto) {
+		log.debug("2=======================");
+		log.debug(dto.toString());
+		log.debug("2=======================");	
+		return expertDao.do_search(dto);
 	}
 	
 	@Override
@@ -65,4 +67,9 @@ public class ExpertSvcImpl implements ExpertSvc{
 		return expertDao.do_chkId(dto);
 	}
 	
+	public List<?> do_searchRank() {
+		log.debug("2=======================");
+		log.debug("2=======================");	
+		return expertDao.do_searchRank();
+	}
 }

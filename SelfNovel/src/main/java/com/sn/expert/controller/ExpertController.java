@@ -3,6 +3,7 @@ package com.sn.expert.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -16,10 +17,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.sn.common.StringUtil;
 import com.sn.expert.domain.ExpertVO;
 import com.sn.expert.service.ExpertSvc;
 import com.sn.user.controller.UserController;
@@ -35,6 +38,55 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	
 	@Autowired
 	private UserSvc userSvc;
+	
+	@RequestMapping(value="expert/do_search.do")
+	public ModelAndView do_search(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		ExpertVO VO = new ExpertVO();	 
+		Hashtable<String, String> 
+		searchParam = new Hashtable<String, String>();//검색조건
+		String p_pageSize = StringUtil.nvl(req.getParameter("page_size"),"16");
+		String p_pageNo  = StringUtil.nvl(req.getParameter("page_num"),"1");
+		String p_searchDiv = StringUtil.nvl(req.getParameter("searchDiv"),"");
+		String p_searchCategory = StringUtil.nvl(req.getParameter("searchCategory"),"");
+		String p_searchWord = StringUtil.nvl(req.getParameter("searchWord"),"");
+		
+		if(!p_searchWord.equals("") && p_searchWord != null) {
+			p_searchWord = "AND instr(exp_title,'" + p_searchWord +"',1,1) > 0";
+		}
+		
+		if(p_searchDiv.equals("")) {
+			p_searchDiv = "u_reg_dt";
+		} else if(p_searchDiv.equals("1")) {
+			p_searchDiv = "exp_trade";
+		} else if(p_searchDiv.equals("2")) {
+			p_searchDiv = "u_reg_dt";
+		} else if(p_searchDiv.equals("3")){
+			p_searchDiv = "exp_price";
+		}
+		
+		searchParam.put("pageSize", p_pageSize);
+		searchParam.put("pageNo", p_pageNo);
+		searchParam.put("searchDiv", p_searchDiv);
+		searchParam.put("searchWord", p_searchWord);
+		searchParam.put("searchCategory", p_searchCategory);
+		
+		VO.setParam(searchParam);
+		
+		List<ExpertVO> list = (List<ExpertVO>)expertSvc.do_search(VO);
+		List<ExpertVO> rank_list = (List<ExpertVO>) expertSvc.do_searchRank();
+   	    
+		int totalNo   = 0;
+   	    if(list !=null && list.size()>0)totalNo = list.get(0).getTotalNo();
+   	    
+		ModelAndView modelAndView =new ModelAndView();
+		
+		modelAndView.addObject("list",list );
+		modelAndView.addObject("rank_list",rank_list );
+		modelAndView.addObject("totalNo",totalNo);
+		modelAndView.setViewName("expert/expert_list");
+		
+		return modelAndView;
+	}
 	
 	@RequestMapping(value="expert/do_searchOne.do")
 	public void do_searchOne(HttpServletRequest req, HttpServletResponse res) throws IOException {

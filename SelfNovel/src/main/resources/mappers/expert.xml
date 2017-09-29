@@ -10,9 +10,7 @@
 		   AND u_id='${u_id}'
 	</select>
 	
-    <select id="do_searchOne" 
-      parameterType="ExpertVO"
-      resultType="ExpertVO">
+    <select id="do_searchOne" parameterType="ExpertVO" resultType="ExpertVO">
 		SELECT u_id,
 			   u_password,
 			   u_name,
@@ -50,12 +48,80 @@
 	</update>
 	
 	<update id="do_save" parameterType="ExpertVO">
-		insert into expert(exp_id, exp_title, exp_profile, exp_ctg, exp_price, exp_trade)
-		values(#{exp_id}, #{exp_title}, #{exp_profile}, #{exp_ctg}, #{exp_price}, 0)
+		INSERT INTO expert(exp_id, exp_title, exp_profile, exp_ctg, exp_price, exp_trade)
+		VALUES(#{exp_id}, #{exp_title}, #{exp_profile}, #{exp_ctg}, #{exp_price}, 0)
     </update>
     
-	<select id="do_search" resultType="ExpertVO">
-		SELECT * FROM users t1, expert t2
-		 WHERE t1.u_id = t2.exp_id
-	</select>      
+    <sql id="BaseConditionForFilter">    
+       <where>   
+        <choose>
+            <when test="SEARCH_DIV == '10'">
+                 A.ID LIKE  #{SEARCH_WORD} || '%'         
+            </when>
+            <when test="SEARCH_DIV == '20'">
+                AND A.name LIKE  #{SEARCH_WORD} || '%'     
+            </when>
+            <when test="SEARCH_DIV == '30'">
+                AND A.u_Level LIKE   #{SEARCH_WORD} || '%'     
+            </when>
+                        
+            <otherwise></otherwise>
+        </choose>
+        </where>       
+    </sql>
+    
+	<select id="do_search" parameterType="ExpertVO" resultType="ExpertVO">
+		SELECT u_id,
+		       u_password,
+		       u_name,
+		       TO_CHAR(u_reg_dt,'YYYY-MM-DD') AS u_reg_dt,
+		       u_level,
+		       u_write_cnt,
+		       u_mod_cnt,
+		       exp_id,
+		       exp_title,
+		       exp_profile,
+		       exp_ctg,
+		       exp_price,
+		       exp_trade,
+		       dtl_cd_nm,
+		       TOTAL_CNT as totalNo,
+		       RNUM as no
+		  FROM(SELECT A.*,
+		              B.*,
+		              C.dtl_cd_nm,
+		              ROW_NUMBER() OVER(ORDER BY u_reg_dt DESC) as RNUM,
+		              COUNT(*) OVER () AS TOTAL_CNT
+			     FROM users A , expert B,
+		              (SELECT * FROM codes WHERE mst_cd_id = 'C002') C
+		         WHERE u_id = exp_id
+		           AND dtl_cd_id = exp_ctg
+		           ${SEARCH_WORD}
+		           ${SEARCH_CATEGORY}
+				 ORDER BY ${SEARCH_DIV} DESC
+				 <!-- ORDER BY u_reg_dt DESC -->
+		      )
+		 WHERE RNUM BETWEEN (${PAGE_SIZE} * (${PAGE_NUM}-1)+1) AND (${PAGE_SIZE} * (${PAGE_NUM}-1)+${PAGE_SIZE})
+	</select>
+	
+	<select id="do_searchRank" resultType="ExpertVO">
+		SELECT u_id,
+		       u_name,
+		       exp_title,
+		       exp_profile,
+		       exp_price,
+		       exp_trade,
+		       dtl_cd_nm
+		  FROM(SELECT A.*,
+		              B.*,
+		              C.dtl_cd_nm,
+		              ROW_NUMBER() OVER(ORDER BY exp_trade DESC) as RNUM
+			     FROM users A , expert B,
+		              (SELECT * FROM codes WHERE mst_cd_id = 'C002') C
+		         WHERE u_id = exp_id
+		           AND dtl_cd_id = exp_ctg
+				 ORDER BY u_reg_dt DESC
+		      )
+		 WHERE RNUM BETWEEN 1 AND 3
+	</select>    
 </mapper>

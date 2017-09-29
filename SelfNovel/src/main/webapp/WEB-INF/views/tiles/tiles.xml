@@ -41,6 +41,11 @@
        <put-attribute name="body" value="/WEB-INF/views/member/update.jsp" />
    </definition>
 
+	<!-- Expert-list Page -->
+   <definition name="expert/expert_list" extends="base-definition">
+       <put-attribute name="title" value="EXPERT-LIST" />
+       <put-attribute name="body" value="/WEB-INF/views/expert/expert_list.jsp" />
+   </definition>
 
    <!-- ************************************************************************ -->
 

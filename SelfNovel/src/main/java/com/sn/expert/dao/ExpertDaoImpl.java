@@ -1,5 +1,6 @@
 package com.sn.expert.dao;
 
+import java.util.Hashtable;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -10,8 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.sn.common.DTO;
 import com.sn.expert.domain.ExpertVO;
-import com.sn.user.dao.UserDaoImpl;
-import com.sn.user.domain.UserVO;
 
 @Repository
 public class ExpertDaoImpl implements ExpertDao {
@@ -35,8 +34,32 @@ private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
 
 	@Override
 	public List<?> do_search(DTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		ExpertVO param=(ExpertVO)dto;
+		
+		Hashtable<String, String> searchParam = null;//검색조건
+		searchParam = param.getParam();
+		
+		int page_size  = 16;
+		int page_num   = 1;
+		
+		if(searchParam.get("pageSize")!=null)//page_size: 10,50,100 
+			page_size = Integer.parseInt(searchParam.get("pageSize").toString());
+		
+		if(searchParam.get("pageNo") !=null)//page_num:1,2,3,....
+			page_num = Integer.parseInt(searchParam.get("pageNo").toString());
+		
+		searchParam.put("PAGE_SIZE", page_size+"");
+		searchParam.put("PAGE_NUM", page_num+"");
+		
+		
+		String searchWord  = searchParam.get("searchWord").toString();
+		String searchDiv   = searchParam.get("searchDiv").toString();
+		String searchCategory   = searchParam.get("searchCategory").toString();
+		
+		searchParam.put("SEARCH_DIV", searchDiv);
+		searchParam.put("SEARCH_WORD", searchWord);
+		searchParam.put("SEARCH_CATEGORY", searchCategory);
+		return sqlSession.selectList(namespace+".do_search", searchParam);
 	}
 
 	@Override
@@ -76,4 +99,11 @@ private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
 		return sqlSession.selectOne(namespace+".do_chkId", (ExpertVO) dto);
 	}
 
+	public List<?> do_searchRank(){
+		log.debug("=================================");
+		log.debug(".do_searchRank");
+		log.debug("=================================");
+		return sqlSession.selectList(namespace+".do_searchRank");
+	}
+	
 }
