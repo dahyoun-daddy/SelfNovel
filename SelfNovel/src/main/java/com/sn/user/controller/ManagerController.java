@@ -115,4 +115,30 @@ public class ManagerController {
 		
 		return String.valueOf(userSvc.do_deleteTx(list));
 	}
+	
+	/**
+	 * do_delete
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value = "/mypage/manager/do_save.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String do_save(HttpServletRequest req) {
+		String u_id = StringUtil.nvl(req.getParameter("u_id"), "");
+		String u_password = StringUtil.nvl(req.getParameter("u_password"), "");
+		String u_name = StringUtil.nvl(req.getParameter("u_name"), "");
+		
+		UserVO userVO = new UserVO();
+		userVO.setU_id(u_id);
+		userVO.setU_password(u_password);
+		userVO.setU_name(u_name);
+		userVO.setU_level(3);
+		
+		int flag = userSvc.do_save(userVO);
+		log.debug("======================================");
+		log.debug("do_save flag: "+flag);
+		log.debug("======================================");
+		
+		return "redirect:manager_user_list.do";
+	}
 }

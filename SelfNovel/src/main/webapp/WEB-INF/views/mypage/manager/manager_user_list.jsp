@@ -124,7 +124,8 @@
 		/* do_save */
 		/********************************************************/
 		$('#do_save').on('click', function() {
-			
+			var saveFrm = document.saveFrm;	
+			saveFrm.submit();
 		});
 	});
 
@@ -208,7 +209,7 @@
 		<%=StringUtil.renderPaging(oTotalCnt, oPage_num, oPage_size, 10, "manager_user_list.do", "do_search_page") %>
 	</div>		
 	<form action="">
-		<input type="button" id="do_save" value="관리자 추가" data-toggle="modal" data-target="#addManager">
+		<input type="button" value="관리자 추가" data-toggle="modal" data-target="#addManager">
 	</form>
 
 	<!-- Modal -->
@@ -225,14 +226,14 @@
 	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
 	      </div>
 	      <div class="modal-body" align="center">
-			 <form name='do_save' action='do_save.do' method='post'>
+			 <form name='saveFrm' action='do_save.do' method='post'>
 			 	<label>아이디</label>
-			 	<input type="text" name="u_id"/><br/>
+			 	<input type="text" id="u_id" name="u_id"/><br/>
 			 	<label>비밀번호</label>
-				<input type="text" name='u_password'><br/>
+				<input type="text" id='u_password' name='u_password'><br/>
 				<label>이름</label>
-				<input type="text" name='u_name'><br/>
-				<button type="button" class="btn btn-default" data-dismiss="modal">등록</button>
+				<input type="text" id='u_name' name='u_name'><br/>
+				<button type="button" class="btn btn-default" data-dismiss="modal" id="do_Save">등록</button>
 			 </form>
 	      </div>
 	      <div class="modal-footer">
