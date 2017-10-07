@@ -44,8 +44,11 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	
 	@RequestMapping(value="expert/do_search.do")
 	public ModelAndView do_search(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		req.setCharacterEncoding("utf-8");
+		
 		ExpertVO VO = new ExpertVO();	 
 		Hashtable<String, String> 
+		
 		searchParam = new Hashtable<String, String>();//검색조건
 		String p_pageSize = StringUtil.nvl(req.getParameter("page_size"),"16");
 		String p_pageNo  = StringUtil.nvl(req.getParameter("page_num"),"1");

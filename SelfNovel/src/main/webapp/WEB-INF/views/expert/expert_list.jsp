@@ -49,18 +49,19 @@
 		var i=1;
 		
 		if(searchWord != null && searchWord != ""){
-			$("#searchWord_1").val(${searchWord}+"");
+			$("#searchWord_1").val('${searchWord}'+"");
 		}
 		$('input:checkbox[id="searchCategory_1"]').each(function() {
 		     if(this.value == arr[i]){
 		            this.checked = true;
 		            i++;
 		      }
-		 });
+		 })
 		
 		$("#searchDiv_1").change(function(){
 	           do_search();
-		});
+		})
+		
 	});
 	
 	function do_search(){
@@ -105,7 +106,7 @@
 			<tr>
 				<td>
 				<div>
-						<% int i=0; %>
+					<% int i=0; String str; %>
 						<c:choose>
             				<c:when test="${rank_list.size()>0}" >
                 				<c:forEach var="expertVO" items="${rank_list}">
@@ -113,8 +114,9 @@
 						   				   cellpadding="2" cellspacing="2" align="left">
 										<tr>
 											<td colspan="2" align="center">
+													<% i++; str = "/resources/img/rank"+String.valueOf(i)+".png"; %>
+													<img src="<c:url value='<%=str %>' />" />
 												<a href="#">
-													<img src="<c:url value='/resources/img/rank.png' />" />
 													<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
 												</a>
 											</td>
@@ -159,8 +161,8 @@
 			<tr>
 				<td style="text-align: center;">검색</td>
 				<td>
-					<input id="searchWord_1" type="text" />
-					<input class="btn btn-success" type="button" value="검색" onclick="do_search()"/>
+					<input id="searchWord_1" type="text" onkeydown="if(event.keyCode == 13) document.getElementById('searchBtn').click()" />
+					<input id="searchBtn" class="btn btn-success" type="button" value="검색" onclick="do_search()"/>
 				</td>
 			</tr>
 			<tr>
