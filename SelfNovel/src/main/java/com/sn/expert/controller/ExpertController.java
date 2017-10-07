@@ -3,6 +3,7 @@ package com.sn.expert.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -125,35 +128,41 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	}
 	
 	@RequestMapping(value="expert/do_save.do")
-	public void do_save(HttpServletRequest req, HttpServletResponse res) throws IOException {
+	public void do_save(MultipartHttpServletRequest req, HttpServletResponse res) throws IOException {
 		String path = req.getSession().getServletContext().getRealPath("/resources/exp_profiles");
+		
+		System.out.println("파일 저장 경로: " + path);
 		
 		File file = new File(path);
 		if(!file.isDirectory()) {
 			file.mkdirs();
 		}
-		MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
+		/*MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
 				new DefaultFileRenamePolicy());
 		
-		String fileName = mr.getOriginalFileName("exp_profile");
-		String newFileName = UUID.randomUUID().toString().replaceAll("-","") + "_" +mr.getOriginalFileName("exp_profile");
-		// 원본이 업로드된 절대경로와 파일명를 구한다.
+		String fileName = mr.getOriginalFileName("exp_profile");*/
+		MultipartFile mFile = req.getFile("exp_profile");
+		String fileName = mFile.getOriginalFilename();
+		String newFileName = UUID.randomUUID().toString().replaceAll("-","") + "_" +fileName;
+		System.out.println("파일명: " + newFileName);
+		mFile.transferTo(new File(path+"/"+newFileName));//저장
+		/*// 원본이 업로드된 절대경로와 파일명를 구한다.
 		String fullFileName = path + "/" + fileName;
 	    File f1 = new File(fullFileName);
 	    if(f1.exists()) {     // 업로드된 파일명이 존재하면 Rename한다.
 	         File newFile = new File(path + "/" + newFileName);
 	         f1.renameTo(newFile);   // rename...
-	    }
+	    }*/
 		
 		ExpertVO VO = new ExpertVO();
-		VO.setU_id(mr.getParameter("u_id"));
-		VO.setU_name(mr.getParameter("u_name"));
-		VO.setU_password(mr.getParameter("u_password"));		
-		VO.setU_level(Integer.valueOf(mr.getParameter("u_level")));
-		VO.setExp_id(mr.getParameter("u_id"));
-		VO.setExp_price(Integer.valueOf(mr.getParameter("exp_price")));
-		VO.setExp_title(mr.getParameter("exp_title"));
-		VO.setExp_ctg(Integer.valueOf(mr.getParameter("exp_ctg")));
+		VO.setU_id(req.getParameter("u_id"));
+		VO.setU_name(req.getParameter("u_name"));
+		VO.setU_password(req.getParameter("u_password"));		
+		VO.setU_level(Integer.valueOf(req.getParameter("u_level")));
+		VO.setExp_id(req.getParameter("u_id"));
+		VO.setExp_price(Integer.valueOf(req.getParameter("exp_price")));
+		VO.setExp_title(req.getParameter("exp_title"));
+		VO.setExp_ctg(Integer.valueOf(req.getParameter("exp_ctg")));
 		VO.setExp_profile(newFileName);
 		
 		int flag =1;

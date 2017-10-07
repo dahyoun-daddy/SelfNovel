@@ -49,7 +49,7 @@
 		var i=1;
 		
 		if(searchWord != null && searchWord != ""){
-			$("#searchWord_1").val(${searchWord}+"");	
+			$("#searchWord_1").val(${searchWord}+"");
 		}
 		$('input:checkbox[id="searchCategory_1"]').each(function() {
 		     if(this.value == arr[i]){

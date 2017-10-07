@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -80,7 +81,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="user/do_save.do")
-	public void do_save(HttpServletRequest req, HttpServletResponse res) throws IOException {
+	public void do_save(MultipartHttpServletRequest req, HttpServletResponse res) throws IOException {
 		String path = req.getSession().getServletContext().getRealPath("/resources/exp_profiles");
 		
 		File file = new File(path);
@@ -88,13 +89,15 @@ public class UserController {
 			file.mkdirs();
 		}
 		
-		MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
-				new DefaultFileRenamePolicy());
+		log.debug("asdf: " + req.getParameter("u_id"));
+		
+		/*MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
+				new DefaultFileRenamePolicy());*/
 		UserVO VO = new UserVO();
-		VO.setU_id(mr.getParameter("u_id"));
-		VO.setU_name(mr.getParameter("u_name"));
-		VO.setU_password(mr.getParameter("u_password"));
-		VO.setU_level(Integer.valueOf(mr.getParameter("u_level")));
+		VO.setU_id(req.getParameter("u_id"));
+		VO.setU_name(req.getParameter("u_name"));
+		VO.setU_password(req.getParameter("u_password"));
+		VO.setU_level(Integer.valueOf(req.getParameter("u_level")));
 		
 		int flag = userSvc.do_save(VO);
 		
@@ -149,6 +152,7 @@ public class UserController {
 		Properties p = new Properties(); // 정보를 담을 객체
 
 		p.put("mail.smtp.host", "smtp.naver.com"); // 네이버 SMTP
+		p.put("mail.smtp.ssl.trust", "smtp.naver.com");
 		p.put("mail.smtp.port", "465");
 		p.put("mail.smtp.starttls.enable", "true");
 		p.put("mail.smtp.auth", "true");
