@@ -88,7 +88,7 @@ public class ItmDaoImpl implements ItmDao {
 	 */
 	@Override
 	public int do_update(DTO dto) {
-		String statement = namespace +".do_delete";//resume.xml연결
+		String statement = namespace +".do_update";//resume.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입
 		return sqlSession.update(statement, inItmVO);
 	}

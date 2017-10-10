@@ -7,5 +7,5 @@ import com.sn.common.WorkDiv;
 
 public interface ItmDao extends WorkDiv {
 	public int do_save_edit(DTO dto);
-	public List<?> do_search_child(DTO dto);
+	public List<?> do_search_child(DTO dto);	
 }
