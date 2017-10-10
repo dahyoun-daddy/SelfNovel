@@ -231,7 +231,7 @@ $(document).ready(function(){
 			</div><!-- 컨테이너 -->
 					</td>
 				</tr>	 
-			</tbody>
+			</tbody> 
 			
 			
 			<tr>

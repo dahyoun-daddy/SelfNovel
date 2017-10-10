@@ -136,7 +136,7 @@ public class rsmTestController {
 		return "redirect:testRsm.do";
 	}
 	
-	/**
+	/** 
 	 * img Test resume_view
 	 */
 	@RequestMapping(value="changeTest.do")
