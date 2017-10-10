@@ -90,6 +90,11 @@ public class ItmDaoImpl implements ItmDao {
 	public int do_update(DTO dto) {
 		String statement = namespace +".do_update";//resume.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입
+		
+		System.out.println("===============================");
+		System.out.println("퇴근시켜줘... : "+inItmVO.toString());
+		System.out.println("===============================");
+		
 		return sqlSession.update(statement, inItmVO);
 	}
 
@@ -100,6 +105,14 @@ public class ItmDaoImpl implements ItmDao {
 	public DTO do_searchOne(DTO dto) {
 		//DO NOT USE
 		return null;
+	}
+
+	@Override
+	public int do_deleteAllRoot(DTO dto) {
+		String statement = namespace + ".do_deleteAllRoot";
+		ItmVO inItmVO = (ItmVO) dto;		
+		
+		return sqlSession.update(statement, inItmVO);
 	}
 
 }

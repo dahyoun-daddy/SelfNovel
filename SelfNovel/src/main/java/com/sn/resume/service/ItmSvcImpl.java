@@ -80,6 +80,8 @@ public class ItmSvcImpl implements ItmSvc {
 		log.debug("================================");
 		return itmDao.do_delete(dto);
 	}
+	
+	
 
 	/**
 	 * 수정
@@ -89,6 +91,11 @@ public class ItmSvcImpl implements ItmSvc {
 		log.debug("===== ItmDaoImpl.do_update =====");
 		log.debug("dto : " + dto.toString());
 		log.debug("================================");
+		
+		System.out.println("===============================");
+		System.out.println("퇴근시켜줘... : "+ dto.toString());
+		System.out.println("===============================");
+		
 		return itmDao.do_update(dto);
 	}
 
@@ -97,5 +104,15 @@ public class ItmSvcImpl implements ItmSvc {
 	public DTO do_searchOne(DTO dto) {
 		//Don't use it
 		return null;
+	}
+
+
+	@Override
+	public int do_deleteAllRoot(DTO dto) {
+		log.debug("===== ItmDaoImpl.do_delete_all_root =====");
+		log.debug("dto : " + dto.toString());
+		log.debug("=========================================");
+		
+		return itmDao.do_deleteAllRoot(dto);
 	}
 }

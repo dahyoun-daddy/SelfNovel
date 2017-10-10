@@ -63,9 +63,18 @@
 	<update id="do_update" parameterType="com.sn.resume.domain.ItmVO">		
 		UPDATE item
 		   SET itm_title = #{itm_title},
-		       itm_content =#{itm_content},       
-		       itm_seq = #{itm_seq}       
+		       itm_content = #{itm_content},       
+		       itm_seq = #{itm_seq},
+		       itm_use_yn = 1       
 		WHERE itm_form_id = #{itm_form_id}
+	</update>
+	
+	<!-- root 삭제 : update하기 전, root들을 모두 0으로 바꾸어서 항목의 개수가 줄어들어도 문제가 없게 만든다.-->
+	<update id="do_deleteAllRoot" parameterType="com.sn.resume.domain.ItmVO">
+		update item
+		   set itm_use_yn = 0
+		 where rsm_id = #{rsm_id}
+  		   and itm_prd_id is null  
 	</update>
 	
 	<!-- 조회(Search) -->

@@ -78,8 +78,10 @@
 		/**************************
 		* '수정하기'버튼 클릭시 이벤트
 		***************************/
-		$("#btnModify").on("click", function(){
-			location.href="modifyView.do";
+		$("#btnModify").on("click", function(){			
+			var frm = document.frm;
+			frm.action = "modifyView.do";
+			frm.submit();			
 		});//close btnModify_on_click
 		
 		/**************************
@@ -243,7 +245,7 @@
 	<hr/>
 	<div id="good"></div>
 	<form action="#" name="frm" method="post" class="form-inline">
-		<input type="hidden" id="rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
+		<input type="hidden" id="rsm_id" name="rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
 		<table class="table table-bordered table-hover table-condensed" border="1px" align="center" width="600px;">
 			<tr>				
 				<td align="right" colspan="3">					
