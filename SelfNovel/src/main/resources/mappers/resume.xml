@@ -50,14 +50,14 @@
 	</delete> -->
 	
 	<!-- 수정(Update) -->
+	<!-- TODO : 이미지 추가할 것! -->
+	<!-- IMG_ID        = #{img_id }   ,-->
 	<update id="do_update" parameterType="com.sn.resume.domain.RsmVO">		
 		UPDATE RESUME 
-		SET IMG_ID        = #{img_id,        jdbcType=NUMBER }           ,
-		    RSM_TITLE     = #{rsm_title,     jdbcType=VARCHAR2(50 CHAR)} ,
-		    RSM_CONTENT   = #{rsm_content,   jdbcType=CLOB }             ,		    
-		    RSM_USE_YN    = #{rsm_use_yn,    jdbcType=NUMBER(1,0)}       ,
-		    RSM_ORD_YN    = #{rsm_ord_yn,    jdbcType=NUMBER(1,0)}
-		WHERE RSM_ID = #{rsm_id, jdbcType=NUMBER(8)}
+		SET RSM_TITLE     = #{rsm_title}  ,
+		    RSM_CONTENT   = #{rsm_content},
+		    RSM_DIV       = #{rsm_div}
+		WHERE RSM_ID = #{rsm_id}
 	</update>
 	
 	<!-- 조회수 증가 -->

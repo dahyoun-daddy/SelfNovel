@@ -128,8 +128,6 @@ $(document).ready(function(){
 						      </c:forEach>
 				   		</select>
 					</td>
-
-
 				</tr>
 				<tr>
 					<td>제목</td>

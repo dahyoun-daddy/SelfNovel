@@ -1,5 +1,6 @@
 package com.sn.resume.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sn.codes.dao.CodesDao;
+import com.sn.codes.domain.CodesVO;
 import com.sn.common.StringUtil;
 import com.sn.resume.dao.RsmDao;
 import com.sn.resume.domain.ItmVO;
@@ -39,6 +42,9 @@ public class RsmController {
 	
 	@Autowired
 	ItmSvc itmSvc;
+	
+	@Autowired
+	CodesDao codesDao;
 	
 	/**
 	 * resumeList
@@ -105,10 +111,90 @@ public class RsmController {
 		log.debug("req : " + req.toString());
 		log.debug("=========================================");
 		
+		RsmVO inRsmVO = new RsmVO();					//자기소개서 조회용 객체		
+		ItmVO inItmVO = new ItmVO();					//하위항목 조회용 객체
+		RsmVO result = new RsmVO();						//자기소개서 조회결과 객체 
+		List<ItmVO> itmList = new ArrayList<ItmVO>();	//하위항목 조회결과 객체List
+		
+		// 0. 자기소개서 id get
+		String rsm_id = req.getParameter("rsm_id");		
+		
+		// 1. 자기소개서 객체, 하위항목 객체에 자소서id set
+		inRsmVO.setRsm_id(rsm_id);
+		inItmVO.setRsm_id(rsm_id);
+		
+		// 2. resume테이블 단건조회
+		result = (RsmVO) rsmSvc.do_searchOne(inRsmVO);		
+		
+		// 3. item테이블 조회
+		itmList = (List<ItmVO>) itmSvc.do_search(inItmVO);
+		
+		// 4. code 테이블 조회
+		CodesVO dto = new CodesVO();
+		dto.setMst_cd_id("C002");	
+		List<CodesVO> codeList = (List<CodesVO>)codesDao.do_search(dto);
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("resume/resume_mod");
+		modelAndView.addObject("resume", result);
+		modelAndView.addObject("itemList", itmList);
+		modelAndView.addObject("codeList", codeList);
 		
 		return modelAndView;
+	}
+	
+	/**
+	 * do_update
+	 * @param req
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value="resume/do_update.do")
+	public ModelAndView do_update(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.do_update =====");
+		log.debug("req : " + req.toString());
+		log.debug("======================================");		
+		
+		//리퀘스트로부터 resume테이블에 갱신할 내용을 get
+		String rsm_id = req.getParameter("rsm_id");				//자소서 id
+		String rsm_title = req.getParameter("rsm_title");		//자소서 제목
+		String rsm_content = req.getParameter("rsm_content");	//자소서 내용
+		String rsm_div = req.getParameter("selectBox");			//자소서 구분
+		
+		//inRsmVO 객체 생성 후, request로부터 받아온 parameter들을 set
+		RsmVO inRsmVO = new RsmVO();		
+		inRsmVO.setRsm_id(rsm_id);
+		inRsmVO.setRsm_title(rsm_title);
+		inRsmVO.setRsm_content(rsm_content);
+		inRsmVO.setRsm_div(rsm_div);		
+
+		//rsmSvc의 do_update 호출
+		rsmSvc.do_update(inRsmVO);
+		
+		//--------------------------------------------------------------
+		//리퀘스트로부터 item테이블에 갱신할 내용을 get
+		String[] ids = req.getParameterValues("itm_form_id");
+		String[] titles = req.getParameterValues("itm_title");
+		String[] contents = req.getParameterValues("itm_content");	
+		
+		ItmVO tempItmVO = new ItmVO();	//Resume의 모든 하위 Item들을 제거하기 위해 사용될 VO
+		tempItmVO.setRsm_id(rsm_id);
+		
+		itmSvc.do_deleteAllRoot(tempItmVO);	//모든 하위 항목을 삭제하여, 아이템이 줄어든 경우 문제 방지
+		
+		//inItmVO 객체 생성 후, 리퀘스트로부터 받아온 parameter들을 set
+		//그리고 itmSvc의 do_update 호출		
+		
+		for(int i = 0; i < titles.length; i++) {
+			ItmVO inItmVO = new ItmVO();
+			inItmVO.setItm_form_id(ids[i]);
+			inItmVO.setItm_title(titles[i]);			
+			inItmVO.setItm_content(contents[i]);
+			inItmVO.setItm_seq(i);
+			
+			itmSvc.do_update(inItmVO);
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -224,6 +310,4 @@ public class RsmController {
 		
 		return flag;
 	}
-	
-
 }
