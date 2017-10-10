@@ -64,14 +64,14 @@
 	<update id="do_update_count" parameterType="com.sn.resume.domain.RsmVO">		
 		UPDATE RESUME 
 		SET RSM_COUNT = NVL(RSM_COUNT, 0) + 1
-		WHERE RSM_ID = #{rsm_id, jdbcType=NUMBER(8)}
+		WHERE RSM_ID = #{rsm_id}
 	</update>
 	
 	<!-- 추천수 증가 -->
 	<update id="do_update_recommend" parameterType="com.sn.resume.domain.RsmVO">		
 		UPDATE RESUME 
 		SET RSM_RECOMMEND = NVL(RSM_RECOMMEND, 0) + 1
-		WHERE RSM_ID = #{rsm_id, jdbcType=NUMBER(8)}
+		WHERE RSM_ID = #{rsm_id}
 	</update>
 	
 	<!-- 단건조회(SearchOne) -->

@@ -134,6 +134,9 @@ public class RsmController {
 		RsmVO resultVO = (RsmVO) this.rsmSvc.do_searchOne(inRsmVO);		
 		log.debug("result : " + resultVO.toString());
 		
+		//조회수 증가
+		rsmSvc.do_update_count(resultVO);
+		
 		//itmVO에 rsm_id를 set
 		ItmVO itmVO = new ItmVO();
 		itmVO.setRsm_id(rsm_id);
@@ -148,7 +151,7 @@ public class RsmController {
 		modelAndView.addObject("itmList", itmList);
 		
 		return modelAndView;		
-	}	
+	}
 	
 	/**
 	 * do_searchChild
@@ -221,4 +224,6 @@ public class RsmController {
 		
 		return flag;
 	}
+	
+
 }
