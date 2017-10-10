@@ -18,4 +18,16 @@ public interface RsmDao extends WorkDiv {
 	 * @return
 	 */
 	public int do_update_count(DTO dto);
+	/**
+	 * do_getNextVal
+	 * detail : 조회수 증가
+	 * 
+	 * date: 2017-10-10
+	 * @author pinkbean
+	 * 
+	 * @param dto
+	 * @return
+	 */
+	public String do_getNextVal();
+	
 }

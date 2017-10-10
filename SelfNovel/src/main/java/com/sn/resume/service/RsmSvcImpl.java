@@ -109,5 +109,20 @@ public class RsmSvcImpl implements RsmSvc {
 		log.debug("===================================");
 		return rsmDao.do_searchOne(dto);
 	}
-
+	/**
+	 * do_getNextVal
+	 * detail : 조회수 증가
+	 * 
+	 * date: 2017-10-10
+	 * @author pinkbean
+	 * 
+	 * @param dto
+	 * @return
+	 */
+	@Override
+	public String do_getNextVal() {
+		log.debug("===== RsmDaoImpl.do_getNextVal =====");
+		log.debug("===================================");
+		return rsmDao.do_getNextVal();
+	}
 }

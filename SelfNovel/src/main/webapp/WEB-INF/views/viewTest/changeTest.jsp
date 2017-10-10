@@ -17,6 +17,17 @@ function moveDown(el){
 	var $tr = $(el).parent().parent(); // 클릭한 버튼이 속한 tr 요소
 	$tr.next().after($tr); // 현재 tr 의 다음 tr 뒤에 선택한 tr 넣기
 }
+
+
+	$(function() {
+		$("#doExcelDown").click(function(){
+			var frm = document.excelFrm;
+			frm.submit();
+		});
+		
+		
+	});
+
 </script>
 </head>
 <body>
@@ -42,6 +53,9 @@ function moveDown(el){
 			<td><input type="button" value="아래" onclick="moveDown(this)"></td>						
 		</tr>		
 	</table>
-
+	
+	<form name="excelFrm" action="doExcelDown.do">
+		<input type="button" value="이건 엑셀 다운로드 테스트" id="doExcelDown">
+	</form>
 </body>
 </html>

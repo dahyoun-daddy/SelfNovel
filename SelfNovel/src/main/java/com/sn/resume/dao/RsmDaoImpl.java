@@ -164,4 +164,18 @@ public class RsmDaoImpl implements RsmDao {
 		return sqlSession.selectOne(statement, inRsmVO);
 	}
 
+	/**
+	 * do_getNextVal
+	 * detail : 조회수 증가
+	 * 
+	 * date: 2017-10-10
+	 * @author pinkbean
+	 * 
+	 * @param dto
+	 * @return
+	 */
+	public String do_getNextVal() {
+		String statement = namespace +".do_getNextVal";//resume.xml연결		
+		return sqlSession.selectOne(statement);		
+	}
 }
