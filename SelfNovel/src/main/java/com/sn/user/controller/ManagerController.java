@@ -122,7 +122,6 @@ public class ManagerController {
 	 * @return
 	 */
 	@RequestMapping(value = "/mypage/manager/do_save.do", method = RequestMethod.POST)
-	@ResponseBody
 	public String do_save(HttpServletRequest req) {
 		String u_id = StringUtil.nvl(req.getParameter("u_id"), "");
 		String u_password = StringUtil.nvl(req.getParameter("u_password"), "");

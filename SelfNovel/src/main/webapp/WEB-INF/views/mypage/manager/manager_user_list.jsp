@@ -124,6 +124,8 @@
 		/* do_save */
 		/********************************************************/
 		$('#do_save').on('click', function() {
+			alert(1);
+			
 			var saveFrm = document.saveFrm;	
 			saveFrm.submit();
 		});
@@ -146,34 +148,43 @@
 		<input type="hidden" name="PAGE_SIZE" value="<%=PAGE_SIZE%>"/>
 		<input type="hidden" name="PAGE_NUM" value="<%=PAGE_NUM%>"/>
 		<input type="hidden" name="totalCnt" value="<%=totalCnt%>"/>
-		<table border="1px" >
+		<table class="table table-bordered table-hover table-condensed" border="1px" 
+			   cellpadding="2" cellspacing="2" align="center" width="600px;" >
 			<tr>
 				<td>검색</td>
 				<td>
 					<input type="text" id="SEARCH_WORD" name="SEARCH_WORD" value="<%=SEARCH_WORD%>"/>
-					<input type="button" id="do_search" value="검색"/>
+					<input type="button" class="btn btn-success" id="do_search" value="검색"/>
 				</td>
 			</tr>
 		</table>
 	
 	<h3>총 회원수: <c:out value="${totalCnt}명"/></h3>
 	<hr/>
-	
-		선택 멤버를 <input type="button" id="do_delete" value="강제 탈퇴"/>
-		<select name="ORDER_DIV">
-			<c:forEach var="codeVO" items="${codeList}">
-				<c:choose>
-					<c:when test="${codeVO.dtl_cd_id eq ORDER_DIV}">
-						<option value="${codeVO.dtl_cd_id}" selected="selected">${codeVO.dtl_cd_nm}</option>
-					</c:when>
-					<c:otherwise>
-						<option value="${codeVO.dtl_cd_id}">${codeVO.dtl_cd_nm}</option>
-					</c:otherwise>
-				</c:choose>
-			</c:forEach>
-		</select>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10">
+				선택 멤버를 <input type="button" class="btn btn-success" id="do_delete" value="강제 탈퇴"/>
+			</div>			
+			<div class="col-md-2">
+				<select name="ORDER_DIV" class="form-control input-sm" style="text-align: right;">
+					<c:forEach var="codeVO" items="${codeList}">
+						<c:choose>
+							<c:when test="${codeVO.dtl_cd_id eq ORDER_DIV}">
+								<option value="${codeVO.dtl_cd_id}" selected="selected">${codeVO.dtl_cd_nm}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${codeVO.dtl_cd_id}">${codeVO.dtl_cd_nm}</option>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+				</select>
+			</div>
+		</div>	
+	</div>	
 	</form>	
-		<table border="1px" >
+		<table class="table table-bordered table-hover table-condensed" border="1px" 
+			   cellpadding="2" cellspacing="2" align="center" width="600px;">
 			<tr>
 				<th><input type="checkbox"  id="allCheck"></th>
 				<th>글번호</th>
@@ -209,15 +220,10 @@
 		<%=StringUtil.renderPaging(oTotalCnt, oPage_num, oPage_size, 10, "manager_user_list.do", "do_search_page") %>
 	</div>		
 	<form action="">
-		<input type="button" value="관리자 추가" data-toggle="modal" data-target="#addManager">
+		<input type="button" class="btn btn-success" value="관리자 추가" data-toggle="modal" data-target="#addManager">
 	</form>
 
 	<!-- Modal -->
-	<!-- 
-		2017-09-19 추가
-		개인용 excel업로드 서블릿을 사용한다. 양식은 테이블 아무거나 체크하고 엑셀다운로드를 클릭해서 다운받으면 된다.
-		service에서 do_upsert를 호출한다.
-	 -->
 	<div class="modal fade" id="addManager" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -233,7 +239,7 @@
 				<input type="text" id='u_password' name='u_password'><br/>
 				<label>이름</label>
 				<input type="text" id='u_name' name='u_name'><br/>
-				<button type="button" class="btn btn-default" data-dismiss="modal" id="do_Save">등록</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" id="do_save">등록</button>
 			 </form>
 	      </div>
 	      <div class="modal-footer">
