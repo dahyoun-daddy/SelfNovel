@@ -97,7 +97,7 @@
 					this.checked = true;
 				}
 			});
-		});		
+		});//close chkCat_each		
 		
 		/*******************
 		* 셀렉트박스 유지 처리

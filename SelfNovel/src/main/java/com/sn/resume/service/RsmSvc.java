@@ -21,7 +21,7 @@ public interface RsmSvc {
 	public int do_save(DTO dto);
 	
 	/**
-	 * do_update
+	 * do_update_count
 	 * detail : 수정
 	 * @param dto
 	 * @return int (1:성공, other:실패)
@@ -29,7 +29,7 @@ public interface RsmSvc {
 	public int do_update_count(DTO dto);
 	
 	/**
-	 * do_update_count
+	 * do_update_recommend
 	 * detail : 조회수 증가
 	 * @param dto
 	 * @return int (1:성공, other:실패)
@@ -37,7 +37,7 @@ public interface RsmSvc {
 	public int do_update_recommend(DTO dto);
 	
 	/**
-	 * do_update_recommend
+	 * do_update
 	 * detail : 추천수 증가
 	 * @param dto
 	 * @return int (1:성공, other:실패)
@@ -66,5 +66,5 @@ public interface RsmSvc {
 	 * @param dto(id = ?)
 	 * @return RsmVO
 	 */
-	public DTO do_searchOne(DTO dto);	
+	public DTO do_searchOne(DTO dto);
 }

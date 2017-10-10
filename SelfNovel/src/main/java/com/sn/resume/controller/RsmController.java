@@ -91,6 +91,24 @@ public class RsmController {
 		modelAndView.setViewName("resume/resume_list");
 		
 		return modelAndView;
+	}	
+	
+	/**
+	 * resumeModify
+	 * detail : 수정폼으로 이동
+	 * @param req
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value="resume/modifyView")
+	public ModelAndView resumeModify(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.modifyView =======");
+		log.debug("req : " + req.toString());
+		log.debug("=========================================");
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("resume/resume_mod");
+		
+		return modelAndView;
 	}
 	
 	/**
@@ -116,6 +134,9 @@ public class RsmController {
 		RsmVO resultVO = (RsmVO) this.rsmSvc.do_searchOne(inRsmVO);		
 		log.debug("result : " + resultVO.toString());
 		
+		//조회수 증가
+		rsmSvc.do_update_count(resultVO);
+		
 		//itmVO에 rsm_id를 set
 		ItmVO itmVO = new ItmVO();
 		itmVO.setRsm_id(rsm_id);
@@ -133,7 +154,7 @@ public class RsmController {
 	}
 	
 	/**
-	 * resumeView
+	 * do_searchChild
 	 * detail : 상세조회
 	 * @param req
 	 * @return ModelAndView
@@ -183,6 +204,26 @@ public class RsmController {
 		//itmSvc를 통해 do_save메소드 호출
 		int flag = itmSvc.do_save_edit(inItmVo);
 		
-		return 0;	
+		return flag;	
 	}
+	
+	@RequestMapping(value="resume/do_update_item.do")
+	@ResponseBody
+	public int doUpdateItem(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.do_update_item =====");
+		log.debug("req : " + req.toString());
+		log.debug("===========================================");
+		
+		ItmVO inItmVo = new ItmVO();
+		inItmVo.setItm_form_id(req.getParameter("itm_form_id"));		
+		inItmVo.setItm_title(req.getParameter("itm_title"));
+		inItmVo.setItm_content(req.getParameter("itm_content"));		
+		
+		//itmSvc를 통해 do_save메소드 호출
+		int flag = itmSvc.do_update(inItmVo);
+		
+		return flag;
+	}
+	
+
 }
