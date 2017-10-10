@@ -9,6 +9,7 @@
 	contextPath = "http://localhost:8080/"+contextPath;
 %>	
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -152,7 +153,8 @@ $(document).ready(function(){
 	<h2>form</h2>
 	<hr/>
 
-	<form name="testFrm" action="rsmParamTest.do" method="POST">	
+	<form name="testFrm" action="rsmParamTest.do" method="POST">
+	<input type="hidden" name="rsm_ord_yn" value="1" />	
 	<div>
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 				   cellpadding="2" cellspacing="2" align="center" id="testTable">
@@ -170,7 +172,7 @@ $(document).ready(function(){
 				</tr>
 				<tr>
 					<td>제목</td>
-					<td><input type="text" /></td>
+					<td><input type="text" name="stitle"/></td>
 				</tr>
 				<tr>
 					<td>ppt첨부</td>
@@ -180,7 +182,7 @@ $(document).ready(function(){
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td></td>
+					<td><input type="text" name="scontent"/></td>
 				</tr>
 				
 			<!-- end 복붙 -->	

@@ -8,7 +8,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.sn.log.domain.LogVO;
+import com.sn.log.domain.LogVO; 
 import com.sn.log.service.LogSvc;
 /**
  * TransactionAdvice 
@@ -17,7 +17,7 @@ import com.sn.log.service.LogSvc;
  * @author SeulGi <dev.leewisdom92@gmail.com>
  *
  */
-public class TransactionAdvice implements MethodInterceptor {
+public class TransactionAdvice implements MethodInterceptor {  
 	/***********************************************/
 	//field
 	/***********************************************/
@@ -37,7 +37,7 @@ public class TransactionAdvice implements MethodInterceptor {
      * @param logSvc
      */
     public void setLogSvc(LogSvc logSvc) {
-    	this.logSvc = logSvc;
+    	this.logSvc = logSvc; 
     }
     
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {

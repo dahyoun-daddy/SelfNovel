@@ -141,7 +141,7 @@ $(document).ready(function(){
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td></td>
+					<td><input type="text" /></td>
 				</tr>
 				<tr id="testTr">
 					<td colspan="2">
@@ -153,7 +153,7 @@ $(document).ready(function(){
 						   cellpadding="2" cellspacing="2" align="center">
 					
 							<tr>
-								<td><input type="text" value="제목(Not Null)"/> </td>
+								<td><input type="text" value="제목(Not Null)" name="title"/> </td>
 							</tr>
 							<tr height="150px;">
 								<td><textarea  name="content"  rows="10" cols="100" >내용(Not Null)</textarea>

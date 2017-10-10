@@ -29,6 +29,9 @@ import com.sn.resume.domain.RsmVO;
 import com.sn.resume.service.ItmSvc;
 import com.sn.resume.service.RsmSvc;
 
+
+
+
 /**
  * rsmTestController 
  * detail : dao테스트하고 싶은데 main에서 autowired로 추가하면 자꾸 null에러떠서 걍 만든 컨트롤러
@@ -75,18 +78,23 @@ public class rsmTestController {
 		log.debug("다음 아이디값: "+rsm_id);
 		
 		//2. 값 꺼낸다
-		String rsm_title="임시제목이다";
-		String rsm_content="임시내용이다";
-		
+		String rsm_title=(String)req.getParameter("stitle");
+		String rsm_content=(String)req.getParameter("scontent");
+		String img_id = StringUtil.nvl(req.getParameter("img_id"), "");
+		String u_id = StringUtil.nvl(req.getParameter("u_id"),"hello");
+		String rsm_ord_yn =(String)req.getParameter("rsm_ord_yn");
+		String rsm_div = StringUtil.nvl(req.getParameter("rsm_div"),"");
+
+
 		//3. vo 만들어서 데이터 넣음
 		RsmVO rsmVo = new RsmVO();
 		rsmVo.setRsm_id(rsm_id);
-		rsmVo.setImg_id("");
+		rsmVo.setImg_id(img_id);
 		rsmVo.setRsm_title(rsm_title);
 		rsmVo.setRsm_content(rsm_content);
-		rsmVo.setU_id("안녕나는유저");
-		rsmVo.setRsm_ord_yn("1");
-		rsmVo.setRsm_div("");
+		rsmVo.setU_id(u_id);
+		rsmVo.setRsm_ord_yn(rsm_ord_yn);
+		rsmVo.setRsm_div(rsm_div);
 		
 		//4. vo를 서비스에 넘김!
 		rsmSvc.do_save(rsmVo);
@@ -111,7 +119,7 @@ public class rsmTestController {
 			vo.setRsm_id(rsm_id);				//id값 넣어줌
 			vo.setItm_title(titlelist[i]);		//제목 넣어줌
 			vo.setItm_content(contentlist[i]);	//내용 넣어줌
-			vo.setU_id("작성자다");					//작성자 아이디
+			vo.setU_id(u_id);					//작성자 아이디
 			vo.setItm_prd_id("");				//상위항목=작성이므로 null
 			vo.setItm_seq(i);					//순서
 			
