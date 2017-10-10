@@ -153,9 +153,13 @@ public class rsmTestController {
 		return "redirect:changeTest.do";
 	}
 	
+	@RequestMapping(value="pptUpload.do")
+	public String pptPopup(){
+		return "viewTest/popTest";
+	}
 	
-	@RequestMapping(value="ppt/pptUpload.do", method=RequestMethod.POST)
-	public String pptUpload(MultipartHttpServletRequest mReq) throws IOException,DataAccessException{
+	@RequestMapping(value="pptUpload.do", method=RequestMethod.POST)
+	public ModelAndView pptUpload(MultipartHttpServletRequest mReq) throws IOException,DataAccessException{
 		ModelAndView modelAndView = new ModelAndView();
 		
 		//1. 먼저 파일유틸을 이용해 파일을 저장하고 파일명을 받는다.
@@ -179,6 +183,8 @@ public class rsmTestController {
 		inVO.setImg_id(img_id);		
 		List<?> imgList = imgSvc.do_search(inVO); 
 		
-		return String.valueOf(img_id);
+		modelAndView.addObject("img_id",img_id);
+		modelAndView.setViewName("viewTest/popTest");
+		return modelAndView;
 	}
 }

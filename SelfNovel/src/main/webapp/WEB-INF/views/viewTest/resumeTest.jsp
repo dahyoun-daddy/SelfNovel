@@ -134,6 +134,16 @@ $(document).ready(function(){
     });
   //순서변경을 위한 함수 end
     //*********************************************************************//
+    
+    
+ 	//2017-10-10 개인용 팝업테스트
+ 	$('#popupTest').on("click",function(){
+ 	    //alert('openPopup');
+ 	    var url    ="pptUpload.do";
+ 	    var title  = "testpop";
+ 	    var status = "toolbar=yes,directories=yes,scrollbars=no,resizable=yes,status=yes,menubar=no,width=240, height=200, top=0,left=20"; 
+ 	    window.open(url, title,status); //window.open(url,title,status); window.open 함수에 url을 앞에와 같이 
+  	});
 });
   </script>
 <title>Insert title here</title>
@@ -164,7 +174,9 @@ $(document).ready(function(){
 				</tr>
 				<tr>
 					<td>ppt첨부</td>
-					<td><input type="button" value="파일첨부" />파일을 첨부해주세요. </td>
+					<td><input type="button" value="파일첨부" id="popupTest"/>파일을 첨부해주세요. 
+						<input type="text" id="img_id">
+					</td>
 				</tr>
 				<tr>
 					<td>내용</td>
