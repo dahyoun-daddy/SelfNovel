@@ -1,9 +1,13 @@
 package com.sn.common;
 
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.AttributedString;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +36,14 @@ public class ExcelUtil {
 	private String filePath;
 	private String excelFileName;
 	private String changFileName;
-	private static short firstRow = 5;
-	private static short firstCol = 1;
+	private static short firstRow = 0;
+	private static short firstCol = 0;
+	
+	private String text ="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+			+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+			+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+			+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+			+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 	
 	
 	/**
@@ -72,9 +83,10 @@ public class ExcelUtil {
         File dir = new File(filePath); 
         if(!dir.exists()) dir.mkdirs(); 
         //File존재하면
-        String changeFileName = createFile(filePath,excelFileName);
+        //String changeFileName = createFile(filePath,excelFileName);
         
-        FileOutputStream fout = new FileOutputStream(filePath+"/"+changeFileName); 
+        //FileOutputStream fout = new FileOutputStream(filePath+"/"+changeFileName); 
+        FileOutputStream fout = new FileOutputStream(filePath+"/"+excelFileName); 
         return fout;
     }
     
@@ -130,80 +142,141 @@ public class ExcelUtil {
        // ## Row Create
        // ? 가로열 생성
        HSSFRow row = sheet.createRow((short)firstRow);
-        
-       // ## Title Cell Create
-       // @row.createCell((short)n) : n번째 셀 설정
-       // @setCellValue(String) : n 번째 셀의 내용
-       // @setCellStyle(style) : n 번째 셀의 스타일
-       HSSFCell cell_0 = row.createCell((short)0+firstCol);
-       cell_0.setCellValue("번호");
-       cell_0.setCellStyle(titleStyle);
-        
-       HSSFCell cell_1 = row.createCell((short)1+firstCol);
-       cell_1.setCellValue("아이디");
-       cell_1.setCellStyle(titleStyle);
-        
-       HSSFCell cell_2 = row.createCell((short)2+firstCol);
-       cell_2.setCellValue("이름");
-       cell_2.setCellStyle(titleStyle);
-        
-       HSSFCell cell_3 = row.createCell((short)3+firstCol);
-       cell_3.setCellValue("레벨");
-       cell_3.setCellStyle(titleStyle);
        
-       HSSFCell cell_4 = row.createCell((short)4+firstCol);
-       cell_4.setCellValue("로그인");
-       cell_4.setCellStyle(titleStyle);
-       
-       HSSFCell cell_5 = row.createCell((short)5+firstCol);
-       cell_5.setCellValue("이메일");
-       cell_5.setCellStyle(titleStyle);
+       //셀 병합
+       sheet.addMergedRegion(new CellRangeAddress(firstRow, firstRow+2, firstCol, firstCol+10));
+       //상단 자기소개서 스타일
+       HSSFCellStyle styleTitle = workbook.createCellStyle();
+       //폰트 스타일
+       HSSFFont fontTitle = workbook.createFont();
+       fontTitle.setBold(true);
+       styleTitle.setFont(fontTitle);
+       //상단 자기소개서 텍스트
+       HSSFCell titleCell = row.createCell(firstCol);
+       titleCell.setCellValue("자기소개서");
+       titleCell.setCellStyle(styleTitle);
        
        
-       //  ObjectList 가 비어있으면 제목만 출력 후 종료
-       if(data == null) return workbook;
-        
-       //  ObjectList 엑셀에 출력
-       for(int i = 0; i < data.size(); i++){
-           // 1번째 행은 제목이니 건너 뜀
-           row = sheet.createRow((short)this.firstRow+(i+1));
-           //UserVO user = (UserVO)data.get(i);
-            
-           cell_0 = row.createCell((short)0+firstCol);
-           //cell_0.setCellValue(user.getNo());
-           //cell_0.setCellStyle(styleCenter);
-            
-           cell_1 = row.createCell((short)1+firstCol);
-           //cell_1.setCellValue(user.getId());
-           //cell_1.setCellStyle(styleLeft);
-            
-           cell_2 = row.createCell((short)2+firstCol);
-           //cell_2.setCellValue(user.getName());
-           //cell_2.setCellStyle(styleLeft);
-            
-           cell_3 = row.createCell((short)3+firstCol);
-           //cell_3.setCellValue(user.getU_Level());
-           //cell_3.setCellStyle(styleRight);
-           
-           cell_3 = row.createCell((short)4+firstCol);
-           //cell_3.setCellValue(user.getLogin());
-           //cell_3.setCellStyle(styleRight);
-           
-           cell_3 = row.createCell((short)5+firstCol);
-           //cell_3.setCellValue(user.getMail());
-           //cell_3.setCellStyle(styleLeft);
+       row = sheet.createRow((short)firstRow+3);
+       //소항목 본문 테스트
+       sheet.addMergedRegion(new CellRangeAddress(firstRow+3, firstRow+4, firstCol, firstCol+10));
+       HSSFCellStyle styleContents = workbook.createCellStyle();
+       styleContents.setWrapText(true);
+       //HSSFCellStyle.setWrapText(true)
+       HSSFCell contentCell = row.createCell(firstCol);
+       contentCell.setCellValue(text);
+       contentCell.setCellStyle(styleContents);
+       
+       HSSFFont cellFont = contentCell.getCellStyle().getFont(workbook);
+       int fontStyle = java.awt.Font.PLAIN;
+       if (cellFont.getBold())
+         fontStyle = java.awt.Font.BOLD;
+       if (cellFont.getItalic())
+         fontStyle = java.awt.Font.ITALIC;
+       java.awt.Font currFont = new java.awt.Font(cellFont.getFontName(), fontStyle,
+           cellFont.getFontHeightInPoints());
+       String cellText = contentCell.getStringCellValue();
+       log.debug("cellText:" + cellText);
+       
+       AttributedString attrStr = new AttributedString(cellText);
+       attrStr.addAttribute(TextAttribute.FONT, currFont);
+       // Use LineBreakMeasurer to count number of lines needed for the text
+       //
+       FontRenderContext frc = new FontRenderContext(null, true, true);
+       LineBreakMeasurer measurer = new LineBreakMeasurer(attrStr.getIterator(), frc);
+       int nextPos = 0;
+       int lineCnt = 1;
+       float columnWidthInPx = sheet.getColumnWidthInPixels(firstCol);
+       log.debug("columnWidthInPx:" + columnWidthInPx);
+       while (measurer.getPosition() < cellText.length()) {
+         nextPos = measurer.nextOffset(columnWidthInPx);
+         log.debug("nextPos:" + nextPos);
+         
+         lineCnt++;
+         measurer.setPosition(nextPos);
        }
-        
-       //컬럼사이즈
-       for(int i=0; i<7; i++){
-    	   if(i==0){
-    		   sheet.setColumnWidth(0,700);
-    	   }else{
-    		   sheet.autoSizeColumn((short)i);
-    		   sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+512 );  // 윗줄만으로는 컬럼의 width 가 부족하여 더 늘려야 함.
-    	   }
+       log.debug("lineCnt:" + lineCnt);
+       if (lineCnt > 1) {
+         row.setHeightInPoints(
+             //sheet.getDefaultRowHeightInPoints() * lineCnt * /* fudge factor */ 1f);
+        		13 * lineCnt * /* fudge factor */ 1f / 6);
        }
+
        
+       
+//       // ## Title Cell Create
+//       // @row.createCell((short)n) : n번째 셀 설정
+//       // @setCellValue(String) : n 번째 셀의 내용
+//       // @setCellStyle(style) : n 번째 셀의 스타일
+//       HSSFCell cell_0 = row.createCell((short)0+firstCol);
+//       cell_0.setCellValue("번호");
+//       cell_0.setCellStyle(titleStyle);
+//        
+//       HSSFCell cell_1 = row.createCell((short)1+firstCol);
+//       cell_1.setCellValue("아이디");
+//       cell_1.setCellStyle(titleStyle);
+//        
+//       HSSFCell cell_2 = row.createCell((short)2+firstCol);
+//       cell_2.setCellValue("이름");
+//       cell_2.setCellStyle(titleStyle);
+//        
+//       HSSFCell cell_3 = row.createCell((short)3+firstCol);
+//       cell_3.setCellValue("레벨");
+//       cell_3.setCellStyle(titleStyle);
+//       
+//       HSSFCell cell_4 = row.createCell((short)4+firstCol);
+//       cell_4.setCellValue("로그인");
+//       cell_4.setCellStyle(titleStyle);
+//       
+//       HSSFCell cell_5 = row.createCell((short)5+firstCol);
+//       cell_5.setCellValue("이메일");
+//       cell_5.setCellStyle(titleStyle);
+//       
+//       
+//       //  ObjectList 가 비어있으면 제목만 출력 후 종료
+//       if(data == null) return workbook;
+//        
+//       //  ObjectList 엑셀에 출력
+//       for(int i = 0; i < data.size(); i++){
+//           // 1번째 행은 제목이니 건너 뜀
+//           row = sheet.createRow((short)this.firstRow+(i+1));
+//           //UserVO user = (UserVO)data.get(i);
+//            
+//           cell_0 = row.createCell((short)0+firstCol);
+//           //cell_0.setCellValue(user.getNo());
+//           //cell_0.setCellStyle(styleCenter);
+//            
+//           cell_1 = row.createCell((short)1+firstCol);
+//           //cell_1.setCellValue(user.getId());
+//           //cell_1.setCellStyle(styleLeft);
+//            
+//           cell_2 = row.createCell((short)2+firstCol);
+//           //cell_2.setCellValue(user.getName());
+//           //cell_2.setCellStyle(styleLeft);
+//            
+//           cell_3 = row.createCell((short)3+firstCol);
+//           //cell_3.setCellValue(user.getU_Level());
+//           //cell_3.setCellStyle(styleRight);
+//           
+//           cell_3 = row.createCell((short)4+firstCol);
+//           //cell_3.setCellValue(user.getLogin());
+//           //cell_3.setCellStyle(styleRight);
+//           
+//           cell_3 = row.createCell((short)5+firstCol);
+//           //cell_3.setCellValue(user.getMail());
+//           //cell_3.setCellStyle(styleLeft);
+//       }
+//        
+//       //컬럼사이즈
+//       for(int i=0; i<7; i++){
+//    	   if(i==0){
+//    		   sheet.setColumnWidth(0,700);
+//    	   }else{
+//    		   sheet.autoSizeColumn((short)i);
+//    		   sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+512 );  // 윗줄만으로는 컬럼의 width 가 부족하여 더 늘려야 함.
+//    	   }
+//       }
+//       
        
        return workbook;
    }

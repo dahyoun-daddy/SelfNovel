@@ -156,7 +156,7 @@ public class rsmTestController {
 	public String doExcelDownLoad() throws IOException {
 		log.debug("=========doExcelDownLoad==========");
 		ExcelUtil eu = new ExcelUtil();
-		eu.writeExcel("c:\\file\\excel\\", "resume", new ArrayList<String>());
+		eu.writeExcel("c:\\file\\excel\\", "resume.xls", new ArrayList<String>());
 		
 		return "redirect:changeTest.do";
 	}
