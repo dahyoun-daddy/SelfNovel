@@ -201,7 +201,10 @@
 		* detail : TODO
 		***************************/
 		$("#btnResumeDown").on("click", function(){
+			console.log('g');
 			
+			var frm = document.doExcelDown;
+			frm.submit();			
 		});
 		
 		/**************************
@@ -209,7 +212,7 @@
 		* detail : TODO
 		***************************/
 		$("#btnPptDown").on("click", function(){
-			
+
 		});
 		
 	});//close .ready(function)
@@ -274,6 +277,13 @@
 
 </head>
 <body>
+	<!-- for excel download -->
+	<!-- 2017-10-11 autor: lsg -->
+	<form name="doExcelDown" action="do_excelDown.do" method="post">
+		<input type="hidden" name="excel_rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
+	</form>
+	<!-- for excel download end -->
+
 	<h2>자기소개서 view</h2>
 	<hr/>
 	<div id="good"></div>

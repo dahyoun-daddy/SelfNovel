@@ -86,10 +86,10 @@ public class ExcelUtil {
         File dir = new File(filePath); 
         if(!dir.exists()) dir.mkdirs(); 
         //File존재하면
-        //String changeFileName = createFile(filePath,excelFileName);
+        String changeFileName = createFile(filePath,excelFileName);
         
-        //FileOutputStream fout = new FileOutputStream(filePath+"/"+changeFileName); 
-        FileOutputStream fout = new FileOutputStream(filePath+"/"+excelFileName); 
+        FileOutputStream fout = new FileOutputStream(filePath+"/"+changeFileName); 
+        //FileOutputStream fout = new FileOutputStream(filePath+"/"+excelFileName); 
         return fout;
     }
     

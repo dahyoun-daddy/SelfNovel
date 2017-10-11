@@ -1,5 +1,6 @@
 package com.sn.resume.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sn.common.DTO;
+import com.sn.common.ExcelUtil;
 import com.sn.resume.dao.ItmDao;
+import com.sn.resume.domain.ItmVO;
 
 /**
  * ItmSvcImpl
@@ -25,6 +28,10 @@ public class ItmSvcImpl implements ItmSvc {
 	
 	@Autowired
 	private ItmDao itmDao;
+	
+	//for excel_download
+	//@autor LSG
+	private String path = "c:\\file\\excel\\";
 	
 	/**
 	 * 일반 저장
@@ -123,5 +130,30 @@ public class ItmSvcImpl implements ItmSvc {
 		log.debug("=========================================");
 		
 		return itmDao.do_deleteAllRoot(dto);
+	}
+	
+	
+	/**
+	 * do_ExcelDownload
+	 * @author LSG
+	 * @param dto
+	 * @return
+	 * @throws IOException 
+	 */
+	public String do_ExcelDownload(DTO dto) throws IOException {
+		String fileName = null;						
+		log.debug("======================================");						
+		log.debug("do excel_down: dto: "+dto.toString());						
+		log.debug("======================================");						
+		List<?> list = (List<?>) this.itmDao.do_search(dto);	
+								
+		ExcelUtil excelUtil = new ExcelUtil();						
+		fileName = excelUtil.writeExcel(path, "resume.xls", list);						
+								
+		log.debug("======================================");						
+		log.debug("fileName: "+fileName);						
+		log.debug("======================================");						
+								
+		return path+fileName;						
 	}
 }

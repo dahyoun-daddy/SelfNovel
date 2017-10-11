@@ -1,10 +1,13 @@
 package com.sn.resume.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -12,8 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.sn.codes.dao.CodesDao;
@@ -46,6 +51,10 @@ public class RsmController {
 	
 	@Autowired
 	CodesDao codesDao;
+	
+	//for excelDown @autor LSG
+	@Resource
+	private View downloadView;
 	
 	/**
 	 * resumeList
@@ -321,4 +330,37 @@ public class RsmController {
 		
 		return flag;
 	}
+	
+	
+	/**										
+	 * 2017-09-18										
+	 * doExcelDownload		
+	 * @author LSG								
+	 * @return										
+	 */										
+	@RequestMapping(value="resume/do_excelDown.do", method=RequestMethod.POST)										
+	public ModelAndView do_excelDown(HttpServletRequest request) throws IOException{
+		ItmVO inVO = new ItmVO();
+		//inVO.setParam(StringUtil.createParam(request));
+		String excel_rsm_id = StringUtil.nvl(request.getParameter("excel_rsm_id"), "");
+		inVO.setRsm_id(excel_rsm_id);
+											
+		String fileFullPath = this.itmSvc.do_ExcelDownload(inVO);									
+		ModelAndView modelAndView = new ModelAndView();									
+		log.debug("======================================");									
+		log.debug("fileFullPath: "+fileFullPath);									
+		log.debug("======================================");									
+											
+		modelAndView.setView(this.downloadView);									
+		File downloadFile=new File(fileFullPath);									
+											
+		log.debug("======================================");									
+		log.debug("downloadFile.: "+downloadFile.getAbsolutePath());									
+		log.debug("======================================");									
+											
+		modelAndView.addObject("downloadFile",downloadFile);									
+		return modelAndView;									
+		//http://localhost:8080/controller/user/do_search_ajax.do									
+	}										
+
 }

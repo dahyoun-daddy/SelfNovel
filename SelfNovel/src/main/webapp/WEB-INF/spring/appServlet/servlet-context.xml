@@ -10,6 +10,17 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
+	<!-- ****************************for FileDownload ****************************-->
+	<!-- 2017-10-11 LSG -->
+	<!-- FileDownload -->										
+    <beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver">										
+        <beans:property name="order" value="0" /><!-- 우선순위가 0번이라는 의미이다 -->										
+    </beans:bean>										
+										
+    <beans:bean id="downloadView" class="com.sn.common.DownloadView" />										
+	<!-- ****************************for FileDownload end ************************-->
+	
+	
 	<!-- ****************************for transaction ****************************-->
 	<!-- 어드바이저를 이용한 자동 프록시 생성기 
 		: 등록된 bean중에서 advisor 인터페이스를 구현한 것을 모두 찾는다. 그리고 생성되는 모든 빈에 대해 어드바이저의 포인트것을 적용해보면서 프로시 적용
