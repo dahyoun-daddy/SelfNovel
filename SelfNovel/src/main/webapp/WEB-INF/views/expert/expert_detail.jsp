@@ -49,25 +49,29 @@
             type: 'POST',
             dataType: "json",
             success: function(results){
-            	var html = "<br><table style='width: 100%;'><tr><td style='color: black;  background-color: yellow;'>원본 내용</td></tr></table>";
+            	var html = "<br><table style='width: 100%;'><tr><td style='color: black; background-color: #D8572A; text-align:center;'><h1>원본 내용</h1></td></tr></table>";
             	var flag = 0;
             	for(var i in results){
             		if(results[i].itm_prd_id == null){
             			html += "<br><table style='width: 100%;'><tr><td style='color: black; width: 100%;'><input style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea style='width: 100%;'>"+results[i].itm_content+"</textarea></td></tr></table>";
+            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea readonly style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
             		} else {
             			if(flag == 0){
-            				html += "</table><br><table><tr><td style='color: black; width: 100%; background-color: blue;'>첨삭 내용</td></tr><table>";
+            				html += "</table><br><table style='width: 100%;'><tr><td style='color: black; width: 100%; background-color: #F7B538; text-align: center;'><h1>첨삭 내용</h1></td></tr><table>";
             				flag++;
             			}
-            			html += "<br><table style='width: 100%;'><tr><td style='color: black; width: 100%;'><input style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea style='width: 100%;'>"+results[i].itm_content+"</textarea></td></tr></table>";
+            			html += "<br><table style='width: 100%; background-color:#F7B538;'><tr><td style='color: black; width: 100%;'><input style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
+            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea readonly style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
             		}
             	}
             	$("#detailModalBody").append(html);
             	$('#detailModal').modal({backdrop: 'static', keyboard: false});	
             }
         });
+	}
+	
+	function cancelBtn(){
+		$("#detailModalBody").html('');
 	}
 </script>
 <title>Insert title here</title>
@@ -104,7 +108,7 @@
 			<li>
 		      <div>
 		        <time>${rsmVO.rsm_reg_dt }</time><br>
-		        <a href="javascript:do_detail('${rsmVO.rsm_id }','${exp_id }')">${rsmVO.rsm_title }</a><br>
+		                제목: <a href="javascript:do_detail('${rsmVO.rsm_id }','${exp_id }')" style="color: white;">${rsmVO.rsm_title }</a><br>
 		                분야: ${rsmVO.rsm_div }
 		      </div>
 		    </li>
@@ -121,7 +125,7 @@
 				<div class="modal-content panel-info %>" >
 					<div class="modal-header panel-heading">
 						<h4 class="modal-title">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelAuth();">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelBtn();">
 			          		×
 			        		</button>
 							<b>첨삭 이력 조회</b>
