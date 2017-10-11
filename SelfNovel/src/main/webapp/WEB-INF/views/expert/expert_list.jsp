@@ -8,7 +8,7 @@
   //contextPath
   String contextPath = request.getContextPath();
   contextPath = "http://localhost:8080/"+contextPath;  
-%> 
+%>
 <%
 	String searchDiv = "";
 	String searchWord = "";
@@ -62,6 +62,7 @@
 	           do_search();
 		})
 		
+		$("#searchDiv_1").val('${searchDiv}');
 	});
 	
 	function do_search(){
@@ -116,7 +117,7 @@
 											<td colspan="2" align="center">
 													<% i++; str = "/resources/img/rank"+String.valueOf(i)+".png"; %>
 													<img src="<c:url value='<%=str %>' />" />
-												<a href="#">
+												<a href="javascript:do_detail()">
 													<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
 												</a>
 											</td>
@@ -191,7 +192,7 @@
 						   				   cellpadding="2" cellspacing="2" align="left">
 										<tr>
 											<td colspan="2" align="center">
-												<a href="#">
+												<a href="do_detail_list.do?exp_id=${expertVO.exp_id }">
 													<img src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
 												</a>
 											</td>

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import com.sn.common.DTO;
 import com.sn.expert.domain.ExpertVO;
+import com.sn.resume.domain.ItmVO;
+import com.sn.resume.domain.RsmVO;
 
 @Repository
 public class ExpertDaoImpl implements ExpertDao {
@@ -36,8 +38,7 @@ private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
 	public List<?> do_search(DTO dto) {
 		ExpertVO param=(ExpertVO)dto;
 		
-		Hashtable<String, String> searchParam = null;//검색조건
-		searchParam = param.getParam();
+		Hashtable<String, String> searchParam = param.getParam();
 		
 		int page_size  = 16;
 		int page_num   = 1;
@@ -104,6 +105,39 @@ private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
 		log.debug(".do_searchRank");
 		log.debug("=================================");
 		return sqlSession.selectList(namespace+".do_searchRank");
+	}
+
+	@Override
+	public List<?> do_searchDetail_itm(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_searchDetail_itm");
+		log.debug("=================================");
+		return sqlSession.selectList(namespace+".do_searchDetail_itm",(ExpertVO) dto);
+	}
+
+	@Override
+	public DTO do_searchDetail_rsm(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_searchDetail_rsm");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		return sqlSession.selectOne(namespace+".do_searchDetail_rsm", (ItmVO) dto);
+	}
+
+	@Override
+	public List<?> do_searchDetail(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_searchDetail");
+		log.debug("=================================");
+		
+		ItmVO param=(ItmVO) dto;
+		Hashtable<String, String> searchParam = param.getParam();
+		
+		String u_ids  = searchParam.get("u_ids").toString();
+		searchParam.put("u_ids", u_ids);
+		searchParam.put("rsm_id", param.getRsm_id().toString());
+		
+		return sqlSession.selectList(namespace+".do_searchDetail", searchParam);
 	}
 	
 }

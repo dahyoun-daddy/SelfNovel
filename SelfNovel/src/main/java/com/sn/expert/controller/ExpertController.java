@@ -2,6 +2,7 @@ package com.sn.expert.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,8 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.sn.common.StringUtil;
 import com.sn.expert.domain.ExpertVO;
 import com.sn.expert.service.ExpertSvc;
+import com.sn.resume.domain.ItmVO;
+import com.sn.resume.domain.RsmVO;
 import com.sn.user.controller.UserController;
 import com.sn.user.domain.UserVO;
 import com.sn.user.service.UserSvc;
@@ -41,6 +44,60 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	
 	@Autowired
 	private UserSvc userSvc;
+	
+	@RequestMapping(value="expert/do_detail_list.do")
+	public ModelAndView do_detail_list(HttpServletRequest req) {
+		ExpertVO expertVO = new ExpertVO();
+		expertVO.setU_id(req.getParameter("exp_id"));
+		expertVO = (ExpertVO) expertSvc.do_chkId(expertVO);
+		
+		List<ItmVO> itmVO = (List<ItmVO>) expertSvc.do_searchDetail_itm(expertVO);
+		List<RsmVO> rsmList = new ArrayList<RsmVO>();
+		String temp = "";
+		
+		for(int i=0; i<itmVO.size(); i++) {
+			RsmVO rsmVO = new RsmVO(); 
+			if(!temp.equals(itmVO.get(i).getRsm_id())) {
+				temp = itmVO.get(i).getRsm_id();
+				rsmVO = (RsmVO) expertSvc.do_searchDetail_rsm(itmVO.get(i));
+				rsmList.add(rsmVO);
+			}
+		}
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("RsmList", rsmList);
+		modelAndView.addObject("u_name", expertVO.getU_name());
+		modelAndView.addObject("exp_id", expertVO.getU_id());
+		modelAndView.addObject("exp_title", expertVO.getExp_title());
+		modelAndView.addObject("exp_profile", expertVO.getExp_profile());
+		modelAndView.addObject("dtl_cd_nm", expertVO.getDtl_cd_nm());
+		modelAndView.addObject("exp_price", expertVO.getExp_price());
+		modelAndView.setViewName("expert/expert_detail");
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="expert/do_detail.do", method = RequestMethod.POST)
+	public void do_detail(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		ItmVO itmVO = new ItmVO();
+		RsmVO rsmVO = new RsmVO();
+		
+		log.debug("asdf: " + req.getParameter("rsm_id"));
+		
+		itmVO.setRsm_id(req.getParameter("rsm_id"));
+		rsmVO = (RsmVO) expertSvc.do_searchDetail_rsm(itmVO);
+		String u_ids = "(u_id='"+ req.getParameter("u_id")
+			+ "' OR u_id='" + rsmVO.getU_id() + "')";
+		
+		Hashtable<String, String> idParam = new Hashtable<String, String>();
+		idParam.put("u_ids", u_ids);
+		itmVO.setParam(idParam);
+		
+		List<ItmVO> itmList = (List<ItmVO>) expertSvc.do_searchDetail(itmVO);
+		
+		res.setCharacterEncoding("UTF-8");
+		res.getWriter().write(new Gson().toJson(itmList));
+	}
 	
 	@RequestMapping(value="expert/do_search.do")
 	public ModelAndView do_search(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -90,6 +147,7 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		modelAndView.addObject("list",list );
 		modelAndView.addObject("rank_list",rank_list );
 		modelAndView.addObject("totalNo",totalNo);
+		modelAndView.addObject("searchDiv",req.getParameter("searchDiv"));
 		modelAndView.addObject("searchCategoryNum",req.getParameter("searchCategoryNum"));
 		req.setAttribute("searchWord",p_searchWord);
 		modelAndView.setViewName("expert/expert_list");

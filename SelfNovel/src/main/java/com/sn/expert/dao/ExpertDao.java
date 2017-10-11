@@ -8,4 +8,7 @@ import com.sn.common.WorkDiv;
 public interface ExpertDao extends WorkDiv {
 	public DTO do_chkId(DTO dto);
 	public List<?> do_searchRank();
+	public List<?> do_searchDetail_itm(DTO dto);
+	public DTO do_searchDetail_rsm(DTO dto);
+	public List<?> do_searchDetail(DTO dto);
 }	

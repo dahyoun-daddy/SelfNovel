@@ -46,6 +46,12 @@
        <put-attribute name="title" value="EXPERT-LIST" />
        <put-attribute name="body" value="/WEB-INF/views/expert/expert_list.jsp" />
    </definition>
+   
+   <!-- Expert-Detail Page -->
+   <definition name="expert/expert_detail" extends="base-definition">
+       <put-attribute name="title" value="EXPERT-DETAIL" />
+       <put-attribute name="body" value="/WEB-INF/views/expert/expert_detail.jsp" />
+   </definition>
 
    <!-- ************************************************************************ -->
 
@@ -73,5 +79,5 @@
    <definition name="/mypage/manager/*" extends="base-definition">
        <put-attribute name="title" value="ORDERS_LIST" />
        <put-attribute name="body" value="/WEB-INF/views/mypage/manager/{1}.jsp" />
-   </definition>         
+   </definition>
 </tiles-definitions>
