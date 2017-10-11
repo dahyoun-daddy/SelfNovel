@@ -43,6 +43,8 @@ function javascript(){
 <script type="text/javascript">
 
 $(function(){
+    //**********************************************
+    //content_
     $('#content_').keyup(function (e){
         var content = $(this).val();
         $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
@@ -50,77 +52,79 @@ $(function(){
     });
     
 
-    $('#content_').keyup();
-    
-
-$("#save").click(function(e){
-
+    //**********************************************
+    //save
+	$("#save").click(function(e){
 	
-	//var tfrm = $("#tfrm");
-	var tfrm = document.tfrm;
-	//=========================================================
-	//rsmVo.setRsm_id(rsm_id);
-	//rsmVo.setImg_id(img_id);
-	//stitle
-	if($('#stitle').val()==""){
-		alert("제목을 입력하세요!");
-		return;
-	}
-	//=========================================================
-	//scontent
-	if($('#scontent').val()==""){
-		alert("내용을 입력하세요!");
-		return;
-	}
-	//=========================================================
-    //title
-	if($('#title').val()==""){
-		alert("소제목을 입력하세요!");
-		return;
-	}
-    //=========================================================
-	//content
-	if($('#content').val()==""){
-		alert("소내용을 입력하세요!");
-		return;
-	}
-    //=========================================================
-    //동적 title
-	$("input[name=title]").each(function() {
-		// element == this
-		var record = $(this).val();
-		if(record==""){ 
-		alert("소제목을 입력하세요!");
-		return;
-	}
-    //=========================================================
-    //동적 content
-    $("textarea[name=content]").each(function(){
-    	var recorder = $(this).val();
-    	if(recorder==""){
-    		alert("소내용을 입력하세요!");
-    		return;
-    	}
-  
-    //=========================================================
-    //- 삭제여부
-    $("#delRow").click(function(e){
-
-    	var tfrm = document.tfrm;
-      	var count=0;
-    $("input[name=title]").each(function(){
-    	count++;
-    })
-    if(count > 0){
-    	$(this).remove();
-    }else{
-    	return;	
-    }
-    
-    	tfrm.submit(); 
-    });
+		
+		//var tfrm = $("#tfrm");
+		var tfrm = document.tfrm;
+		//=========================================================
+		//rsmVo.setRsm_id(rsm_id);
+		//rsmVo.setImg_id(img_id);
+		//stitle
+		if($('#stitle').val()==""){
+			alert("제목을 입력하세요!");
+			return;
+		}
+		//=========================================================
+		//scontent
+		if($('#scontent').val()==""){
+			alert("내용을 입력하세요!");
+			return;
+		}
+		//=========================================================
+	    //title
+		if($('#title').val()==""){
+			alert("소제목을 입력하세요!");
+			return;
+		}
+	    //=========================================================
+		//content
+		if($('#content').val()==""){
+			alert("소내용을 입력하세요!");
+			return;
+		}
+	    //=========================================================
+	    //동적 title
+		$("input[name=title]").each(function() {
+			// element == this
+			var record = $(this).val();
+			if(record==""){ 
+				alert("소제목을 입력하세요!");
+				return;
+			}
+	    });
+	    
+	    //=========================================================
+	    //동적 content
+	    $("textarea[name=content]").each(function(){
+	    	var recorder = $(this).val();
+	    	if(recorder==""){
+	    		alert("소내용을 입력하세요!");
+	    		return;
+	    	}
+		});
+	    
+	
+	    	tfrm.submit(); 
 	});
-	});
+	
+	
+	//=========================================================
+	//- 삭제여부
+	$("#testTable").on("click",".delRow",function(){// 삭제기능			
+		var tfrm = document.tfrm;
+	  	var count=0;
+	    $("input[name=title]").each(function(){
+	    	count++;
+	    });
+	    
+	    if(count > 1){
+	    	$(this).closest("#testTr").remove();
+	    }else{
+	    	return;	
+	    }
 	});
 });
 </script>
@@ -131,13 +135,7 @@ $("#save").click(function(e){
 <script type="text/javascript">
 
 $(document).ready(function(){
-    
-    $("#testTable").on("click",".delRow",function(){// 삭제기능	
-        //$(this).parent().parent().remove(); 
-        //alert("aaa");
-        $(this).closest("#testTr").remove();
-    });
-    
+
     
     $("#testTable").on("click","#itemAdd",function(){
         //alert("aa");
