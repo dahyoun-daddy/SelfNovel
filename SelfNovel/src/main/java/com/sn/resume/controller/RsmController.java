@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.sn.codes.dao.CodesDao;
 import com.sn.codes.domain.CodesVO;
@@ -154,13 +155,14 @@ public class RsmController {
 		log.debug("req : " + req.toString());
 		log.debug("======================================");		
 		
-		//리퀘스트로부터 resume테이블에 갱신할 내용을 get
-		String rsm_id = req.getParameter("rsm_id");				//자소서 id
-		String rsm_title = req.getParameter("rsm_title");		//자소서 제목
+		//1. 리퀘스트로부터 resume테이블에 갱신할 내용을 get
+		String rsm_id      = req.getParameter("rsm_id");		//자소서 id
+		String rsm_title   = req.getParameter("rsm_title");		//자소서 제목
 		String rsm_content = req.getParameter("rsm_content");	//자소서 내용
-		String rsm_div = req.getParameter("selectBox");			//자소서 구분
+		String rsm_div     = req.getParameter("selectBox");		//자소서 구분
+		String u_id        = req.getParameter("u_id");			//작성자 ID
 		
-		//inRsmVO 객체 생성 후, request로부터 받아온 parameter들을 set
+		//2. inRsmVO 객체 생성 후, request로부터 받아온 parameter들을 set
 		RsmVO inRsmVO = new RsmVO();		
 		inRsmVO.setRsm_id(rsm_id);
 		inRsmVO.setRsm_title(rsm_title);
@@ -171,7 +173,7 @@ public class RsmController {
 		rsmSvc.do_update(inRsmVO);
 		
 		//--------------------------------------------------------------
-		//리퀘스트로부터 item테이블에 갱신할 내용을 get
+		//3. 리퀘스트로부터 item테이블에 갱신할 내용을 get
 		String[] ids = req.getParameterValues("itm_form_id");
 		String[] titles = req.getParameterValues("itm_title");
 		String[] contents = req.getParameterValues("itm_content");	
@@ -181,20 +183,23 @@ public class RsmController {
 		
 		itmSvc.do_deleteAllRoot(tempItmVO);	//모든 하위 항목을 삭제하여, 아이템이 줄어든 경우 문제 방지
 		
-		//inItmVO 객체 생성 후, 리퀘스트로부터 받아온 parameter들을 set
-		//그리고 itmSvc의 do_update 호출		
-		
+		//4. inItmVO 객체 생성 후, 리퀘스트로부터 받아온 parameter들을 set
+		//그리고 itmSvc의 do_update 호출
 		for(int i = 0; i < titles.length; i++) {
 			ItmVO inItmVO = new ItmVO();
+			inItmVO.setRsm_id(rsm_id);
+			inItmVO.setU_id(u_id);
 			inItmVO.setItm_form_id(ids[i]);
 			inItmVO.setItm_title(titles[i]);			
 			inItmVO.setItm_content(contents[i]);
-			inItmVO.setItm_seq(i);
-			
+			inItmVO.setItm_seq(i);			
 			itmSvc.do_update(inItmVO);
 		}
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("rsm_id", rsm_id);
+		modelAndView.setView(new RedirectView("do_searchOne.do"));
 		
-		return null;
+		return modelAndView;
 	}
 	
 	/**
