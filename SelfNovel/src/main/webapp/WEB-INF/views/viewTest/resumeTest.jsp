@@ -31,16 +31,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-function testing (){ 
 
-    var tag = document.getElementById( "demo" ); 
-
-    tag.removeChild( tag.childNodes[ 0 ] ); 
-} 
-
-</script>
-
-<script type="text/javascript">
+// <!-- window.history.back()    page 합칠때 바꾸기-->
 function javascript(){
 	 
     window.location.href="http://localhost:8080/controller/resume/do_search.do";
@@ -60,8 +52,45 @@ $(function() {
     $('#content_').keyup();
 });
 </script>
+<script type="text/javascript">
+
+$("#save").click(function(e){
+	var tfrm = $("#tfrm");
+	//=========================================================
+	//rsmVo.setRsm_id(rsm_id);
+	//rsmVo.setImg_id(img_id);
+	//stitle
+	if($('#stitle').val()==""){
+		alert("제목을 입력하세요!");
+		return;
+	}
+	//=========================================================
+	//scontent
+	if($('#scontent').val()==""){
+		alert("제목을 입력하세요!");
+		return;
+	}
+	//=========================================================
+    //title
+	if($('#title').val()==""){
+		alert("제목을 입력하세요!");
+		return;
+	}
+    //=========================================================
+	//content
+	if($('#content').val()==""){
+		alert("제목을 입력하세요!");
+		return;
+	}
+
+	tfrm.submit(); 
+});
+
+
+</script>
 
 <script type="text/javascript">
+
 $(document).ready(function(){
     
     $("#testTable").on("click",".delRow",function(){// 삭제기능	
@@ -176,7 +205,7 @@ $(document).ready(function(){
 	<h2>form</h2>
 	<hr/>
 
-	<form name="testFrm" action="rsmParamTest.do" method="POST">
+	<form name="tfrm" action="rsmParamTest.do" method="POST">
 	<input type="hidden" name="rsm_ord_yn" value="1" />	
 	<div>
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
@@ -263,7 +292,7 @@ $(document).ready(function(){
 				<div align="center">
 					<input type="button" value="작성취소" onclick='javascript()' /> 
 
-					<input type="submit" value="작성완료" />
+					<input type="button" value="작성완료" id="save" />
 				</div>	
 				</td>
 			</tr>
