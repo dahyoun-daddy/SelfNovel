@@ -59,6 +59,14 @@
 		WHERE itm_form_id =#{itm_form_id}
 	</update>	
 	
+	<!-- 단건수정(updateOne -->
+	<update id="do_updateOne" parameterType="com.sn.resume.domain.ItmVO">
+		UPDATE item
+		   SET itm_title = #{itm_title},
+		   	   itm_content = #{itm_content}
+		WHERE itm_form_id =#{itm_form_id}
+	</update>
+	
 	<!-- 수정(Update) -->
 	<update id="do_update" parameterType="com.sn.resume.domain.ItmVO">		
     

@@ -90,13 +90,20 @@ public class ItmSvcImpl implements ItmSvc {
 	public int do_update(DTO dto) {
 		log.debug("===== ItmDaoImpl.do_update =====");
 		log.debug("dto : " + dto.toString());
-		log.debug("================================");
-		
-		System.out.println("===============================");
-		System.out.println("퇴근시켜줘... : "+ dto.toString());
-		System.out.println("===============================");
+		log.debug("================================");		
 		
 		return itmDao.do_update(dto);
+	}
+	
+	/**
+	 * 단건 수정
+	 */
+	@Override
+	public int do_updateOne(DTO dto) {
+		log.debug("===== ItmDaoImpl.do_updateOne =====");
+		log.debug("dto : " + dto.toString());
+		log.debug("===================================");
+		return itmDao.do_updateOne(dto);
 	}
 
 	//Do not use
@@ -106,7 +113,9 @@ public class ItmSvcImpl implements ItmSvc {
 		return null;
 	}
 
-
+	/**
+	 * 수정시 root제거
+	 */
 	@Override
 	public int do_deleteAllRoot(DTO dto) {
 		log.debug("===== ItmDaoImpl.do_delete_all_root =====");

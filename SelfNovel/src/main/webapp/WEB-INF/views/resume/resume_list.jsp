@@ -142,7 +142,10 @@
 			<tr>
 				<td style="text-align: center;">분야</td>
 				<td>
-					<input type="checkbox" name="categoryChk" value="1">서비스업
+					<c:forEach var="codeVo" items="${codeList}" varStatus="status">					
+						<input type="checkbox" name="categoryChk" value="${status.index}">${codeVo.dtl_cd_nm }
+					</c:forEach>				
+					<!-- <input type="checkbox" name="categoryChk" value="1">서비스업
 					<input type="checkbox" name="categoryChk" value="2">제조·화학
 					<input type="checkbox" name="categoryChk" value="3">의료·제약·복지
 					<input type="checkbox" name="categoryChk" value="4">판매·유통
@@ -151,8 +154,8 @@
 					<input type="checkbox" name="categoryChk" value="7">IT·웹·통신
 					<input type="checkbox" name="categoryChk" value="8">미디어·디자인
 					<input type="checkbox" name="categoryChk" value="9">은행·금융업
-					<input type="checkbox" name="categoryChk" value="10">기관·협회
-				</td>
+					<input type="checkbox" name="categoryChk" value="10">기관·협회 -->
+				</td>				
 			</tr>
 			<tr>
 				<td style="text-align: center;">검색</td>
@@ -185,6 +188,7 @@
 				</tr>
 				<tr>
 					<th style="text-align: center;">글번호</th>
+					<th style="text-align: center;">카테고리</th>
 					<th style="text-align: center;">작성자</th>
 					<th style="text-align: center;">제목</th>
 					<th style="text-align: center;">작성일</th>
@@ -199,8 +203,15 @@
 		                <c:forEach var="rsmVo" items="${list}">
 							<tr>	                	
 								<td class="text-center"><c:out value="${rsmVo.no}"/></td>
-								<td class="text-left"><c:out value="${rsmVo.u_name}"/></td>
-								<!-- TODO : 글 제목에 링크 -->
+								<td class="text-center">
+									<c:forEach var="codeVo" items="${codeList}" varStatus="status">
+										<c:if test="${rsmVo.rsm_div eq status.index }">
+											<c:out value="${codeVo.dtl_cd_nm }"></c:out>
+											<%-- <c:out value="${rsmVo.rsm_div }"/> --%>
+										</c:if>
+									</c:forEach>
+								</td>
+								<td class="text-left"><c:out value="${rsmVo.u_name}"/></td>								
 								<td class="text-left">
 									<a href="do_searchOne.do?rsm_id=${rsmVo.rsm_id}">
 										<c:out value="${rsmVo.rsm_title}"/>
@@ -224,7 +235,10 @@
 	</form>
 	<div>
 		<div style="text-align:right;">
-			<button type="button" id="btn_write">글쓰기</button>
+			<!-- 로그인한 상태에서만 글쓰기 버튼이 보이도록 -->
+			<c:if test="${sessionScope.u_id ne null}">
+				<button type="button" id="btn_write">글쓰기</button>
+			</c:if>
 		</div>
 	</div>
 	

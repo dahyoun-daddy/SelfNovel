@@ -89,12 +89,18 @@ public class RsmController {
 		int totalCnt = 0;
 		if(list !=null && list.size()>0)totalCnt = list.get(0).getTotalNo();
 		
+		// code 테이블 조회
+		CodesVO dto = new CodesVO();
+		dto.setMst_cd_id("C002");	
+		List<CodesVO> codeList = (List<CodesVO>)codesDao.do_search(dto);
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("list", list );		
 		modelAndView.addObject("totalCnt", totalCnt);
 		modelAndView.addObject("searchWord", p_searchWord);
 		modelAndView.addObject("searchDiv", p_searchDiv);
 		modelAndView.addObject("searchCat", p_searchCat);
+		modelAndView.addObject("codeList", codeList);
 		modelAndView.setViewName("resume/resume_list");
 		
 		return modelAndView;
@@ -298,12 +304,12 @@ public class RsmController {
 		return flag;	
 	}
 	
-	@RequestMapping(value="resume/do_update_item.do")
+	@RequestMapping(value="resume/do_updateOne.do")
 	@ResponseBody
 	public int doUpdateItem(HttpServletRequest req) {
-		log.debug("===== RsmDaocontroller.do_update_item =====");
+		log.debug("===== RsmDaocontroller.do_updateOne =====");
 		log.debug("req : " + req.toString());
-		log.debug("===========================================");
+		log.debug("=========================================");
 		
 		ItmVO inItmVo = new ItmVO();
 		inItmVo.setItm_form_id(req.getParameter("itm_form_id"));		
@@ -311,7 +317,7 @@ public class RsmController {
 		inItmVo.setItm_content(req.getParameter("itm_content"));		
 		
 		//itmSvc를 통해 do_save메소드 호출
-		int flag = itmSvc.do_update(inItmVo);
+		int flag = itmSvc.do_updateOne(inItmVo);
 		
 		return flag;
 	}

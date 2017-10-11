@@ -101,7 +101,7 @@
 		
 		/**************************
 		* 항목수정 모달창의 '수정완료'버튼 클릭시 이벤트 :
-		* detail : do_update_item
+		* detail : do_updateOne
 		***************************/
 		$("#btnModSave").on("click", function(){
 			var itm_form_id = $("#modItmId").val();
@@ -110,7 +110,7 @@
 			
 			$.ajax({
 				type : "POST",
-				url : "do_update_item.do",
+				url : "do_updateOne.do",
 				dataType : "html",
 				data : {
 					"itm_form_id" : itm_form_id,
@@ -150,8 +150,10 @@
 			var rsm_id = $("#rsm_id").val();
 			var itm_title = $("#modalTitleNew").val();
 			var itm_content = $("#modalContentNew").val();
-			var itm_prd_id = $("#modalItmId").val();
-			var u_id = $("#u_id").val();//TODO : 세션에서 작성자 아이디 받아오도록 수정할 것
+			var itm_prd_id = $("#modalItmId").val();			
+			var u_id = "${sessionScope.u_id }";
+			
+			alert(u_id);
 			
 			$.ajax({
 				type : "POST",
@@ -248,12 +250,15 @@
 		<input type="hidden" id="rsm_id" name="rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
 		<table class="table table-bordered table-hover table-condensed" border="1px" align="center" width="600px;">
 			<tr>				
-				<td align="right" colspan="3">					
-					<!-- TODO : 세션아이디와 동일한 경우만 수정가능하도록 -->
-					<c:if test="${rsmVO.u_id ne '세션아이디'}">
+				<td align="right" colspan="3">
+					<!-- 세션에 아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 일치하는 경우에만 수정하기 버튼을 보여준다. -->
+					<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq rsmVO.u_id}">
 						<input type="button" id="btnModify" value="수정하기" class="btn btn-default">
 					</c:if>										
-					<input type="button" id="btnReport" value="신고하기" class="btn btn-default">
+					<!-- 세션아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 다른 경우에만 신고하기 버튼을 보여준다. -->
+					<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne rsmVO.u_id}">
+						<input type="button" id="btnReport" value="신고하기" class="btn btn-default">
+					</c:if>					
 					<input type="button" id="btnBackToList" value="목록으로" class="btn btn-default">
 				</td>
 			</tr>
@@ -303,17 +308,15 @@
 										<td><textarea id="itm_content" rows="5" cols="80" style="border: 0px;">${item.itm_content}</textarea></td>
 									</tr>
 									<tr>
-										<td style="float: right;">
-											<c:choose>											
-												<c:when test="${item.u_id ne '세션아이디'}">
-												<!-- TODO : 세션값의 ID에 따라 버튼 다르게 처리할 것 -->
-												<!-- 세션값의 아이디와 글의 아이디가 같은 경우 수정버튼 -->												
-													<input type="button" value="수정하기" id="btnModResume" class="btn btn-default">
-												</c:when>															
-												<c:otherwise>
-													<input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default">
-												</c:otherwise>					
-											</c:choose>
+										<td style="float: right;">											
+											<!-- 1. 글의 작성자와 세션아이디가 일치하면 수정하기 버튼을 보여준다. -->
+											<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq item.u_id}">
+												<input type="button" value="수정하기" id="btnModResume" class="btn btn-default">
+											</c:if>
+											<!-- 2. 글의 작성자와 세션아이디가 다르면 첨삭하기 버튼을 보여준다. -->
+											<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne item.u_id}">	
+												<input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default">
+											</c:if>
 										</td>
 									</tr>
 									<c:if test="${item.totalNo ne '0'}">

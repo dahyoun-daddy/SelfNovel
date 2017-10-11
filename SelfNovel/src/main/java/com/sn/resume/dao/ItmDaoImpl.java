@@ -34,7 +34,7 @@ public class ItmDaoImpl implements ItmDao {
 	 */
 	@Override
 	public int do_save(DTO dto) {
-		String statement = namespace +".do_save";//resume.xml연결
+		String statement = namespace +".do_save";//item.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입				
 		return sqlSession.insert(statement, inItmVO);		
 	}
@@ -45,7 +45,7 @@ public class ItmDaoImpl implements ItmDao {
 	 */
 	@Override
 	public int do_save_edit(DTO dto) {
-		String statement = namespace +".do_save_edit";//resume.xml연결
+		String statement = namespace +".do_save_edit";//item.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입				
 		return sqlSession.insert(statement, inItmVO);		
 	}	
@@ -56,7 +56,7 @@ public class ItmDaoImpl implements ItmDao {
 	 */
 	@Override
 	public List<?> do_search(DTO dto) {
-		String statement = namespace +".do_search";//resume.xml연결
+		String statement = namespace +".do_search";//item.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;             //파라미터 주입
 		return sqlSession.selectList(statement, inItmVO);
 	}
@@ -66,7 +66,7 @@ public class ItmDaoImpl implements ItmDao {
 	 * detail : 하위항목 검색
 	 */	
 	public List<?> do_search_child(DTO dto) {
-		String statement = namespace +".do_search_child";//resume.xml연결
+		String statement = namespace +".do_search_child";//item.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;             //파라미터 주입
 		return sqlSession.selectList(statement, inItmVO);
 	}
@@ -77,7 +77,7 @@ public class ItmDaoImpl implements ItmDao {
 	 */
 	@Override
 	public int do_delete(DTO dto) {
-		String statement = namespace +".do_delete";//resume.xml연결
+		String statement = namespace +".do_delete";//item.xml연결
 		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입
 		return sqlSession.update(statement, inItmVO);
 	}
@@ -88,13 +88,20 @@ public class ItmDaoImpl implements ItmDao {
 	 */
 	@Override
 	public int do_update(DTO dto) {
-		String statement = namespace +".do_update";//resume.xml연결
-		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입
+		String statement = namespace +".do_update";//item.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;           //파라미터 주입	
 		
-		System.out.println("===============================");
-		System.out.println("퇴근시켜줘... : "+inItmVO.toString());
-		System.out.println("===============================");
-		
+		return sqlSession.update(statement, inItmVO);
+	}
+	
+	/**
+	 * do_updateOne
+	 * detail : 단건 수정
+	 */
+	@Override
+	public int do_updateOne(DTO dto) {
+		String statement = namespace +".do_updateOne";//Item.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;           	  //파라미터 주입
 		return sqlSession.update(statement, inItmVO);
 	}
 
@@ -114,5 +121,4 @@ public class ItmDaoImpl implements ItmDao {
 		
 		return sqlSession.update(statement, inItmVO);
 	}
-
 }
