@@ -41,7 +41,8 @@ function javascript(){
 </script>
 
 <script type="text/javascript">
-$(function() {
+
+$(function(){
     $('#content_').keyup(function (e){
         var content = $(this).val();
         $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
@@ -50,12 +51,13 @@ $(function() {
     
 
     $('#content_').keyup();
-});
-</script>
-<script type="text/javascript">
+    
 
 $("#save").click(function(e){
-	var tfrm = $("#tfrm");
+
+	
+	//var tfrm = $("#tfrm");
+	var tfrm = document.tfrm;
 	//=========================================================
 	//rsmVo.setRsm_id(rsm_id);
 	//rsmVo.setImg_id(img_id);
@@ -67,25 +69,62 @@ $("#save").click(function(e){
 	//=========================================================
 	//scontent
 	if($('#scontent').val()==""){
-		alert("제목을 입력하세요!");
+		alert("내용을 입력하세요!");
 		return;
 	}
 	//=========================================================
     //title
 	if($('#title').val()==""){
-		alert("제목을 입력하세요!");
+		alert("소제목을 입력하세요!");
 		return;
 	}
     //=========================================================
 	//content
 	if($('#content').val()==""){
-		alert("제목을 입력하세요!");
+		alert("소내용을 입력하세요!");
 		return;
 	}
+    //=========================================================
+    //동적 title
+	$("input[name=title]").each(function() {
+		// element == this
+		var record = $(this).val();
+		if(record==""){ 
+		alert("소제목을 입력하세요!");
+		return;
+	}
+    //=========================================================
+    //동적 content
+    $("textarea[name=content]").each(function(){
+    	var recorder = $(this).val();
+    	if(recorder==""){
+    		alert("소내용을 입력하세요!");
+    		return;
+    	}
+  
+    //=========================================================
+    //- 삭제여부
+    $("#delRow").click(function(e){
 
-	tfrm.submit(); 
+    	var tfrm = document.tfrm;
+      	var count=0;
+    $("input[name=title]").each(function(){
+    	count++;
+    })
+    if(count > 0){
+    	$(this).remove();
+    }else{
+    	return;	
+    }
+    
+    	tfrm.submit(); 
+    });
+	});
+	});
+	});
 });
-
+</script>
+<script type="text/javascript">
 
 </script>
 
@@ -115,10 +154,10 @@ $(document).ready(function(){
         contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
         contents += '		                                                                               ';
         contents += '				<tr>                                                                   ';
-        contents += '					<td><input type="text" name="title" placeholder="제목(Not Null)" /></td>                ';
+        contents += '					<td><input type="text" name="title" id="title" placeholder="제목(Not Null)" required/></td>                ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr height="150px;">                                                   ';
-        contents += '				<td><textarea  name="content"  rows="10" cols="100" placeholder="내용(Not Null)"></textarea></td>   ';
+        contents += '				<td><textarea  name="content" id="content" rows="10" cols="100" placeholder="내용(Not Null)" required></textarea></td>   ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr>                                                                   ';
         contents += '					<td align="right">글자수 용량:<span name="counter" id="counter">###</span></td>       ';
@@ -224,7 +263,7 @@ $(document).ready(function(){
 				</tr>
 				<tr>
 					<td>제목</td>
-					<td><input type="text" name="stitle"/></td>
+					<td><input type="text" name="stitle" id="stitle" required/></td>
 				</tr>
 				<tr>
 					<td>ppt첨부</td>
@@ -234,7 +273,7 @@ $(document).ready(function(){
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><input type="text" name="scontent"/></td>
+					<td><input type="text" name="scontent" id="scontent" required/></td>
 				</tr>
 				
 			<!-- end 복붙 -->	
@@ -249,11 +288,11 @@ $(document).ready(function(){
 						   cellpadding="2" cellspacing="2" align="center">
 							
 							<tr>
-								<td><input type="text" name="title" placeholder="제목(Not Null)">
+								<td><input type="text" name="title" id="title" placeholder="제목(Not Null)" required>
 								 </input> </td>
 							</tr>
 							<tr height="150px;">
-								<td><textarea  name="content"  rows="10" cols="100" placeholder="내용(Not Null)"></textarea>
+								<td><textarea  name="content" id="content" rows="10" cols="100" placeholder="내용(Not Null)" required></textarea>
 								</td>
 							</tr>
 							
@@ -262,7 +301,7 @@ $(document).ready(function(){
 							</tr>
 							<tr height="100px;">
 								<td align="right"><input type="button" value="+" id="itemAdd" />
-								<input type="button" name="delRow" class="delRow" value="-" /></td>
+								<input type="button" name="delRow" id="delRow" class="delRow" value="-" /></td>
 							</tr>
 				   </table><!-- 내용테이블 -->
 					<table class="table table-bordered table-hover table-condensed" border="1px" 
