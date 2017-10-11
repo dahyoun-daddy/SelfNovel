@@ -15,4 +15,7 @@ public interface ExpertSvc {
 	List<?> do_search(DTO dto);
 	DTO do_chkId(DTO dto);
 	List<?> do_searchRank();
+	List<?> do_searchDetail_itm(DTO dto);
+	DTO do_searchDetail_rsm(DTO dto);
+	List<?> do_searchDetail(DTO dto);
 }

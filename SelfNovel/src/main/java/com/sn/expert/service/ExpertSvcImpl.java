@@ -72,4 +72,26 @@ public class ExpertSvcImpl implements ExpertSvc{
 		log.debug("2=======================");	
 		return expertDao.do_searchRank();
 	}
+
+	@Override
+	public List<?> do_searchDetail_itm(DTO dto) {
+		log.debug("2=======================");
+		log.debug("2=======================");	
+		log.debug("asdf: " + dto.toString());
+		return expertDao.do_searchDetail_itm(dto);
+	}
+
+	@Override
+	public DTO do_searchDetail_rsm(DTO dto) {
+		log.debug("2=======================");
+		log.debug("2=======================");	
+		return expertDao.do_searchDetail_rsm(dto);
+	}
+
+	@Override
+	public List<?> do_searchDetail(DTO dto) {
+		log.debug("2=======================");
+		log.debug("2=======================");	
+		return expertDao.do_searchDetail(dto);
+	}
 }

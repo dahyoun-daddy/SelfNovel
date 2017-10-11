@@ -22,7 +22,7 @@
 		else { userSep='expert'; }
 		
 		if(userSep=='user'){
-			for(var i=1 ; i<8; i++){
+			for(var i=1 ; i<11; i++){
 				document.getElementById('item'+i).style.display = "none";
 			}
 		}
@@ -304,7 +304,7 @@
 			</tr>
 			<tr>
 				<td style="width:30%;">
-					<div align="right">
+					<div id="item9" align="right">
 						프로필 제목:
 					</div> 
 				</td>
@@ -324,7 +324,7 @@
 			</tr>
 			<tr>
 				<td style="width:30%;">
-					<div align="right">
+					<div id="item8" align="right">
 						전문분야: 
 					</div>
 				</td>
@@ -347,7 +347,7 @@
 			</tr>
 			<tr>
 				<td style="width:30%;">
-					<div align="right">
+					<div id="item10" align="right">
 						가격: 
 					</div>
 				</td>
