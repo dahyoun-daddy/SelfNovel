@@ -22,6 +22,7 @@ import com.sn.common.ExcelUtil;
 import com.sn.common.FileSaveUtil;
 import com.sn.common.FileSaveVO;
 import com.sn.common.StringUtil;
+import com.sn.common.WordUtil;
 import com.sn.img.domain.ImgVO;
 import com.sn.img.service.ImgSvc;
 import com.sn.resume.domain.ItmVO;
@@ -155,8 +156,14 @@ public class rsmTestController {
 	@RequestMapping(value="doExcelDown.do")
 	public String doExcelDownLoad() throws IOException {
 		log.debug("=========doExcelDownLoad==========");
+		
+		ItmVO inVO = new ItmVO();
+		inVO.setRsm_id("8");		
+		
 		ExcelUtil eu = new ExcelUtil();
-		eu.writeExcel("c:\\file\\excel\\", "resume.xls", new ArrayList<String>());
+		eu.writeExcel("c:\\file\\excel\\", "resume.xls", itmSvc.do_search(inVO));
+//		WordUtil wu = new WordUtil();
+//		wu.writeWord("c:\\file\\word\\", "resume.docx", new ArrayList<String>());
 		
 		return "redirect:changeTest.do";
 	}
