@@ -130,6 +130,7 @@
 </script>
 
 <title>Insert title here</title>
+
 </head>
 <body>
 	<h2>자기소개서</h2>
@@ -181,10 +182,10 @@
 			   cellpadding="2" cellspacing="2" align="center" width="600px;">
 			<thead>
 				<tr>
-					<th style="text-align: center;" colspan="6">공지사항</th>
+					<th style="text-align: center;" colspan="7">공지사항</th>
 				</tr>
 				<tr>
-					<th colspan="6">..........</th>
+					<th colspan="7">..........</th>
 				</tr>
 				<tr>
 					<th style="text-align: center;">글번호</th>

@@ -21,6 +21,7 @@ public class ItmVO extends DTO {
 	private String itm_title   ;//소제목
 	private String itm_content ;//소내용
 	private String u_id        ;//작성자
+	private String u_name	   ;//작성자 이름
 	private String itm_reg_dt  ;//작성일
 	private int    itm_seq     ;//순서
 	private int    itm_use_yn  ;//공개 여부(1: 공개 / 0:비공개)
@@ -33,7 +34,7 @@ public class ItmVO extends DTO {
 	/**
 	 * Default Constructor
 	 */
-	public ItmVO() {}	
+	public ItmVO() {}
 	
 	/**
 	 * @param rsm_id
@@ -42,12 +43,13 @@ public class ItmVO extends DTO {
 	 * @param itm_title
 	 * @param itm_content
 	 * @param u_id
+	 * @param u_name
 	 * @param itm_reg_dt
 	 * @param itm_seq
 	 * @param itm_use_yn
 	 */
 	public ItmVO(String rsm_id, String itm_form_id, String itm_prd_id, String itm_title, String itm_content,
-			String u_id, String itm_reg_dt, int itm_seq, int itm_use_yn) {
+			String u_id, String u_name, String itm_reg_dt, int itm_seq, int itm_use_yn) {
 		super();
 		this.rsm_id = rsm_id;
 		this.itm_form_id = itm_form_id;
@@ -55,10 +57,12 @@ public class ItmVO extends DTO {
 		this.itm_title = itm_title;
 		this.itm_content = itm_content;
 		this.u_id = u_id;
+		this.u_name = u_name;
 		this.itm_reg_dt = itm_reg_dt;
 		this.itm_seq = itm_seq;
 		this.itm_use_yn = itm_use_yn;
 	}
+
 
 
 
@@ -192,20 +196,31 @@ public class ItmVO extends DTO {
 		this.itm_reg_dt = itm_reg_dt;
 	}
 	
-	
+	/**
+	 * @return the u_name
+	 */
+	public String getU_name() {
+		return u_name;
+	}
+
+	/**
+	 * @param u_name the u_name to set
+	 */
+	public void setU_name(String u_name) {
+		this.u_name = u_name;
+	}
 	
 	/***********************************************/
 	//method
 	/***********************************************/
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "ItmVO [rsm_id=" + rsm_id + ", itm_form_id=" + itm_form_id + ", itm_prd_id=" + itm_prd_id
-				+ ", itm_title=" + itm_title + ", itm_content=" + itm_content + ", u_id=" + u_id + ", itm_reg_dt="
-				+ itm_reg_dt + ", itm_seq=" + itm_seq + ", itm_use_yn=" + itm_use_yn + "]";
-	}	
-
+				+ ", itm_title=" + itm_title + ", itm_content=" + itm_content + ", u_id=" + u_id + ", u_name=" + u_name
+				+ ", itm_reg_dt=" + itm_reg_dt + ", itm_seq=" + itm_seq + ", itm_use_yn=" + itm_use_yn + "]";
+	}
 }//--ItmVO

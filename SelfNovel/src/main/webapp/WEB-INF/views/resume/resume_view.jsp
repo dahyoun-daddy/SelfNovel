@@ -181,9 +181,12 @@
 		/**************************
 		* '목록'버튼 클릭시 이벤트
 		***************************/
-		$("#btnBackToList").on("click", function(){
-			location.href="do_search.do";						
+		$(document).on("click", "#btnBackToList", function(){
+			location.href="do_search.do";
 		});//close btnBacToList_on_click
+		/* $("#btnBackToList").on("click", function(){
+			location.href="do_search.do";						
+		});//close btnBacToList_on_click */
 		
 		/**************************
 		* '신고'버튼 클릭시 이벤트
@@ -217,22 +220,42 @@
 	function draw_item_table(item) {
 		var item_table = "<table class='table table-bordered table-hover table-condensed' border='1px'" 
 		   	+ "cellpadding='2' cellspacing='2' align='center' width='550px;'>"
-		   	+ "<tr>"
-		   	+ "<td>작성자</td>"
-		   	+ "<td><input type='text' id='u_id' value=" + item.u_id + "></td>"
-		   	+ "<td>작성일</td>"
-		   	+ "<td><input type='text' id='item_reg_dt' value=" + item.itm_reg_dt + "></td>"
+		   	+ "<tr>"		   	 
+		   	+ "<td>"
+		   	+ "<label>"
+		   	+ "작성자"
+		   	+ "</label>"
+		   	+ "</td>"
+		   	+ "<td>"
+		   	+ "<label>"
+		   	+ item.u_name
+		   	+ "</label>"
+		   	+ "</td>"
+		   	+ "<td>"
+		   	+ "<label>"
+		   	+ "작성일"
+		   	+ "</label>"
+		   	+ "</td>"
+		   	+ "<td>"
+		   	+ "<label>"
+		   	+ item.itm_reg_dt
+		   	+ "</label>"		   	
+		   	+ "</td>"
 		   	+ "</tr>"
 			+ "<tr>"
-			+ "<td colspan='4'>"
-			+ "<input type='text' id='itm_title' value=" + item.itm_title + ">"
+			+ "<td colspan='5'>"
+			+ "<label>"
+			+ item.itm_title
+			+ "</label>"
+			+ "<input type='hidden' id='u_id' value=" + item.u_id + ">"
+			+ "<input type='hidden' id='itm_title' value=" + item.itm_title + ">"
 			+ "<input type='hidden' id='itm_form_id' value=" + item.itm_form_id + ">"
 			+ "<input type='hidden' id='itm_prd_id' value=" + item.itm_prd_id + ">"
 			+ "</td>"
 			+ "</tr>"
 			+ "<tr>"
-			+ "<td colspan='4'>"
-			+ "<textarea rows='5' cols='80' style='border: 0px;'>" + item.itm_content + "</textarea>"
+			+ "<td colspan='5'>"
+			+ "<textarea rows='5' cols='80' style='border: 0px;' readonly>" + item.itm_content + "</textarea>"
 			+ "</td>"
 			+ "</tr>"
 		+"</table>"	
@@ -241,6 +264,14 @@
 	
 </script>
 <title>Insert title here</title>
+<style type="text/css">
+	textarea {
+		width : 100%;
+		resize: vertical;
+		height: 200px;
+	}
+</style>
+
 </head>
 <body>
 	<h2>자기소개서 view</h2>
@@ -248,40 +279,62 @@
 	<div id="good"></div>
 	<form action="#" name="frm" method="post" class="form-inline">
 		<input type="hidden" id="rsm_id" name="rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
+		<input type="hidden" id="u_name" value="${rsmVO.u_name}" ><!-- 작성자 id -->
+		<input type="hidden" id="rsm_title" value="${rsmVO.rsm_title}"><!-- 자소서 제목 -->
+		
+		<!-- 세션에 아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 일치하는 경우에만 수정하기 버튼을 보여준다. -->
+		<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq rsmVO.u_id}">
+			<input type="button" id="btnModify" value="수정하기" class="btn btn-default" style="float:right;">
+		</c:if>										
+		<!-- 세션아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 다른 경우에만 신고하기 버튼을 보여준다. -->
+		<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne rsmVO.u_id}">
+			<input type="button" id="btnReport" value="신고하기" class="btn btn-default" style="float:right;">
+		</c:if>					
+		<input type="button" id="btnBackToList" value="목록으로" class="btn btn-default" style="float:right;">
+		<br>
+		<br/>				
+		<br>
 		<table class="table table-bordered table-hover table-condensed" border="1px" align="center" width="600px;">
-			<tr>				
-				<td align="right" colspan="3">
-					<!-- 세션에 아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 일치하는 경우에만 수정하기 버튼을 보여준다. -->
-					<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq rsmVO.u_id}">
-						<input type="button" id="btnModify" value="수정하기" class="btn btn-default">
-					</c:if>										
-					<!-- 세션아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 다른 경우에만 신고하기 버튼을 보여준다. -->
-					<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne rsmVO.u_id}">
-						<input type="button" id="btnReport" value="신고하기" class="btn btn-default">
-					</c:if>					
-					<input type="button" id="btnBackToList" value="목록으로" class="btn btn-default">
+			<tr>
+				<td style="text-align: center;" width="15%">
+					<label>제목</label>
+				</td>
+				<td width="65%">					
+					<label class="table_item">${rsmVO.rsm_title}</label>					
+				</td>
+				<td width="5%">
+					<label class="table_item">
+						작성일
+					</label>
+				</td>
+				<td width="15%">
+					<label class="table_item">${rsmVO.rsm_reg_dt}</label>
 				</td>
 			</tr>
 			<tr>
-				<td style="text-align: center;" width="15%">제목</td>
-				<td width="70%">
-					<!-- <input type="text" value="제목,분야" style="border: 0px;">-->
-					<input type="text" value="${rsmVO.rsm_title}" style="border: 0px;">
+				<td style="text-align: center;">
+					<label>작성자</label>
 				</td>
-				<td align="right" width="15%">					
-					<input type="text" style="text-align: right; border: 0px;" value="${rsmVO.rsm_reg_dt}">
-				</td>
-			</tr>
-			<tr>
-				<td style="text-align: center;">작성자</td>
-				<td colspan="2"><input type="text" id="u_name" style="border: 0px;" value="${rsmVO.u_name}" ></td>				
-			</tr>
-			<tr>
-				<td style="text-align: center;">내용</td>
-				<td colspan="2"><textarea rows="2" cols="50" style="border: 0px;">${rsmVO.rsm_content }</textarea> </td>
-			</tr>
-			<tr>
 				<td colspan="3">
+					<label>
+						${rsmVO.u_name}
+					</label>					
+				</td>				
+			</tr>
+			<tr>
+				<td style="text-align: center;">
+					<label>
+						내용
+					</label>
+				</td>
+				<td colspan="3">
+					<label>
+						${rsmVO.rsm_content }
+					</label>					 
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4">
 					<br/>
 					<div align="right">
 						<input type="button" id="btnResumeDown" value="자기소개서 Down" class="btn btn-default">
@@ -298,26 +351,29 @@
 											cellpadding="2" cellspacing="2" align="center" width="550px;">									
 									<tr>
 										<td>
-											<input id="itm_title" type="text" value="${item.itm_title}" style="border: 0px;">
+											<label>${item.itm_title }</label>											
+											<input type="hidden" id="itm_title" value="${item.itm_title}">
 											<input type="hidden" id="itm_form_id" value="${item.itm_form_id}"><!-- 항목 아이디 -->
 											<input type="hidden" id="itm_childs" value="${item.totalNo}"><!-- 하위노드 개수 -->
 										</td>
 										
 									</tr>
 									<tr>
-										<td><textarea id="itm_content" rows="5" cols="80" style="border: 0px;">${item.itm_content}</textarea></td>
+										<td><textarea id="itm_content" readonly>${item.itm_content}</textarea></td>
 									</tr>
-									<tr>
-										<td style="float: right;">											
-											<!-- 1. 글의 작성자와 세션아이디가 일치하면 수정하기 버튼을 보여준다. -->
-											<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq item.u_id}">
+									<tr>																					
+										<!-- 1. 글의 작성자와 세션아이디가 일치하면 수정하기 버튼을 보여준다. -->
+										<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq item.u_id}">
+											<td style="float: right;">
 												<input type="button" value="수정하기" id="btnModResume" class="btn btn-default">
-											</c:if>
-											<!-- 2. 글의 작성자와 세션아이디가 다르면 첨삭하기 버튼을 보여준다. -->
-											<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne item.u_id}">	
+											</td>
+										</c:if>
+										<!-- 2. 글의 작성자와 세션아이디가 다르면 첨삭하기 버튼을 보여준다. -->
+										<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne item.u_id}">
+											<td style="float: right;">	
 												<input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default">
-											</c:if>
-										</td>
+											</td>
+										</c:if>										
 									</tr>
 									<c:if test="${item.totalNo ne '0'}">
 										<!-- <img src="" width="60px" height="50px" name="doShowEdit" id="doShowEdit">-->
@@ -341,10 +397,11 @@
 						</c:choose>						
 					</c:forEach>
 					<!-- **************************** end forEach **************************** -->					
-					</div>
+					</div>					
 				</td>
 			</tr>
 		</table>
+		<input type="button" id="btnBackToList" value="목록으로" class="btn btn-default" style="float:right;">
 	</form>
 	
 	<!-- 수정하기 Modal Window -->

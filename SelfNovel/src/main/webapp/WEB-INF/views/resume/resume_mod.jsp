@@ -24,8 +24,8 @@
 
 <script type="text/javascript">
 	
-	$(document).ready(function(){    
-	    
+	$(document).ready(function(){
+
 	    /*
 	    	textarea 글자수 count 기능
 	    */
@@ -52,6 +52,38 @@
 			작성 완료 버튼
 		**********************/
 		$("#btnSubmit").on("click", function(){
+			//이 함수를 빠져나가야 함
+			
+			var flag = true;
+			
+			//제목 공백 검사
+			$("input[name=itm_title]").each(function() {
+				var itm_title = $(this).val();
+				if(itm_title == ""){
+					alert("제목을 입력해주세요!");					
+					flag = false;
+				}
+			})
+			
+			if(flag == false){
+				return;
+			}
+			
+			flag = true;
+			 
+			//내용 공백 검사
+			$("textarea[name=itm_content").each(function() {
+				var itm_title = $(this).val();
+				if(itm_title == ""){
+					alert("내용을 입력해주세요!");
+					flag = false;
+				}
+			})
+			
+			if(flag == false){
+				return;
+			}
+			
 			if(doubleSubmitCheck()) return;			
 			
 			var frm = document.editForm;			
@@ -60,7 +92,18 @@
 		})	
 		
 	    $("#editTable").on("click",".delRow",function(){// 삭제기능
-	        $(this).closest("#testTr").remove();
+	    	var count = 0;
+	    	
+	    	$("tr[id=testTr]").each(function(){
+	    		count++;	
+	    	})
+	    	
+	    	if(count > 1){
+	    		$(this).closest("#testTr").remove();	
+	    	}else{
+	    		return;
+	    	}
+	    	
 	    })    
 	    
 	    $("#editTable").on("click","#itemAdd",function(){	      
@@ -68,8 +111,7 @@
 	        var contents = '';
 	        contents += '<tr id="testTr">                                                                                                                   ';
 	        contents += '	<td colspan="2">			                                                                                                    ';
-	        contents += '		<div class="container">                                                                                                     ';
-	        contents += '						<div class="row">                                                                                           ';
+	        contents += '		<div class="container">                                                                                                     ';	        
 	        contents += '							<div class="col-md-10">                                                                                 ';
 	        contents += '					<table class="table table-bordered table-hover table-condensed" border="1px"                                    ';
 	        contents += '		   							cellpadding="2" cellspacing="2" align="center">					                                ';
@@ -105,8 +147,7 @@
 	        contents += '				<div class="col-md-2">                                                                                              ';
 	        contents += '					<input type="button" id="moveUp" value="▲" /><br/>                                                              ';
 	        contents += '					<input type="button" id="moveDown" value="▼" />                                                                 ';
-	        contents += '				</div><!-- span2 -->                                                                                                ';
-	        contents += '			</div> <!-- row div -->                                                                                                 ';
+	        contents += '				</div><!-- span2 -->                                                                                                ';	        
 	        contents += '		</div><!-- 컨테이너 -->                                                                                                        ';
 	        contents += '	</td>                                                                                                                           ';
 	        contents += '</tr><!-- testTr -->                                                                                                               ';
@@ -130,12 +171,12 @@
 	    	*/
 	    //*********************************************************************//
 	    $("#editTable").on("click","#moveUp",function(){	    	
-	    	var $tr = $(this).parent().parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
+	    	var $tr = $(this).parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
 	    	$tr.prev().before($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
 	    })
 
 	    $("#editTable").on("click","#moveDown",function(){	    	
-	    	var $tr = $(this).parent().parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
+	    	var $tr = $(this).parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
 	    	$tr.next().after($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
 	    })
 		//순서변경을 위한 함수 end	    
@@ -166,6 +207,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>수정하기</title>
+<style type="text/css">
+	textarea {
+		width : 100%;
+		resize: none;
+		height: 200px;
+	}
+</style>
 </head>
 <body>	
 	<h2>수정하기</h2>
@@ -180,76 +228,86 @@
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 				   cellpadding="2" cellspacing="2" align="center" id="editTable">								 	
 				<tr>					
-					<td>분야</td>
+					<td>
+						<label>카테고리</label>
+					</td>
 					<td>
 						<select name="selectBox" id="selectBox" style="width:150px;" class="select_02">
-						      <c:forEach var="codeVo" items="${codeList}" varStatus="status">
-						         <option value="${status.index}">${codeVo.dtl_cd_nm}</option>
-						      </c:forEach>
+							<c:forEach var="codeVo" items="${codeList}" varStatus="status">
+								<option value="${status.index}">${codeVo.dtl_cd_nm}</option>
+							</c:forEach>
 				   		</select>
 					</td>
 				</tr>
 				<tr>
-					<td>제목</td>
 					<td>
-						<input type="text" id="rsm_title" name="rsm_title" value="${resume.rsm_title}"/>
+						<label>제목</label>
+					</td>
+					<td>
+						<label>
+							${resume.rsm_title}
+						</label>
+						<input type="hidden" id="rsm_title" name="rsm_title" value="${resume.rsm_title}"/>
 					</td>
 				</tr>
 				<tr>
-					<td>ppt첨부</td>
+					<td>
+						<label>ppt첨부 </label>
+					</td>
 					<td><input type="button" value="파일첨부" />파일을 첨부해주세요. </td>
 				</tr>
 				<tr>
-					<td>내용</td>
+					<td>
+						<label>내용</label>
+					</td>
 					<td>
 						<textarea id="rsm_content" name="rsm_content">${resume.rsm_content }</textarea>						
 					</td>
 				</tr>
 			<!-- end 복붙 -->
 			<tbody id="AddOption" >				
-				<c:forEach var="item" items="${itemList}" >
+				<c:forEach var="item" items="${itemList}" varStatus="status">
 					<c:if test="${item.u_id eq resume.u_id }">
 						<tr id="testTr">
 							<td colspan="2">			
-								<div class="container">
-			  							<div class="row">
-			   							<div class="col-md-10">
-											<table class="table table-bordered table-hover table-condensed" border="1px" 
-								   							cellpadding="2" cellspacing="2" align="center">					
-												<tr>
-													<td>
-														<input type="hidden" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">
-														<input type="text" id="itm_title" name="itm_title" value="${item.itm_title}"/> 
-													</td>
-												</tr>
-												<tr height="150px;">
-													<td>
-														<textarea id="itm_content" name="itm_content"  rows="10" cols="100" >${item.itm_content }</textarea>
-													</td>
-												</tr>							
-												<tr>
-													<td align="right">글자수 :
-														<span id="counter" name="counter">
-															${fn:length(item.itm_content) }
-															자
-														</span>
-													</td>
-												</tr>
-												<tr height="100px;">
-													<td align="right"><input type="button" value="+" id="itemAdd" />
-														<input type="button" name="delRow" class="delRow" value="-" />
-													</td>
-												</tr>
-							   				</table><!-- 내용테이블 -->
-											<table class="table table-bordered table-hover table-condensed" border="1px" 
-											   			cellpadding="2" cellspacing="2" align="center">
-											</table>
-										</div> <!-- span1 -->
-										<div class="col-md-2">
-											<input type="button" id="moveUp" value="▲" /><br/>
-											<input type="button" id="moveDown" value="▼" />
-										</div><!-- span2 -->
-									</div> <!-- row div -->
+								<div class="container">			  							
+			   						<div class="col-md-10">
+										<table class="table table-bordered table-hover table-condensed" border="1px" 
+								   						cellpadding="2" cellspacing="2" align="center">					
+											<tr>
+												<td>
+													<input type="hidden" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">
+													<input type="text" id="itm_title" name="itm_title" value="${item.itm_title}"/> 
+												</td>
+											</tr>
+											<tr height="150px;">
+												<td>
+													<textarea id="itm_content" name="itm_content"  rows="10" cols="100" >${item.itm_content }</textarea>
+												</td>
+											</tr>							
+											<tr>
+												<td align="right">글자수 :
+													<span id="counter" name="counter">
+														${fn:length(item.itm_content) }
+														자
+													</span>
+												</td>
+											</tr>
+											<tr height="100px;">
+												<td align="right">
+													<input type="button" value="+" id="itemAdd" />
+													<input type="button" name="delRow" class="delRow" value="-" />
+												</td>
+											</tr>
+							   			</table><!-- 내용테이블 -->
+										<table class="table table-bordered table-hover table-condensed" border="1px" 
+										   			cellpadding="2" cellspacing="2" align="center">
+										</table>
+									</div> <!-- span1 -->
+									<div class="col-md-2">
+										<input type="button" id="moveUp" value="▲" /><br/>
+										<input type="button" id="moveDown" value="▼" />
+									</div><!-- span2 -->									
 								</div><!-- 컨테이너 -->
 							</td>
 						</tr><!-- testTr -->
