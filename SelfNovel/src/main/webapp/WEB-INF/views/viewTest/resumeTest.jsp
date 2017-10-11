@@ -253,7 +253,7 @@ $(document).ready(function(){
 				</div><!-- span2 -->
 			</div> <!-- row div -->
 			</div><!-- 컨테이너 -->
-					</td>
+					</td>  
 				</tr>	 
 			</tbody> 
 			
