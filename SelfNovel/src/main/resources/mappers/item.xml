@@ -150,7 +150,8 @@ SELECT a1.*,
                            FROM item                
                           WHERE rsm_id = #{rsm_id}
                         CONNECT BY itm_prd_id = PRIOR itm_form_id                     
-                       )           
+                       )
+                 WHERE lvl BETWEEN 1 AND 2                 
                 )
           WHERE itm_form_id = root) b1
   WHERE a1.itm_form_id = b1.itm_form_id
