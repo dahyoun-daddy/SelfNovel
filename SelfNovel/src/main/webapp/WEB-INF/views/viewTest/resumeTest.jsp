@@ -18,12 +18,35 @@
 
 <!-- JQuery CDN -->
 <script src="//code.jquery.com/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
  
 <!-- BootStrap CDN -->
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+function testing (){ 
+
+    var tag = document.getElementById( "demo" ); 
+
+    tag.removeChild( tag.childNodes[ 0 ] ); 
+} 
+
+</script>
+
+<script type="text/javascript">
+function javascript(){
+	 
+    window.location.href="http://localhost:8080/controller/resume/do_search.do";
+}
+
+</script>
 
 <script type="text/javascript">
 $(function() {
@@ -63,10 +86,10 @@ $(document).ready(function(){
         contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
         contents += '		                                                                               ';
         contents += '				<tr>                                                                   ';
-        contents += '					<td><input type="text" name="title" value="제목(Not Null)"/></td>                ';
+        contents += '					<td><input type="text" name="title" placeholder="제목(Not Null)" /></td>                ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr height="150px;">                                                   ';
-        contents += '				<td><textarea  name="content"  rows="10" cols="100" >내용(Not Null)</textarea></td>   ';
+        contents += '				<td><textarea  name="content"  rows="10" cols="100" placeholder="내용(Not Null)"></textarea></td>   ';
         contents += '				</tr>                                                                  ';
         contents += '				<tr>                                                                   ';
         contents += '					<td align="right">글자수 용량:<span name="counter" id="counter">###</span></td>       ';
@@ -195,12 +218,13 @@ $(document).ready(function(){
 	   			<div class="col-md-10">
 					<table class="table table-bordered table-hover table-condensed" border="1px" 
 						   cellpadding="2" cellspacing="2" align="center">
-					
+							
 							<tr>
-								<td><input type="text" name="title" value="제목(Not Null)"></input> </td>
+								<td><input type="text" name="title" placeholder="제목(Not Null)">
+								 </input> </td>
 							</tr>
 							<tr height="150px;">
-								<td><textarea  name="content"  rows="10" cols="100" >내용(Not Null)</textarea>
+								<td><textarea  name="content"  rows="10" cols="100" placeholder="내용(Not Null)"></textarea>
 								</td>
 							</tr>
 							
@@ -237,8 +261,9 @@ $(document).ready(function(){
 			<tr>
 				<td colspan="2">
 				<div align="center">
-					<input type="button" value="작성취소">
-					<input type="button" value="작성완료">
+					<input type="button" value="작성취소" onclick='javascript()' /> 
+
+					<input type="submit" value="작성완료" />
 				</div>	
 				</td>
 			</tr>
@@ -246,7 +271,7 @@ $(document).ready(function(){
 		</table><!-- 바깥테이블 -->
 	</div><!-- 바깥테이블 div -->
 	
-	<input type="submit" value="버튼">
+	
 	</form>
 
 </body>

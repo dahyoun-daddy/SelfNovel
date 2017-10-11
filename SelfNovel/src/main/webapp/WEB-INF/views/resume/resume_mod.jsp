@@ -24,24 +24,29 @@
 
 <script type="text/javascript">
 	
-	$(function() {
-		$('#itm_content').keyup(function (e){
-			var content = $(this).val();
-			$(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
-			$('#counter').html(content.length );
-		});
-		$('#itm_content').keyup();
-	});	
-	
-	$(document).ready(function(){	 
+	$(document).ready(function(){    
+	    
+	    /*
+	    	textarea 글자수 count 기능
+	    */
+	    $("#editTable").on("keyup","textarea[name='itm_content']",function (){
+	        var content = $(this).val();        
+	        $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
+	        
+	        var tbl = $(this).parent().parent().parent().parent();
+	        counter = $(tbl).find("#counter");
+	        $(counter).html(content.length );
+	    })  
 		
 		/*********************
 			작성 취소 버튼
 		**********************/
 		$("#btnCancel").on("click", function(){
-			if(doubleSubmitCheck()) return;			
+			if(doubleSubmitCheck()) {
+				return;
+			}
 			history.back();
-		});
+		})
 		
 		/*********************
 			작성 완료 버튼
@@ -52,69 +57,63 @@
 			var frm = document.editForm;			
 			frm.action = "do_update.do";
 			frm.submit();
-		});		
+		})	
 		
 	    $("#editTable").on("click",".delRow",function(){// 삭제기능
 	        $(this).closest("#testTr").remove();
-	    });	    
+	    })    
 	    
 	    $("#editTable").on("click","#itemAdd",function(){	      
 	        
 	        var contents = '';
-	        contents += '	<tr id="testTr">                                                                   ';
-	        contents += '		<td colspan="2">                                                               ';
-	        contents += '                                                                                      ';
-	        contents += '<div class="container">                                                               ';
-	        contents += '			<div class="row">                                                          ';
-	        contents += ' 			<div class="col-md-10">                                                    ';
-	        contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
-	        contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
-	        contents += '		                                                                               ';
-	        contents += '				<tr>                                                                   ';
-	        contents += '					<td><input type="text" value="제목(Not Null)"/></td>                ';
-	        contents += '				</tr>                                                                  ';
-	        contents += '				<tr height="150px;">                                                   ';
-	        contents += '				<td><textarea  name="content"  rows="10" cols="100" >내용(Not Null)</textarea></td>   ';
-	        contents += '				</tr>                                                                  ';
-	        contents += '				<tr>                                                                   ';
-	        contents += '					<td align="right">글자수 용량:<span name="counter" id="counter">###</span></td>       ';
-	        contents += '				</tr>                                                                  ';
-	        contents += '				<tr height="100px;">                                                   ';
-	        contents += '					<td align="right"><input type="button" value="+" id="itemAdd" />   ';
-	        contents += '					<input type="button" name="delRow" class="delRow" value="-" /></td>';
-	        contents += '				</tr>                                                                  ';
-	        contents += '	   </table><!-- 내용테이블 -->                                                         '; 
-	        contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
-	        contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
-	        contents += '			   				                                                           ';
-	        contents += '                                                                                      ';
-	        contents += '		</table>                                                                       ';
-	        contents += '		                                                                               ';
-	        contents += '		                                                                               ';
-	        contents += '	</div> <!-- span1 -->                                                              ';
-	        contents += '	<div class="col-md-2">                                                             ';
-	        contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
-	        contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
-	        contents += '			<input type="button" id="moveUp" value="▲" /><br/>                         ';
-	        contents += '			<input type="button" id="moveDown" value="▼" />                            ';
-	        contents += '		</table>                                                                       ';
-	        contents += '	</div><!-- span2 -->                                                               ';
-	        contents += '</div> <!-- row div -->                                                               ';
-	        contents += '</div><!-- 컨테이너 -->                                                                  ';
-	        contents += '		</td>                                                                          ';
-	        contents += '	</tr>                                                                              ';
+	        contents += '<tr id="testTr">                                                                                                                   ';
+	        contents += '	<td colspan="2">			                                                                                                    ';
+	        contents += '		<div class="container">                                                                                                     ';
+	        contents += '						<div class="row">                                                                                           ';
+	        contents += '							<div class="col-md-10">                                                                                 ';
+	        contents += '					<table class="table table-bordered table-hover table-condensed" border="1px"                                    ';
+	        contents += '		   							cellpadding="2" cellspacing="2" align="center">					                                ';
+	        contents += '						<tr>                                                                                                        ';
+	        contents += '							<td>                                                                                                    ';
+	        contents += '								<input type="hidden" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">               ';
+	        contents += '								<input type="text" id="itm_title" name="itm_title" placeholder="제목"/>                              ';
+	        contents += '							</td>                                                                                                   ';
+	        contents += '						</tr>                                                                                                       ';
+	        contents += '						<tr height="150px;">                                                                                        ';
+	        contents += '							<td>                                                                                                    ';
+	        contents += '								<textarea id="itm_content" name="itm_content" rows="10" cols="100" placeholder="내용을 입력해주세요."></textarea>';
+	        contents += '							</td>                                                                                                   ';
+	        contents += '						</tr>							                                                                            ';
+	        contents += '						<tr>                                                                                                        ';
+	        contents += '							<td align="right">글자수 :                                                                                ';
+	        contents += '								<span id="counter" name="counter">                                                                  ';
+	        contents += '									0                                                                                               ';
+	        contents += '									자                                                                                                                                                                                                                ';
+	        contents += '								</span>                                                                                             ';
+	        contents += '							</td>                                                                                                   ';
+	        contents += '						</tr>                                                                                                       ';
+	        contents += '						<tr height="100px;">                                                                                        ';
+	        contents += '							<td align="right"><input type="button" value="+" id="itemAdd" />                                        ';
+	        contents += '								<input type="button" name="delRow" class="delRow" value="-" />                                      ';
+	        contents += '							</td>                                                                                                   ';
+	        contents += '						</tr>                                                                                                       ';
+	        contents += '	   				</table><!-- 내용테이블 -->                                                                                        ';
+	        contents += '					<table class="table table-bordered table-hover table-condensed" border="1px"                                    ';
+	        contents += '					   			cellpadding="2" cellspacing="2" align="center">                                                     ';
+	        contents += '					</table>                                                                                                        ';
+	        contents += '				</div> <!-- span1 -->                                                                                               ';
+	        contents += '				<div class="col-md-2">                                                                                              ';
+	        contents += '					<input type="button" id="moveUp" value="▲" /><br/>                                                              ';
+	        contents += '					<input type="button" id="moveDown" value="▼" />                                                                 ';
+	        contents += '				</div><!-- span2 -->                                                                                                ';
+	        contents += '			</div> <!-- row div -->                                                                                                 ';
+	        contents += '		</div><!-- 컨테이너 -->                                                                                                        ';
+	        contents += '	</td>                                                                                                                           ';
+	        contents += '</tr><!-- testTr -->                                                                                                               ';
 	        
-	        $('#AddOption').append(contents); // 추가기능	       
-	    });
-	    
-	    $("#editTable").on("keyup","textarea[name='content']",function (){
-	        var content = $(this).val();        
-	        $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
-	        
-	        var tbl = $(this).parent().parent().parent().parent();
-	        counter = $(tbl).find("#counter");
-	        $(counter).html(content.length );
-	    });	    
+	        $("#AddOption").append(contents); // 추가기능	       
+	    })
+
 		
 	    //*********************************************************************//
 	    //순서변경을 위한 함수
@@ -133,18 +132,18 @@
 	    $("#editTable").on("click","#moveUp",function(){	    	
 	    	var $tr = $(this).parent().parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
 	    	$tr.prev().before($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
-	    });
+	    })
 
 	    $("#editTable").on("click","#moveDown",function(){	    	
 	    	var $tr = $(this).parent().parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
 	    	$tr.next().after($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
-	    });
+	    })
 		//순서변경을 위한 함수 end	    
 
 		/*******************
 		* 셀렉트박스 유지 처리
 		********************/
-		$("#selectBox > option[value=" + ${resume.rsm_div} + "]").attr("selected", true);
+		$("#selectBox > option[value=" + ${resume.rsm_div} + "]").attr("selected", true)
 		
 	});//close ready
 	
@@ -176,6 +175,7 @@
 		<form action="#" id="editForm" name="editForm">
 		<!-- 자소서 id값 -->
 		<input type="hidden" id="rsm_id" name="rsm_id" value="${resume.rsm_id }">
+		<input type="hidden" id="u_id" name="u_id" value="${resume.u_id }">
 		<!-- 전체 table -->
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 				   cellpadding="2" cellspacing="2" align="center" id="editTable">								 	
@@ -218,7 +218,7 @@
 								   							cellpadding="2" cellspacing="2" align="center">					
 												<tr>
 													<td>
-														<input type="text" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">
+														<input type="hidden" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">
 														<input type="text" id="itm_title" name="itm_title" value="${item.itm_title}"/> 
 													</td>
 												</tr>
@@ -252,7 +252,7 @@
 									</div> <!-- row div -->
 								</div><!-- 컨테이너 -->
 							</td>
-						</tr>
+						</tr><!-- testTr -->
 					</c:if>					
 				</c:forEach>
 			</tbody>
