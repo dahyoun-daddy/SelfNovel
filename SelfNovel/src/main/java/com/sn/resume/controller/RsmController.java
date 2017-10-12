@@ -508,7 +508,7 @@ public class RsmController {
 	 */	
 	@RequestMapping(value="resume/pptUpload.do")
 	public String pptPopup(){
-		return "resume/resume_ppt_pop";
+		return "resume/popup/resume_ppt_pop";
 	}
 	
 	@RequestMapping(value="resume/pptUpload.do", method=RequestMethod.POST)
@@ -533,7 +533,7 @@ public class RsmController {
 		log.debug("ing_id: "+img_id);
 		
 		modelAndView.addObject("img_id",img_id);
-		modelAndView.setViewName("resume/resume_ppt_pop");
+		modelAndView.setViewName("resume/popup/resume_ppt_pop");
 		return modelAndView;
 	}
 }

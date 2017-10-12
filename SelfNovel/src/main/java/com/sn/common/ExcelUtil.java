@@ -42,13 +42,6 @@ public class ExcelUtil {
 	private static short firstCol = 0;
 	private static short maxWidth = 10; //가로 최대길이
 	
-	private String text ="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-			+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-			+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-			+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-			+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-	
-	
 	/**
 	 * 
 	 * @param filePath
@@ -257,14 +250,20 @@ public class ExcelUtil {
            row = sheet.createRow((short)corRow); 
            
            //제목 텍스트 생성
-           HSSFCell sTitleCell = row.createCell(corCol);
+           HSSFCell sTitleCell = row.createCell(corCol);             
            sTitleCell.setCellValue("항 목: ");
-           sTitleCell.setCellStyle(titleStyle);   
+           sTitleCell.setCellStyle(titleStyle);
+           
            
            //제목 데이터 추가
            corCol++;
            nameCell = row.createCell(corCol);
-           nameCell.setCellValue(vo.getItm_title()); 
+           String prd_id = StringUtil.nvl(vo.getItm_prd_id(), "");
+           if(prd_id.equals("")) {
+        	   nameCell.setCellValue(vo.getItm_title());
+           }else {
+        	   nameCell.setCellValue(" ㄴ 첨삭: "+vo.getItm_title());
+           }
            nameCell.setCellStyle(sTitleStyle);
            
            //병합될 셀들에 스타일을 줌
