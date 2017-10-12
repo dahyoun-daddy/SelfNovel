@@ -121,8 +121,8 @@
 		/**************************
 		* '글쓰기'버튼 클릭시 이벤트 : TODO
 		***************************/
-		$("btn_write").on("click", function(){
-			//TODO			
+		$("#btn_write").on("click", function(){
+			$(location).attr('href',"do_save.do");		
 		});//close btn_write_on_click
 		
 	});//close document ready

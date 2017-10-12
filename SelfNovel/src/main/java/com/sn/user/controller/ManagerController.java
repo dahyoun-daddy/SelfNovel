@@ -131,7 +131,7 @@ public class ManagerController {
 		userVO.setU_id(u_id);
 		userVO.setU_password(u_password);
 		userVO.setU_name(u_name);
-		userVO.setU_level(3);
+		userVO.setU_level(0);
 		
 		int flag = userSvc.do_save(userVO);
 		log.debug("======================================");

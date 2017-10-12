@@ -9,21 +9,30 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.sn.codes.dao.CodesDao;
 import com.sn.codes.domain.CodesVO;
+import com.sn.common.DTO;
+import com.sn.common.FileSaveUtil;
+import com.sn.common.FileSaveVO;
 import com.sn.common.StringUtil;
+import com.sn.img.domain.ImgVO;
+import com.sn.img.service.ImgSvc;
 import com.sn.resume.dao.RsmDao;
 import com.sn.resume.domain.ItmVO;
 import com.sn.resume.domain.RsmVO;
@@ -55,6 +64,10 @@ public class RsmController {
 	//for excelDown @autor LSG
 	@Resource
 	private View downloadView;
+	
+	//for pptSave @autor LSG
+	@Autowired
+	ImgSvc imgSvc;
 	
 	/**
 	 * resumeList
@@ -251,10 +264,26 @@ public class RsmController {
 		List<ItmVO> itmList = (List<ItmVO>) itmSvc.do_search(itmVO);
 		//HashMap<String, String> sizeMap = itmSvc.do_search(itmVO);
 		
+		/*
+		 //2017-10-12 추가
+		 //@autor: LSG
+		 //ppt 미리보기를 위한 이미지 아이디 세팅
+		 //modelAndView.addObject("imgList", imgList); 추가
+		*/
+		String img_id = resultVO.getImg_id();
+		List<?> imgList = null;
+		if(img_id!=null) {
+			ImgVO imgVO = new ImgVO();
+			imgVO.setImg_id(Integer.valueOf(img_id));
+			imgList = imgSvc.do_search(imgVO);
+		}
+		
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("resume/resume_view");
-		modelAndView.addObject("rsmVO", resultVO);		
+		modelAndView.addObject("rsmVO", resultVO);	
 		modelAndView.addObject("itmList", itmList);
+		modelAndView.addObject("imgList", imgList);
 		
 		return modelAndView;		
 	}
@@ -333,8 +362,10 @@ public class RsmController {
 	
 	
 	/**										
-	 * 2017-09-18										
-	 * doExcelDownload		
+	 * 2017-10-12										
+	 * doExcelDownload	
+	 * detail: 이력서를 엑셀로 다운시켜주는 서블릿.
+	 * 	
 	 * @author LSG								
 	 * @return										
 	 */										
@@ -363,4 +394,143 @@ public class RsmController {
 		//http://localhost:8080/controller/user/do_search_ajax.do									
 	}										
 
+	/**										
+	 * 2017-10-12										
+	 * do_save		
+	 * detail: 작성 페이지 로드하는 서블릿.
+	 * 
+	 * @author LSG								
+	 * @return										
+	 */		
+	@RequestMapping(value="resume/do_save.do", method=RequestMethod.GET)
+	public ModelAndView do_save(HttpServletRequest req) {
+		//코드테이블 분야 리스트를 받는다.
+		CodesVO dto = new CodesVO();
+		dto.setMst_cd_id("C002");	
+		List<CodesVO> codeList = (List<CodesVO>)codesDao.do_search(dto);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("codeList",codeList);
+		modelAndView.setViewName("resume/resume_form");		
+		return modelAndView;		
+	}
+
+	/**										
+	 * 2017-10-12										
+	 * pptPopup		
+	 * detail: ppt 업로드하는 popup페이지 띄우는 서블릿.
+	 * 
+	 * @author LSG								
+	 * @return										
+	 */	
+	@RequestMapping(value="resume/do_save.do", method=RequestMethod.POST)
+	public String do_saveResume(HttpServletRequest req) {
+		log.debug("===================");
+
+		//********************************************************************//
+		// resume
+		//********************************************************************//
+		// 글 본문 저장
+		//********************************************************************//
+		//1. resume 시퀀스의 nextVal을 가져온다
+		String rsm_id=rsmSvc.do_getNextVal();
+		log.debug("다음 아이디값: "+rsm_id);
+		
+		//2. 값 꺼낸다
+		String rsm_title=(String)req.getParameter("stitle");
+		String rsm_content=(String)req.getParameter("scontent");
+		String img_id = StringUtil.nvl(req.getParameter("img_id"), "");
+		String rsm_ord_yn =(String)req.getParameter("rsm_ord_yn");
+		String rsm_div = StringUtil.nvl(req.getParameter("rsm_div"),"");
+		//2-1세션값에서 아이디값 꺼내기
+		String u_id = (String) req.getSession().getAttribute("u_id");
+
+
+		//3. vo 만들어서 데이터 넣음
+		RsmVO rsmVo = new RsmVO();
+		rsmVo.setRsm_id(rsm_id);
+		rsmVo.setImg_id(img_id);
+		rsmVo.setRsm_title(rsm_title);
+		rsmVo.setRsm_content(rsm_content);
+		rsmVo.setU_id(u_id);
+		rsmVo.setRsm_ord_yn(rsm_ord_yn);
+		rsmVo.setRsm_div(rsm_div);
+		
+		//4. vo를 서비스에 넘김!
+		rsmSvc.do_save(rsmVo);
+		
+		//********************************************************************//
+		// item
+		//********************************************************************//
+		//1. 먼저 배열로 값 꺼낸다
+		String[] titlelist = (String[]) req.getParameterValues("title");
+		String[] contentlist = (String[]) req.getParameterValues("content");
+		
+		//2. itemVO를 넣을 리스트를 만든다.
+		List<DTO> itmList = new ArrayList<DTO>();		
+		
+		//3. for문돌림
+		for(int i=0;i<contentlist.length;i++) {
+			log.debug(titlelist[i]);
+			log.debug(contentlist[i]);
+			
+			//3-1. vo 만들어서 데이터 넣음
+			ItmVO vo = new ItmVO();
+			vo.setRsm_id(rsm_id);				//id값 넣어줌
+			vo.setItm_title(titlelist[i]);		//제목 넣어줌
+			vo.setItm_content(contentlist[i]);	//내용 넣어줌
+			vo.setU_id(u_id);					//작성자 아이디
+			vo.setItm_prd_id("");				//상위항목=작성이므로 null
+			vo.setItm_seq(i);					//순서
+			
+			//3-2. vo를 리스트에 넣음!
+			itmList.add(vo);
+			
+			//지금은 다른데 건드리기 뭐하니까 여기서 걍 서비스 호출해서 테스트함!
+			itmSvc.do_save(vo);
+		}
+		
+		//4. 리스트를 서비스에 넘김!
+		//itmSvc.do_Save(itmList); <<리스트를 받는 메소드 추가가 필요함!
+		//********************************************************************//	
+		return "redirect:do_searchOne.do?rsm_id="+rsm_id;
+	}	
+	
+	/**										
+	 * 2017-10-12										
+	 * pptPopup		
+	 * detail: ppt 업로드하는 popup페이지 띄우는 서블릿.
+	 * 
+	 * @author LSG								
+	 * @return										
+	 */	
+	@RequestMapping(value="resume/pptUpload.do")
+	public String pptPopup(){
+		return "resume/resume_ppt_pop";
+	}
+	
+	@RequestMapping(value="resume/pptUpload.do", method=RequestMethod.POST)
+	public ModelAndView pptUpload(MultipartHttpServletRequest mReq) throws IOException,DataAccessException{
+		ModelAndView modelAndView = new ModelAndView();
+		
+		//1. 먼저 파일유틸을 이용해 파일을 저장하고 파일명을 받는다.
+		String savePath = "C://file//";
+		String resourcesFilepath = mReq.getSession().getServletContext().getRealPath("resources");
+		
+		FileSaveUtil fileSaveUtil = new FileSaveUtil();
+		List<FileSaveVO> fileList = fileSaveUtil.do_saveMulti(mReq, savePath);
+		String saveFileName = "";
+		
+		if(fileList!=null) {
+			FileSaveVO fileSaveVO = fileList.get(0);
+			saveFileName = StringUtil.nvl(fileSaveVO.getSaveFileName(), "");
+		}
+		
+		//2. 이미지 서비스 쪽에 파일의 저장경로를 넘겨준다. 그럼 저장하고 이미지 아이디를 반환한다.
+		int img_id = this.imgSvc.do_savepptTx(saveFileName,savePath+saveFileName,resourcesFilepath);
+		
+		modelAndView.addObject("img_id",img_id);
+		modelAndView.setViewName("resume/resume_ppt_pop");
+		return modelAndView;
+	}
 }

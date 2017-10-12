@@ -114,19 +114,19 @@ public class ImgSvcImpl implements ImgSvc {
 	         slide.get(i).draw(graphics);
 	         
 	         //creating an image file as output
-	         out = new FileOutputStream(resourcesFilepath+"/"+saveImgPath+"/"+"fileName"+i+".png");
+	         out = new FileOutputStream(resourcesFilepath+"/"+saveImgPath+"/"+fileName+i+".png");
 	         javax.imageio.ImageIO.write(img, "png", out);
 	         ppt.write(out);
 	         
 	         //여기서 이미지 정보를 저장해서 넘겨줄거다. 앞부분 떼고 넘기는 이유는 부르는 부분의 context 경로로 줄 것이기 때문이다
-	         log.debug(i+"번째: "+resourcesFilepath+"/"+saveImgPath+"/"+"fileName"+i+".png");        	         
+	         log.debug(i+"번째: "+resourcesFilepath+"/"+saveImgPath+"/"+fileName+i+".png");        	         
 	         /**********************************************************/
 	         //setVO
 	         ImgVO imgVo = new ImgVO();
 	         imgVo.setImg_id(imgID);
 	         imgVo.setImg_num(i);
-	         imgVo.setImg_org_nm("fileName"+i+".png");
-	         imgVo.setImg_sv_nm("fileName"+i+".png");
+	         imgVo.setImg_org_nm(fileName+i+".png");
+	         imgVo.setImg_sv_nm(fileName+i+".png");
 	         imgVo.setImg_path(saveImgPath);
 	         imgVo.setImg_use_yn(1);
 	         
