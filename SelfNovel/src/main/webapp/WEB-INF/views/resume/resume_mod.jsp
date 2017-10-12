@@ -270,7 +270,8 @@
 						<!-- 2017-10-12 @autor: lsg -->
 						<c:choose>
 							<c:when test="${resume.img_id eq null}">
-								<input type="button" value="파일첨부"/>파일을 첨부해주세요.
+								<input type="hidden" name="img_id" id="img_id">
+								<input type="button" id="popupTest" value="파일첨부"/>파일을 첨부해주세요.
 							</c:when>
 							<c:otherwise>
 								<input type="hidden" name="img_id" id="img_id" value="${resume.img_id}">
