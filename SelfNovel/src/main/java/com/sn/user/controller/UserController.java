@@ -2,6 +2,11 @@ package com.sn.user.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Hashtable;
@@ -60,6 +65,46 @@ public class UserController {
 	public String update(Locale locale, Model model) {
 		return "member/update";
 	}
+	
+	/*@RequestMapping(value="user/naver_callback.do")
+	public ModelAndView naver_callback(HttpServletRequest req) {
+		String clientId = "KohD8sjB6zl3Ue8J49uV";//애플리케이션 클라이언트 아이디값";
+		String redirectURI = URLEncoder.encode("http://localhost:8080/controller/home.do", "UTF-8");
+		SecureRandom random = new SecureRandom();
+		String state = new BigInteger(130, random).toString();
+		String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+		apiURL += "&client_id=" + clientId;
+		apiURL += "&redirect_uri=" + redirectURI;
+		apiURL += "&state=" + state;
+		session.setAttribute("state", state);
+		
+	    try {
+	      URL url = new URL(apiURL);
+	      HttpURLConnection con = (HttpURLConnection)url.openConnection();
+	      con.setRequestMethod(" get");="" int="" responsecode="con.getResponseCode();" bufferedreader="" br;="" system.out.print("responsecode="+responseCode);
+	      if(responseCode==200) { // 정상 호출
+	        br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	      } else {  // 에러 발생
+	        br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+	      }
+	      String inputLine;
+	      StringBuffer res = new StringBuffer();
+	      while ((inputLine = br.readLine()) != null) {
+	        res.append(inputLine);
+	      }
+	      br.close();
+	      if(responseCode==200) {
+	        out.println(res.toString());
+	      }
+	    } catch (Exception e) {
+	      System.out.println(e);
+	    }
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		
+		return modelAndView;
+	}*/
 	
 	@RequestMapping(value="user/do_searchOne.do")
 	public void do_searchOne(HttpServletRequest req, HttpServletResponse res) throws IOException {

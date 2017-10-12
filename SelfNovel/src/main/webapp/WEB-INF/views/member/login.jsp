@@ -1,7 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.security.SecureRandom" %>
+<%@ page import="java.math.BigInteger" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <% request.setCharacterEncoding("utf-8"); %>
+<%
+	String contextPath = request.getContextPath();
+	contextPath = "http://localhost:8080/"+contextPath;
+%>
+<%
+	String clientId = "KohD8sjB6zl3Ue8J49uV";//애플리케이션 클라이언트 아이디값";
+	String redirectURI = URLEncoder.encode("http://localhost:8080/controller/home.do", "UTF-8");
+	SecureRandom random = new SecureRandom();
+	String state = new BigInteger(130, random).toString();
+	String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+	apiURL += "&client_id=" + clientId;
+	apiURL += "&redirect_uri=" + redirectURI;
+	apiURL += "&state=" + state;
+	session.setAttribute("state", state);
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,7 +41,7 @@
 			return;
 		}
 		
-		if(u_level == '1'){ userSep = "user" }
+		if(u_level == '1' || u_level == '0'){ userSep = "user" }
 		else { userSep = "expert" }
 		
 		$.ajax({
@@ -62,7 +80,7 @@
 		<input class="form-control" style="width:30%;" id="login_pwd" type="password" /><br>
 		<form id="loginFrm" action="home.do" method="POST" >
 			<input class="btn btn-warning" style="width:30%;" type="button" value="일반 로그인" onclick="n_login()"/><br><br>
-			<input style="width:30%;" type="button" value="구글 로그인" onclick="g_login()"/>
+			 <a href="<%=apiURL%>"><img height="50" src="http://static.nid.naver.com/oauth/small_g_in.PNG"/></a>
 		</form>
 	</div>
 </body>

@@ -19,7 +19,7 @@
 		  FROM USERS
 		 WHERE u_id = '${u_id}'
 		   AND u_password = '${u_password}'
-		   AND u_level = ${u_level}
+		   AND (u_level = 1 OR u_level = 0)
     </select>  
 	
 	<update id="do_updateName" parameterType="UserVO"  >
