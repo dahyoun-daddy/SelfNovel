@@ -86,26 +86,37 @@ $(function(){
 			return;
 		}
 	    //=========================================================
+	    var isNull = false;	
+	    	
 	    //동적 title
 		$("input[name=title]").each(function() {
 			// element == this
 			var record = $(this).val();
 			if(record==""){ 
-				alert("소제목을 입력하세요!");
-				return;
+				isNull = true;
+				return false;
 			}
 	    });
+	    
+	    if(isNull){
+	    	alert("소제목을 입력하세요!");
+	    	return;
+	    }
 	    
 	    //=========================================================
 	    //동적 content
 	    $("textarea[name=content]").each(function(){
 	    	var recorder = $(this).val();
 	    	if(recorder==""){
-	    		alert("소내용을 입력하세요!");
-	    		return;
+	    		isNull = true;
+	    		return false;
 	    	}
 		});
 	    
+	    if(isNull){
+	    	alert("소내용을 입력하세요!");
+	    	return;
+	    }
 	
 	    	tfrm.submit(); 
 	});

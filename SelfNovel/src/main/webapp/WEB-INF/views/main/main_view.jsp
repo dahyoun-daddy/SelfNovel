@@ -44,78 +44,32 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>
-									<div>
-										<br/>
-										<table class="table table-bordered table-hover table-condensed" border="1px" align="center" style="width: 200px;">
-											<tr>
-												<td colspan="2">
-													<img src="" width="190px;" height="150px;">
-												</td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">전문가 ID</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">분야</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">첨삭 건수</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-										</table>
-									</div>
-								</td>
-								<td>
-									<div>
-										<br/>
-										<table class="table table-bordered table-hover table-condensed" border="1px" align="center" style="width: 200px;">
-											<tr>
-												<td colspan="2">
-													<img src="" width="190px;" height="150px;">
-												</td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">전문가 ID</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">분야</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">첨삭 건수</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-										</table>
-									</div>
-								</td>
-								<td>
-									<div>
-										<br/>
-										<table class="table table-bordered table-hover table-condensed" border="1px" align="center" style="width: 200px;">
-											<tr>
-												<td colspan="2">
-													<img src="" width="190px;" height="150px;">
-												</td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">전문가 ID</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">분야</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-											<tr>
-												<td style="text-align: center;">첨삭 건수</td>
-												<td><input type="text" size="10" style="border: 0px;"></td>
-											</tr>
-										</table>
-									</div>
-								</td>
+								<c:forEach var="expertVO" items="${rank_list}">
+									<td>
+										<div>
+											<br/>
+											<table class="table table-bordered table-hover table-condensed" border="1px" align="center" style="width: 200px;">
+												<tr>
+													<td colspan="2">
+														<img src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="190px;" height="150px;">
+													</td>
+												</tr>
+												<tr>
+													<td style="text-align: center;">전문가 ID</td>
+													<td><p>${expertVO.exp_id}</p></td>
+												</tr>
+												<tr>
+													<td style="text-align: center;">분야</td>
+													<td><p>${expertVO.dtl_cd_nm}</p></td>
+												</tr>
+												<tr>
+													<td style="text-align: center;">첨삭 건수</td>
+													<td><p>${expertVO.exp_trade}</p></td>
+												</tr>
+											</table>
+										</div>
+									</td>
+								</c:forEach>
 							</tr>
 						</tbody>
 					</table>
