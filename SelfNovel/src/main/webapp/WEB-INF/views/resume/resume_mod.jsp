@@ -186,6 +186,15 @@
 		********************/
 		$("#selectBox > option[value=" + ${resume.rsm_div} + "]").attr("selected", true)
 		
+		
+	 	//2017-10-12 다른 파일 업로드
+	 	$('#popupTest').on("click",function(){
+	 	    //alert('openPopup');
+	 	    var url    ="pptUpload.do";
+	 	    var title  = "testpop";
+	 	    var status = "toolbar=yes,directories=yes,scrollbars=no,resizable=yes,status=yes,menubar=no,width=240, height=200, top=0,left=20"; 
+	 	    window.open(url, title,status); //window.open(url,title,status); window.open 함수에 url을 앞에와 같이 
+	  	});
 	});//close ready
 	
 	/**
@@ -254,7 +263,20 @@
 					<td>
 						<label>ppt첨부 </label>
 					</td>
-					<td><input type="button" value="파일첨부" />파일을 첨부해주세요. </td>
+					<td>
+						<!-- for ppt -->
+						<!-- 2017-10-12 @autor: lsg -->
+						<c:choose>
+							<c:when test="${resume.img_id eq null}">
+								<input type="button" value="파일첨부"/>파일을 첨부해주세요.
+							</c:when>
+							<c:otherwise>
+								<input type="hidden" name="img_id" id="img_id" value="${resume.img_id}">
+								<input type="button" id="popupTest" value="다른 파일첨부"/> 기존에 첨부한 파일이 있습니다.
+							</c:otherwise>
+						</c:choose> 
+						<!-- for ppt end -->
+					</td>
 				</tr>
 				<tr>
 					<td>

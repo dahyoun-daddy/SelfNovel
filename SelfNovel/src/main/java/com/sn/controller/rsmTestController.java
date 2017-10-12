@@ -50,14 +50,19 @@ public class rsmTestController {
 	@Autowired
 	ImgSvc imgSvc;
 	
+	String filePath="";
+		
+	
 	/**
 	 * img Test resume_view
 	 */
 	@RequestMapping(value="testRsm.do")
-	public String resumeForm() {
+	public String resumeForm(HttpServletRequest req) {
 		log.debug("===================");
 		log.debug("=======resumeview======");
 		log.debug("===================");
+		
+		
 		
 		return "viewTest/resumeTest";
 	}
@@ -165,11 +170,12 @@ public class rsmTestController {
 //		WordUtil wu = new WordUtil();
 //		wu.writeWord("c:\\file\\word\\", "resume.docx", new ArrayList<String>());
 		
+		
 		return "redirect:changeTest.do";
 	}
 	
 	@RequestMapping(value="pptUpload.do")
-	public String pptPopup(){
+	public String pptPopup(HttpServletRequest req){
 		return "viewTest/popTest";
 	}
 	

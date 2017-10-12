@@ -189,13 +189,15 @@ public class RsmController {
 		String rsm_content = req.getParameter("rsm_content");	//자소서 내용
 		String rsm_div     = req.getParameter("selectBox");		//자소서 구분
 		String u_id        = req.getParameter("u_id");			//작성자 ID
+		String img_id      = req.getParameter("img_id");		//이미지 ID
 		
 		//2. inRsmVO 객체 생성 후, request로부터 받아온 parameter들을 set
 		RsmVO inRsmVO = new RsmVO();		
 		inRsmVO.setRsm_id(rsm_id);
 		inRsmVO.setRsm_title(rsm_title);
 		inRsmVO.setRsm_content(rsm_content);
-		inRsmVO.setRsm_div(rsm_div);		
+		inRsmVO.setRsm_div(rsm_div);
+		inRsmVO.setImg_id(img_id);
 
 		//rsmSvc의 do_update 호출
 		rsmSvc.do_update(inRsmVO);
@@ -528,6 +530,7 @@ public class RsmController {
 		
 		//2. 이미지 서비스 쪽에 파일의 저장경로를 넘겨준다. 그럼 저장하고 이미지 아이디를 반환한다.
 		int img_id = this.imgSvc.do_savepptTx(saveFileName,savePath+saveFileName,resourcesFilepath);
+		log.debug("ing_id: "+img_id);
 		
 		modelAndView.addObject("img_id",img_id);
 		modelAndView.setViewName("resume/resume_ppt_pop");

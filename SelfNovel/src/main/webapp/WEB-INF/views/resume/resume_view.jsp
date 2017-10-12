@@ -6,8 +6,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
   //contextPath
-  String contextPath = request.getContextPath();
-  contextPath = "http://localhost:8080/"+contextPath;  
+  String firstContextPath = request.getContextPath();
+  String contextPath = "http://localhost:8080/"+firstContextPath;  
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -431,7 +431,7 @@
 				    		<c:when test="${status.count eq 1}">
 				    		<!-- 1일 경우에만 item active가 되도록. 하나는 반드시 이걸 가지고 있어야 하기 때문 -->
 							    <div class="item active">
-							      <img alt="" src="<%=contextPath %>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
+							      <img alt="" src="<%=firstContextPath%>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
 							      <div class="carousel-caption">
 							        ...
 							      </div>
@@ -439,7 +439,7 @@
 				    		</c:when>
 				    		<c:otherwise>
 							    <div class="item">
-							      <img alt="" src="<%=contextPath %>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
+							      <img alt="" src="<%=firstContextPath%>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
 							      <div class="carousel-caption">
 							        ...
 							      </div>

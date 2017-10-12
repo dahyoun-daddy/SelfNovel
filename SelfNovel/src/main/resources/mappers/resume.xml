@@ -56,6 +56,7 @@
 		UPDATE RESUME 
 		SET RSM_TITLE     = #{rsm_title}  ,
 		    RSM_CONTENT   = #{rsm_content},
+		    IMG_ID        = #{img_id }   ,
 		    RSM_DIV       = #{rsm_div}
 		WHERE RSM_ID = #{rsm_id}
 	</update>
