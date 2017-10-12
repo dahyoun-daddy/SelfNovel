@@ -424,24 +424,28 @@
 				    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
 				  </ol>
 				    
+				  <div class="carousel-inner" role="listbox">
 				    <!-- images -->
 				    <c:forEach var="imgVO" items="${imgList}" varStatus="status">
-				    	<!-- 1일 경우에만 item active가 되도록. 하나는 반드시 이걸 가지고 있어야 하기 때문 -->
-				    	<c:if test="${status.count eq 1}">
-						    <div class="item active">
-						      <img alt="" src="<%=contextPath %>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
-						      <div class="carousel-caption">
-						        ...
-						      </div>
-						    </div>				    	
-				    	</c:if>
-				    	
-					    <div class="item">
-					      <img alt="" src="<%=contextPath %>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
-					      <div class="carousel-caption">
-					        ...
-					      </div>
-					    </div>		    	
+				    	<c:choose>
+				    		<c:when test="${status.count eq 1}">
+				    		<!-- 1일 경우에만 item active가 되도록. 하나는 반드시 이걸 가지고 있어야 하기 때문 -->
+							    <div class="item active">
+							      <img alt="" src="<%=contextPath %>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
+							      <div class="carousel-caption">
+							        ...
+							      </div>
+							    </div>					    		
+				    		</c:when>
+				    		<c:otherwise>
+							    <div class="item">
+							      <img alt="" src="<%=contextPath %>/resources/${imgVO.img_path}/${imgVO.img_sv_nm}">
+							      <div class="carousel-caption">
+							        ...
+							      </div>
+							    </div>					    		
+				    		</c:otherwise>
+				    	</c:choose>
 					</c:forEach>
 				</div>
 				
