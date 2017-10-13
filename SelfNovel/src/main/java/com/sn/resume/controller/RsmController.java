@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
@@ -24,6 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.util.CookieGenerator;
 
 import com.sn.codes.dao.CodesDao;
 import com.sn.codes.domain.CodesVO;
@@ -290,12 +294,42 @@ public class RsmController {
 		return modelAndView;		
 	}
 	
+	/**
+	 * updateRecommend
+	 * detail : 추천버튼 클릭시 추천수를 증가시킨다.
+	 * @param req
+	 * @return
+	 */
 	@RequestMapping(value="resume/do_updateRecommend")
 	@ResponseBody
-	public int do_updateRecommend(HttpServletRequest req) {
+	public int do_updateRecommend(HttpServletRequest req, HttpServletResponse res) {
 		log.debug("===== RsmDaocontroller.do_updateRecommend =====");
 		log.debug("req : " + req.toString());
 		log.debug("===============================================");
+		
+		// 0. 쿠키명 지정
+		String cookieName = req.getParameter("rsm_id");
+		
+		// 1. 저장된 쿠키 불러오기 
+		Cookie cookies[] = req.getCookies(); 
+		Cookie cookie_tmp = null;  
+		
+		// 2. 쿠키가 존재 한다면 탐색
+		if (cookies != null && cookies.length > 0) {  
+			 for (Cookie cookie : cookies) {
+				 if (cookieName.equals(cookie.getName())) {
+					 return 404;
+				 }//close if
+			 }//close for
+		}//close if
+		
+		// last. 쿠키가 존재하지 않는다면 쿠키 생성
+		if(cookie_tmp == null) {
+			CookieGenerator cookieGer = new CookieGenerator();
+			cookieGer.setCookieName(req.getParameter("rsm_id"));
+			//cookieGer.setCookiePath("/web_project"); 
+			cookieGer.addCookie(res, "recommended"); 
+		}		
 		
 		String rsm_id = req.getParameter("rsm_id");
 		RsmVO inRsmVO = new RsmVO();

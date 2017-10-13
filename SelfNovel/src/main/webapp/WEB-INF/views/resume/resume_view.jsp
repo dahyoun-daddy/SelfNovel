@@ -15,16 +15,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<!-- 부트스트랩 -->
-<link href="<%=contextPath%>/resources/css/bootstrap.css"
-	rel="stylesheet">
-<link href="<%=contextPath%>/resources/css/bootstrap-theme.min.css" rel="stylesheet">
-<!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
-<script type="text/javascript" src="<%=contextPath%>/resources/js/jquery-3.2.1.js"></script>
-<!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-<script src="<%=contextPath%>/resources/js/bootstrap.min.js"></script>
+<!-- JQuery CDN -->
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-<script src="<%=contextPath%>/resources/js/jquery.bootpag.js"></script>
+<!-- BootStrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<!-- bootpag -->
+<script src="${pageContext.request.contextPath}/resources/js/jquery.bootpag.js"></script>
+
+<!-- BootStrap CDN -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <script type="text/javascript">
 		
@@ -200,6 +203,10 @@
 					"rsm_id" : rsm_id	
 				},
 				success : function(data){
+					if(data == 404){
+						alert("이미 추천한 게시물입니다.");
+						return;
+					}
 					location.reload();
 				}
 			});
