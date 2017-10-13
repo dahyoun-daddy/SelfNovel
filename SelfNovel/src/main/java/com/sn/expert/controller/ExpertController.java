@@ -198,14 +198,22 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		if(!file.isDirectory()) {
 			file.mkdirs();
 		}
-		MultipartFile mFile = req.getFile("exp_profile");
-		String fileName = mFile.getOriginalFilename();
-		String newFileName = UUID.randomUUID().toString().replaceAll("-","") + "_" +fileName;
-		System.out.println("파일명: " + newFileName);
-		mFile.transferTo(new File(path+"/"+newFileName));//저장
+		
+		String newFileName=null;
+		
+		if(req.getFile("exp_profile") != null) {
+			MultipartFile mFile = req.getFile("exp_profile");
+			String fileName = mFile.getOriginalFilename();
+			newFileName = UUID.randomUUID().toString().replaceAll("-","") + "_" +fileName;
+			System.out.println("파일명: " + newFileName);
+			mFile.transferTo(new File(path+"/"+newFileName));//저장
+		} else {
+			newFileName = req.getParameter("exp_profile");
+		}
 		
 		ExpertVO VO = new ExpertVO();
 		VO.setU_id(req.getParameter("u_id"));
+		VO.setU_naver(req.getParameter("u_naver"));
 		VO.setU_name(req.getParameter("u_name"));
 		VO.setU_password(req.getParameter("u_password"));		
 		VO.setU_level(Integer.valueOf(req.getParameter("u_level")));

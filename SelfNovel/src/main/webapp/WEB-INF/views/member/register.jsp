@@ -1,7 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<% request.setCharacterEncoding("utf-8"); %> 
+<% 
+	request.setCharacterEncoding("utf-8");
+	if(session.getAttribute("isNaver") == null){
+		session.setAttribute("isNaver","false");
+	}
+%> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -152,16 +157,24 @@
 				$("#exp_price").focus();
 				return;
 			} else if($("#exp_profile")[0].files[0] == null){
-				alert("프로필 사진 등록은 필수입니다.");
-				return;
+				if(<%=session.getAttribute("isNaver").equals("false")%>){
+					alert("프로필 사진 등록은 필수입니다.");
+					return;	
+				}
 			}
 		}
 	
 		var formData = new FormData();
 		formData.append("u_id", $("#u_id").val());
+		formData.append("u_naver", $("#u_naver").val());
 		formData.append("u_password", $("#u_password").val());
 		formData.append("u_name", $("#u_name").val());
-		formData.append("exp_profile", $("#exp_profile")[0].files[0]);
+		if($("#exp_profile")[0].files[0] == null){
+			formData.append("exp_profile", $("#profileHolder").attr("src"));
+		} else {
+			formData.append("exp_profile", $("#exp_profile")[0].files[0]);	
+		}
+		
 		formData.append("exp_title", $("#exp_title").val());
 		formData.append("exp_price", $("#exp_price").val());
 		formData.append("u_level", $(":input:radio[name=userSep]:checked").val());
@@ -174,7 +187,7 @@
 		alert(userSep);
 		
 		$.ajax({
-            url: userSep+"/do_save.do",
+            url: "../" + userSep+"/do_save.do",
             processData: false,
             contentType: false,
             data: formData,
@@ -234,7 +247,7 @@
             	} else{
             		$('#emailAuth_modal').modal({backdrop: 'static', keyboard: false});
 	            	$.ajax({
-	            	        url: "user/send_email.do",
+	            	        url: "send_email.do",
 	            	        data: {u_id: $("#u_id").val()},
 	            	        type: 'POST',
 	            	        success: function(authNum){
@@ -267,7 +280,7 @@
 	회원가입
 	<hr/>
 	<div align="center" style="width:50%; height:800px; display: inline-block;" >
-		<form action="login_user.do" method="POST" name="registerFrm" id="registerFrm">
+		<form action="../login_user.do" method="POST" name="registerFrm" id="registerFrm">
 		<table>
 			<tr>
 				<td colspan="2">

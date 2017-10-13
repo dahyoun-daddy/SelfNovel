@@ -40,7 +40,12 @@
             	if(u_level == '2'){
             		$("#exp_title").val(data.exp_title);
             		$("#exp_price").val(data.exp_price);
-            		$("#profileHolder").attr("src", "/controller/resources/exp_profiles/" + data.exp_profile);
+            		var str = data.exp_profile.substring(0,6);
+            		if(str == 'https:'){
+            			$("#profileHolder").attr("src", data.exp_profile);	
+            		} else {
+            			$("#profileHolder").attr("src", "/controller/resources/exp_profiles/" + data.exp_profile);	
+            		}            		
             		$("#exp_ctg").val(data.exp_ctg);
             		$("#old_profile").val(data.exp_profile);
             	}

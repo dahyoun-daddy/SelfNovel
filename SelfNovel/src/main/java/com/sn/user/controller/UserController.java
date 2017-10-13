@@ -138,7 +138,6 @@ public class UserController {
 	
 	@RequestMapping(value="user/do_searchOne.do")
 	public void do_searchOne(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		req.getSession().setAttribute("isNaver", "false");
 		UserVO VO = new UserVO();
 		VO.setU_id(req.getParameter("u_id"));
 		VO.setU_password(req.getParameter("u_password"));
