@@ -42,7 +42,7 @@
 			</table>
 			</td>
 			<td style="width: 35%;">
-				<table style="width:35%; display:inline-block;" align="right">
+				<table style="display:inline-block;" align="right">
 					<% if(u_id == null){ %>
 			   		<tr>
 			   			<td>
