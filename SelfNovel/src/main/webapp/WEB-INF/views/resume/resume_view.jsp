@@ -184,9 +184,28 @@
 		$(document).on("click", "#btnBackToList", function(){
 			location.href="do_search.do";
 		});//close btnBacToList_on_click
-		/* $("#btnBackToList").on("click", function(){
-			location.href="do_search.do";						
-		});//close btnBacToList_on_click */
+		
+		/*
+		* '추천'버튼 클릭시 이벤트
+		*/
+		$(document).on("click", "#btnRecommend", function(){
+			
+			var rsm_id = $("#rsm_id").val();
+			
+			$.ajax({
+				type : "post",
+				url : "do_updateRecommend.do",
+				dataType : "html",
+				data : {
+					"rsm_id" : rsm_id	
+				},
+				success : function(data){
+					location.reload();
+				}
+			});
+		});//close btnRecommend_on_click
+		
+		
 		
 		/**************************
 		* '신고'버튼 클릭시 이벤트
@@ -273,6 +292,11 @@
 		resize: vertical;
 		height: 200px;
 	}
+	
+	.btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+	.btn-labeled {padding-top: 0;padding-bottom: 0;}
+	.btn { margin-bottom:10px; }
+	
 </style>
 
 </head>
@@ -462,9 +486,20 @@
 			</div>
 			<br/><br/>
 		</c:if>	
-		<!-- **************************** ppt 미리보기 부분 end**************************** -->	
-		
-		<input type="button" id="btnBackToList" value="목록으로" class="btn btn-default" style="float:right;">
+		<!-- **************************** ppt 미리보기 부분 end**************************** -->
+		<div>
+			<div align="center">				
+				<button type="button" id="btnRecommend" class="btn btn-labeled btn-primary" >								
+                	<span class="btn-label">
+                		<i class="glyphicon glyphicon-thumbs-up"></i>
+                	</span>
+                	${rsmVO.rsm_recommend }
+                </button>				
+			</div>			
+			<div align="right">
+				<input type="button" id="btnBackToList" value="목록으로" class="btn btn-default">
+			</div>
+		</div>
 	</form>
 	
 	<!-- 수정하기 Modal Window -->

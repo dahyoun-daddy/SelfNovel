@@ -290,6 +290,22 @@ public class RsmController {
 		return modelAndView;		
 	}
 	
+	@RequestMapping(value="resume/do_updateRecommend")
+	@ResponseBody
+	public int do_updateRecommend(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.do_updateRecommend =====");
+		log.debug("req : " + req.toString());
+		log.debug("===============================================");
+		
+		String rsm_id = req.getParameter("rsm_id");
+		RsmVO inRsmVO = new RsmVO();
+		inRsmVO.setRsm_id(rsm_id);
+		
+		int flag = rsmSvc.do_update_recommend(inRsmVO);
+		
+		return flag;
+	}
+	
 	/**
 	 * do_searchChild
 	 * detail : 상세조회
@@ -311,13 +327,13 @@ public class RsmController {
 		itmVO.setItm_prd_id(itm_prd_id);
 		
 		//ItmSvc를 통해 해당 자기소개서의 항목들 호출
-		List<ItmVO> itmList = (List<ItmVO>) itmSvc.do_search_child(itmVO);
+		List<ItmVO> itmList = (List<ItmVO>) itmSvc.do_search_child(itmVO);		
 		
 		return itmList;
 	}
 	
 	/**
-	 * doSaveItm
+	 * do_save_edit
 	 * detail : 첨삭 저장 메소드
 	 * 최초작성   : 2017-09-28	
 	 * @param req
@@ -344,6 +360,12 @@ public class RsmController {
 		return flag;	
 	}
 	
+	/**
+	 * doUpdateOne
+	 * detail : 하위항목 단건 수정
+	 * @param req
+	 * @return flag
+	 */
 	@RequestMapping(value="resume/do_updateOne.do")
 	@ResponseBody
 	public int doUpdateItem(HttpServletRequest req) {
