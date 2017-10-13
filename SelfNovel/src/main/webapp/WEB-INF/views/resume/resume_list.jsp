@@ -3,6 +3,9 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 <% response.setContentType("text/html; charset=UTF-8"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<jsp:useBean id="toDay" class="java.util.Date" />
+
 <%
 	//contextPath
 	String contextPath = request.getContextPath();
@@ -131,6 +134,20 @@
 
 <title>Insert title here</title>
 
+<style type="text/css">
+	.table-head-rows {
+		text-align: center;
+		background-color: #4f81bd;
+		color: #FFF;
+		font-size: large;
+	}
+	
+	.table_body_rows {
+		font-size: medium;
+		margin: auto;				
+	}	
+</style>
+
 </head>
 <body>
 	<h2>자기소개서</h2>
@@ -188,13 +205,13 @@
 					<th colspan="7">..........</th>
 				</tr>
 				<tr>
-					<th style="text-align: center;">글번호</th>
-					<th style="text-align: center;">카테고리</th>
-					<th style="text-align: center;">작성자</th>
-					<th style="text-align: center;">제목</th>
-					<th style="text-align: center;">작성일</th>
-					<th style="text-align: center;">조회수</th>
-					<th style="text-align: center;">추천수</th>
+					<th class="table-head-rows">글번호</th>
+					<th class="table-head-rows">카테고리</th>
+					<th class="table-head-rows">작성자</th>
+					<th class="table-head-rows">제목</th>
+					<th class="table-head-rows">작성일</th>
+					<th class="table-head-rows">조회수</th>
+					<th class="table-head-rows">추천수</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -202,8 +219,10 @@
 				<c:choose>
 		            <c:when test="${list.size()>0}" >
 		                <c:forEach var="rsmVo" items="${list}">
-							<tr>	                	
+							<tr>	        
+								<!-- 글 번호 -->        	
 								<td class="text-center"><c:out value="${rsmVo.no}"/></td>
+								<!-- 카테고리 -->
 								<td class="text-center">
 									<c:forEach var="codeVo" items="${codeList}" varStatus="status">
 										<c:if test="${rsmVo.rsm_div eq status.index }">
@@ -212,17 +231,46 @@
 										</c:if>
 									</c:forEach>
 								</td>
-								<td class="text-left"><c:out value="${rsmVo.u_name}"/></td>								
-								<td class="text-left">
+								<!-- 작성자 -->
+								<td class="text-center"><c:out value="${rsmVo.u_name}"/></td>					
+								
+								<!-- 제목 -->								
+								<td class="text-left" >
 									<a href="do_searchOne.do?rsm_id=${rsmVo.rsm_id}">
 										<c:out value="${rsmVo.rsm_title}"/>
-									</a>
-									<%-- <c:if test="${rsmVo.rsm_reg_dt }"></c:if> --%>
-									
+									</a>					
+										
+									<!-- 게시물 작성날짜 -->
+									<c:set var="temp" value="${rsmVo.rsm_reg_dt }" />
+									<fmt:parseDate value="${temp}" pattern="yyyy-MM-dd HH:mm:SS" var="reg_dt" />
+									<fmt:formatDate value="${reg_dt }" pattern="yyyy-MM-dd" var="f_reg_dt" />
+									<fmt:formatDate value="${reg_dt }" pattern="HH:mm" var="f_reg_tm"/>																	
+								
+									<!-- 오늘날짜 -->
+									<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd" var="now"/>
+														
+									<!-- 작성일이 오늘날짜면 제목 뒤에 New표시 라벨 -->																			
+									<c:if test="${f_reg_dt eq now}">
+										<span class="label label-warning">New</span>										
+									</c:if>									
 								</td>
-								<td class="text-center"><c:out value="${rsmVo.rsm_reg_dt}"/></td>
-								<td class="text-right"><c:out value="${rsmVo.rsm_count}"/></td>
-								<td class="text-right"><c:out value="${rsmVo.rsm_recommend}"/></td>
+								
+								<!-- 작성일 -->
+								<td class="text-center">
+									<!-- 작성일이 오늘이면 시간만 표시, 그 외는 날짜만 표시 -->								
+									<c:choose>										
+										<c:when test="${f_reg_dt eq now}">											
+											<c:out value="${f_reg_tm }"></c:out>
+										</c:when>
+										<c:otherwise>
+											<c:out value="${f_reg_dt}"/>
+										</c:otherwise>
+									</c:choose>
+								</td>
+								<!-- 조회수 -->
+								<td class="text-center"><c:out value="${rsmVo.rsm_count}"/></td>
+								<!-- 추천수 -->
+								<td class="text-center"><c:out value="${rsmVo.rsm_recommend}"/></td>
 							</tr>       
 						</c:forEach>
 					</c:when>
