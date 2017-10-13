@@ -121,19 +121,6 @@ public class UserController {
         	modelAndView.setViewName("home");
         	return modelAndView;
         }
-        
-//        log.debug("asdf: " + naverUser.getNickname());
-//        
-//         네이버 사용자 프로필 정보를 이용하여 가입되어있는 사용자를 DB에서 조회하여 가져온다. 
-//        SnsUser snsUser = userBO.getUserByNaverUser(naverUser);
-//        
-//         만약 일치하는 사용자가 없다면 현재 로그인한 네이버 사용자 계정으로 회원가입이 가능하도록 가입페이지로 전달한다 
-//        if( snsUser == null ) {
-//        	return new ModelAndView("redirect:/join/naver");
-//        }
-        
-//         만약 일치하는 사용자가 있다면 현재 세션에 사용자 로그인 정보를 저장 
-//        session.setAttribute("SNS_USER",snsUser);
 	}
 	
 	@RequestMapping(value="user/do_searchOne.do")
@@ -264,6 +251,7 @@ public class UserController {
 		req.getSession().removeAttribute("u_id");
 		req.getSession().removeAttribute("u_name");
 		req.getSession().removeAttribute("u_level");
+		req.getSession().setAttribute("isNaver","false");
 	}
 	
 	@RequestMapping(value="user/do_update.do")
