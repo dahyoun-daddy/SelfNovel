@@ -519,6 +519,7 @@
 		</div>
 	</form>
 	
+	
 	<!-- 수정하기 Modal Window -->
 	<div id="modModal" class="modal fade" role="dialog">
 		<form name="modModalFrm">

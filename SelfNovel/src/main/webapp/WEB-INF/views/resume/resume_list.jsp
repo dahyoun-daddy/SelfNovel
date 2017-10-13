@@ -158,28 +158,38 @@
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="600px;">
 			<tr>
-				<td style="text-align: center;">분야</td>
-				<td>
-					<c:forEach var="codeVo" items="${codeList}" varStatus="status">					
-						<input type="checkbox" name="categoryChk" value="${status.index}">${codeVo.dtl_cd_nm }
-					</c:forEach>				
-					<!-- <input type="checkbox" name="categoryChk" value="1">서비스업
-					<input type="checkbox" name="categoryChk" value="2">제조·화학
-					<input type="checkbox" name="categoryChk" value="3">의료·제약·복지
-					<input type="checkbox" name="categoryChk" value="4">판매·유통
-					<input type="checkbox" name="categoryChk" value="5">교육업
-					<input type="checkbox" name="categoryChk" value="6">건설업
-					<input type="checkbox" name="categoryChk" value="7">IT·웹·통신
-					<input type="checkbox" name="categoryChk" value="8">미디어·디자인
-					<input type="checkbox" name="categoryChk" value="9">은행·금융업
-					<input type="checkbox" name="categoryChk" value="10">기관·협회 -->
-				</td>				
+				<td colspan="2" style="text-align: center;">분야</td>
+			</tr>
+			<tr>				
+				<td colspan="2">
+					<div align="center">
+					<ul>											
+					<c:forEach var="codeVo" items="${codeList}" varStatus="status">						
+						<div align="left" style="width: 250px; float: left">
+							<label>
+								<input type="checkbox" name="categoryChk" value="${status.index}">
+								${codeVo.dtl_cd_nm }
+							</label>
+						</div>						
+						<%-- <c:set var="remain" value="${status.count % 5 }"></c:set>
+						<c:if test="${remain eq 0 }">
+							<br>
+						</c:if>			 --%>																						
+					</c:forEach>
+					</ul>					
+					</div>
+				</td>								
 			</tr>
 			<tr>
 				<td style="text-align: center;">검색</td>
 				<td>
 					<input type="text" id="searchWord" name="searchWord" value="${searchWord}"/>
-					<button type="button" id="btn_search">검색</button>
+					<button type="button" id="btn_search" class="btn btn-labeled btn-primary">
+						<span class="btn-label">
+                			<i class="glyphicon glyphicon-search"></i>
+                		</span>					
+						검색
+					</button>
 				</td>
 			</tr>
 			<tr>
@@ -288,8 +298,13 @@
 		<div style="text-align:right;">
 			<!-- 로그인한 상태에서만 글쓰기 버튼이 보이도록 -->
 			<c:if test="${sessionScope.u_id ne null}">
-				<button type="button" id="btn_write">글쓰기</button>
-			</c:if>
+				<button type="button" id="btn_write" class="btn btn-labeled btn-primary">
+					<span class="btn-label">
+                		<i class="glyphicon glyphicon-pencil"></i>
+                	</span>
+                	글쓰기
+				</button>				
+			</c:if>							
 		</div>
 	</div>
 	
