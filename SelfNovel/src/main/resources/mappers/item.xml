@@ -173,7 +173,7 @@ SELECT a1.*,
 		       i.itm_use_yn
 		FROM item i, users u        
 		WHERE itm_prd_id = #{itm_prd_id}        
-          AND i.u_id = u.u_id
+          AND i.u_id = u.u_id(+)
 		  AND itm_use_yn = 1
 	</select>	
 	<!-- 작성자 기반 조회(Search) -->

@@ -247,6 +247,16 @@
 	* 첨삭영역의 테이블을 그리는 함수
 	***************************/
 	function draw_item_table(item) {
+		
+		var u_name;
+		
+		if(item.u_name == undefined){
+			u_name = "탈퇴한 회원"; 
+		}else{
+			u_name = item.u_name;
+		}
+		
+		
 		var item_table = "<table class='table table-bordered table-hover table-condensed' border='1px'" 
 		   	+ "cellpadding='2' cellspacing='2' align='center' width='550px;'>"
 		   	+ "<tr>"		   	 
@@ -257,7 +267,7 @@
 		   	+ "</td>"
 		   	+ "<td>"
 		   	+ "<label>"
-		   	+ item.u_name
+		   	+ u_name
 		   	+ "</label>"
 		   	+ "</td>"
 		   	+ "<td>"

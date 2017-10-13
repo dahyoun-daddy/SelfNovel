@@ -217,6 +217,8 @@
 									<a href="do_searchOne.do?rsm_id=${rsmVo.rsm_id}">
 										<c:out value="${rsmVo.rsm_title}"/>
 									</a>
+									<%-- <c:if test="${rsmVo.rsm_reg_dt }"></c:if> --%>
+									
 								</td>
 								<td class="text-center"><c:out value="${rsmVo.rsm_reg_dt}"/></td>
 								<td class="text-right"><c:out value="${rsmVo.rsm_count}"/></td>
