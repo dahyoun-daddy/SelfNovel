@@ -16,7 +16,7 @@ import com.sn.resume.domain.RsmVO;
 
 @Repository
 public class ExpertDaoImpl implements ExpertDao {
-private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
+	private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
@@ -138,6 +138,15 @@ private static Logger log = LoggerFactory.getLogger(ExpertDaoImpl.class);
 		searchParam.put("rsm_id", param.getRsm_id().toString());
 		
 		return sqlSession.selectList(namespace+".do_searchDetail", searchParam);
+	}
+
+	@Override
+	public DTO do_chkNaver(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_chkId");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		return sqlSession.selectOne(namespace+".do_chkNaver", (ExpertVO) dto);
 	}
 	
 }

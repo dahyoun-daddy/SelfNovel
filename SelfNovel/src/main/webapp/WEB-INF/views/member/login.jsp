@@ -11,7 +11,7 @@
 %>
 <%
 	String clientId = "KohD8sjB6zl3Ue8J49uV";//애플리케이션 클라이언트 아이디값";
-	String redirectURI = URLEncoder.encode("http://localhost:8080/controller/home.do", "UTF-8");
+	String redirectURI = URLEncoder.encode("http://localhost:8080/controller/user/naver_callback.do", "UTF-8");
 	SecureRandom random = new SecureRandom();
 	String state = new BigInteger(130, random).toString();
 	String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
@@ -54,7 +54,7 @@
             success: function(result){
             	if(result == "fail"){
             		alert("아이디 또는 비밀번호를 확인해 주세요.");
-            	} else {
+            	} else{
             		loginFrm.submit();
             	}
             }
@@ -79,8 +79,10 @@
 		<input class="form-control" style="width:30%;" id="login_id" type="text" /><br>
 		<input class="form-control" style="width:30%;" id="login_pwd" type="password" /><br>
 		<form id="loginFrm" action="home.do" method="POST" >
-			<input class="btn btn-warning" style="width:30%;" type="button" value="일반 로그인" onclick="n_login()"/><br><br>
-			 <a href="<%=apiURL%>"><img height="50" src="http://static.nid.naver.com/oauth/small_g_in.PNG"/></a>
+			<input class="btn btn-warning" style="width:30%;" type="button" value="일반 로그인" onclick="n_login()"/><br><br> 
+		</form>
+		<form id="naverFrm" action="register_user.do">
+			<a href="<%=apiURL%>"><img height="50" src="<c:url value='/resources/img/naverid_login_button.png' />"/></a>
 		</form>
 	</div>
 </body>

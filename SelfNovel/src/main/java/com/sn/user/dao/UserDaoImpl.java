@@ -79,4 +79,13 @@ public class UserDaoImpl implements UserDao {
 		log.debug("=================================");
 		return sqlSession.selectOne(namespace+".do_chkId", (UserVO) dto);
 	}
+
+	@Override
+	public DTO do_chkNaver(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_chkNaver");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		return sqlSession.selectOne(namespace+".do_chkNaver", (UserVO) dto);
+	}
 }

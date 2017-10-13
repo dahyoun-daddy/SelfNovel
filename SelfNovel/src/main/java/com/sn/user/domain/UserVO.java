@@ -15,6 +15,7 @@ public class UserVO extends DTO {
 	private int u_level;		// 등급
 	private int u_write_cnt;	// 게시물 등록수
 	private int u_mod_cnt;		// 첨삭 수
+	private String u_naver;
 
 	@Override
 	public String toString() {
@@ -78,4 +79,13 @@ public class UserVO extends DTO {
 		this.u_mod_cnt = u_mod_cnt;
 	}
 
+	public String getU_naver() {
+		return u_naver;
+	}
+
+	public void setU_naver(String u_naver) {
+		this.u_naver = u_naver;
+	}
+
+	
 }

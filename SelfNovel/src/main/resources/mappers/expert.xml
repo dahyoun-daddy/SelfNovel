@@ -4,6 +4,35 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sn.expert.repository.mappers.expert">
+	<select id="do_chkNaver" parameterType="ExpertVO" resultType="ExpertVO">
+		SELECT *
+		  FROM users, expert, codes
+		 WHERE u_id = exp_id
+		   AND mst_cd_id = 'C002'
+		   AND exp_ctg = dtl_cd_id
+		   AND u_naver='${u_naver}'
+	</select>
+	<select id="do_searchOneNaver" parameterType="ExpertVO" resultType="ExpertVO">
+		SELECT u_id,
+			   u_password,
+			   u_name,
+			   TO_CHAR(u_reg_dt,'YYYY-MM-DD') AS u_reg_dt,
+			   u_level,
+			   u_write_cnt,
+			   u_mod_cnt,
+		       exp_title,
+		       exp_profile,
+		       exp_ctg,
+		       exp_price,
+		       exp_trade
+		  FROM users, expert
+		 WHERE u_id = exp_id
+		   AND u_id = '${u_id}'
+		   AND u
+		   AND u_password = '${u_password}'
+		   AND u_level = 2
+	</select>
+
 	<select id="do_searchDetail" parameterType="com.sn.resume.domain.ItmVO" resultType="com.sn.resume.domain.ItmVO">
 		SELECT *
 		  FROM item
@@ -54,11 +83,11 @@
 		       exp_ctg,
 		       exp_price,
 		       exp_trade
-		  FROM USERS, expert
+		  FROM users, expert
 		 WHERE u_id = exp_id
 		   AND u_id = '${u_id}'
 		   AND u_password = '${u_password}'
-		   AND u_level = ${u_level}
+		   AND u_level = 2
     </select>
 	
 	<update id="do_updateName" parameterType="ExpertVO"  >

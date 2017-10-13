@@ -4,6 +4,8 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 <% response.setContentType("text/html; charset=UTF-8"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%
   //contextPath
   String contextPath = request.getContextPath();
@@ -118,7 +120,17 @@
 													<% i++; str = "/resources/img/rank"+String.valueOf(i)+".png"; %>
 													<img src="<c:url value='<%=str %>' />" />
 												<a href="javascript:do_detail()">
-													<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
+													<c:set var="d" value="${expertVO.exp_profile }"/>
+													<c:set var="e" value="${fn:substring(d,0,7) }"/>
+													<c:choose>
+														<c:when test="${e eq 'http://'}">
+															<img style="position:relative; top:0; left:0;" src="${expertVO.exp_profile}" width="200px" height="200px">	
+														</c:when>
+														
+														<c:otherwise>
+															<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">															
+														</c:otherwise>
+													</c:choose>													
 												</a>
 											</td>
 										</tr>
@@ -193,7 +205,17 @@
 										<tr>
 											<td colspan="2" align="center">
 												<a href="do_detail_list.do?exp_id=${expertVO.exp_id }">
-													<img src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">
+													<c:set var="d" value="${expertVO.exp_profile }"/>
+													<c:set var="e" value="${fn:substring(d,0,7) }"/>
+													<c:choose>
+														<c:when test="${e eq 'http://'}">
+															<img style="position:relative; top:0; left:0;" src="${expertVO.exp_profile}" width="200px" height="200px">	
+														</c:when>
+														
+														<c:otherwise>
+															<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">															
+														</c:otherwise>
+													</c:choose>
 												</a>
 											</td>
 										</tr>

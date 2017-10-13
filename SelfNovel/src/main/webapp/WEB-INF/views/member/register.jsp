@@ -97,6 +97,13 @@
 				$("#lexp_price").text('');
 			}
 		});
+		
+		if(<%=session.getAttribute("isNaver").equals("true")%>){
+			$("#u_name").val('<%=request.getAttribute("nickName")%>');
+			$("#u_naver").val('<%=request.getAttribute("naverId")%>');
+			$("#profileHolder").attr("src",'<%=request.getAttribute("profileImage")%>');
+			alert("최초 로그인 시 회원가입이 필수입니다.");
+		}
 	})
 	
 	function do_userSep(userSep){	// 가입 항목 동적 생성
@@ -217,7 +224,7 @@
 		
 		
 		$.ajax({
-            url: "user/do_chkId.do",
+            url: "do_chkId.do",
             data: {u_id: $("#u_id").val()},
             type: 'POST',
             success: function(result){
@@ -249,6 +256,8 @@
 			alert('인증번호를 다시 확인해 주세요.');
 		}
 	}
+	
+	
 </script>
 <title>:::Register:::</title>
 </head>
@@ -388,6 +397,7 @@
 			</tr>
 		</table>
 		<input type="hidden" value="" id="u_level" name="u_level" />
+		<input type="hidden" value="" id="u_naver" name="u_naver" />
 		</form>
 	</div>
 	<div style="position:absolute; border-left: 1px solid #DFDFDF; padding-left: 50px; width:30%; height: auto; display: inline-block;">

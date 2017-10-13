@@ -18,4 +18,5 @@ public interface ExpertSvc {
 	List<?> do_searchDetail_itm(DTO dto);
 	DTO do_searchDetail_rsm(DTO dto);
 	List<?> do_searchDetail(DTO dto);
+	DTO do_chkNaver(DTO dto);
 }

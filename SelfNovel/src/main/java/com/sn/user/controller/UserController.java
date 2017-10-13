@@ -1,7 +1,10 @@
 package com.sn.user.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -25,6 +28,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +37,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.gson.Gson;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.sn.common.DTO;
 import com.sn.user.domain.SMTPAuthenticator;
 import com.sn.user.domain.UserVO;
+import com.sn.user.naverlogin.NaverLoginBO;
+import com.sn.user.naverlogin.NaverUser;
 import com.sn.user.service.UserSvc;
 
 @Controller
@@ -50,6 +59,8 @@ public class UserController {
 	
 	@Autowired
 	private UserSvc userSvc;
+	
+	NaverLoginBO naverLoginBO = new NaverLoginBO();
 	
 	@RequestMapping(value = "login_user.do", method = RequestMethod.POST)
 	public String home(Locale locale, Model model) {
@@ -66,48 +77,68 @@ public class UserController {
 		return "member/update";
 	}
 	
-	/*@RequestMapping(value="user/naver_callback.do")
-	public ModelAndView naver_callback(HttpServletRequest req) {
-		String clientId = "KohD8sjB6zl3Ue8J49uV";//애플리케이션 클라이언트 아이디값";
-		String redirectURI = URLEncoder.encode("http://localhost:8080/controller/home.do", "UTF-8");
-		SecureRandom random = new SecureRandom();
-		String state = new BigInteger(130, random).toString();
-		String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
-		apiURL += "&client_id=" + clientId;
-		apiURL += "&redirect_uri=" + redirectURI;
-		apiURL += "&state=" + state;
-		session.setAttribute("state", state);
+	@RequestMapping(value="user/naver_login.do")
+    public ModelAndView login(HttpSession session) {
+        /* 네아로 인증 URL을 생성하기 위하여 getAuthorizationUrl을 호출 */
+        String naverAuthUrl = naverLoginBO.getAuthorizationUrl(session);
+        
+        log.debug("asdf: " + naverAuthUrl);
+        
+        /* 생성한 인증 URL을 View로 전달 */
+        return new ModelAndView(naverAuthUrl);
+    }
+	
+	@RequestMapping(value="user/naver_callback.do")
+	public ModelAndView naver_callback(@RequestParam String code, @RequestParam String state, HttpServletRequest req, HttpServletResponse res, HttpSession session) throws IOException {
+		res.setCharacterEncoding("UTF-8");
+		req.setCharacterEncoding("UTF-8");
 		
-	    try {
-	      URL url = new URL(apiURL);
-	      HttpURLConnection con = (HttpURLConnection)url.openConnection();
-	      con.setRequestMethod(" get");="" int="" responsecode="con.getResponseCode();" bufferedreader="" br;="" system.out.print("responsecode="+responseCode);
-	      if(responseCode==200) { // 정상 호출
-	        br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	      } else {  // 에러 발생
-	        br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-	      }
-	      String inputLine;
-	      StringBuffer res = new StringBuffer();
-	      while ((inputLine = br.readLine()) != null) {
-	        res.append(inputLine);
-	      }
-	      br.close();
-	      if(responseCode==200) {
-	        out.println(res.toString());
-	      }
-	    } catch (Exception e) {
-	      System.out.println(e);
-	    }
-		
-		ModelAndView modelAndView = new ModelAndView();
-		
-		
-		return modelAndView;
-	}*/
+		OAuth20Service oauthService = naverLoginBO.getOauthService(session.getAttribute("state").toString());
+		// Scribe에서 제공하는 AccessToken 획득 기능으로 네아로 Access Token을 획득 
+		OAuth2AccessToken accessToken = oauthService.getAccessToken(code);
+		System.out.println(accessToken.toString());
+    	// 발급받은 AccessToken을 이용하여 현재 로그인한 네이버의 사용자 프로필 정보를 조회할 수 있다. 
+        NaverUser naverUser = naverLoginBO.getUserProfile(accessToken);
+//        
+        System.out.print(naverUser.toString());
+        
+        ModelAndView modelAndView = new ModelAndView();
+        UserVO userVO = new UserVO();
+        userVO.setU_naver(naverUser.getId());
+        userVO = (UserVO) userSvc.do_chkNaver(userVO);
+        session.setAttribute("isNaver", "true");
+        
+        if(userVO == null) {
+        	modelAndView.addObject("nickName",naverUser.getNickname());
+        	modelAndView.addObject("profileImage",naverUser.getProfileImage());
+        	modelAndView.addObject("naverId",naverUser.getId());
+        	modelAndView.setViewName("member/register");
+        	return modelAndView;
+        } else {
+        	session.setAttribute("u_id", userVO.getU_id());
+        	session.setAttribute("u_name", userVO.getU_name());
+        	session.setAttribute("u_level", userVO.getU_level());
+        	modelAndView.setViewName("home");
+        	return modelAndView;
+        }
+        
+//        log.debug("asdf: " + naverUser.getNickname());
+//        
+//         네이버 사용자 프로필 정보를 이용하여 가입되어있는 사용자를 DB에서 조회하여 가져온다. 
+//        SnsUser snsUser = userBO.getUserByNaverUser(naverUser);
+//        
+//         만약 일치하는 사용자가 없다면 현재 로그인한 네이버 사용자 계정으로 회원가입이 가능하도록 가입페이지로 전달한다 
+//        if( snsUser == null ) {
+//        	return new ModelAndView("redirect:/join/naver");
+//        }
+        
+//         만약 일치하는 사용자가 있다면 현재 세션에 사용자 로그인 정보를 저장 
+//        session.setAttribute("SNS_USER",snsUser);
+	}
 	
 	@RequestMapping(value="user/do_searchOne.do")
 	public void do_searchOne(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		req.getSession().setAttribute("isNaver", "false");
 		UserVO VO = new UserVO();
 		VO.setU_id(req.getParameter("u_id"));
 		VO.setU_password(req.getParameter("u_password"));
@@ -133,9 +164,6 @@ public class UserController {
 		if(!file.isDirectory()) {
 			file.mkdirs();
 		}
-		
-		log.debug("asdf: " + req.getParameter("u_id"));
-		
 		/*MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
 				new DefaultFileRenamePolicy());*/
 		UserVO VO = new UserVO();
@@ -143,6 +171,7 @@ public class UserController {
 		VO.setU_name(req.getParameter("u_name"));
 		VO.setU_password(req.getParameter("u_password"));
 		VO.setU_level(Integer.valueOf(req.getParameter("u_level")));
+		VO.setU_naver(req.getParameter("u_naver"));
 		
 		int flag = userSvc.do_save(VO);
 		
@@ -239,21 +268,16 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="user/do_update.do")
-	public void do_update(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		String path = req.getSession().getServletContext().getRealPath("/resources/exp_profiles");
-		
-		MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
-				new DefaultFileRenamePolicy());
-		
+	public void do_update(MultipartHttpServletRequest req, HttpServletResponse res) throws IOException {
 		UserVO VO = new UserVO();
-		String functionSep = mr.getParameter("functionSep");
+		String functionSep = req.getParameter("functionSep");
 		Hashtable<String, String> param = new Hashtable<String, String>();
 		param.put("functionSep", functionSep);
 		VO.setParam(param);
 		
-		VO.setU_id(mr.getParameter("u_id"));
-		VO.setU_name(mr.getParameter("u_name"));
-		VO.setU_password(mr.getParameter("u_password"));
+		VO.setU_id(req.getParameter("u_id"));
+		VO.setU_name(req.getParameter("u_name"));
+		VO.setU_password(req.getParameter("u_password"));
 		
 		int flag = userSvc.do_update(VO);
 		if(flag > 0) {

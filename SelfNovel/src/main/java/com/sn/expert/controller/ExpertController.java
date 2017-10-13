@@ -198,22 +198,11 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		if(!file.isDirectory()) {
 			file.mkdirs();
 		}
-		/*MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
-				new DefaultFileRenamePolicy());
-		
-		String fileName = mr.getOriginalFileName("exp_profile");*/
 		MultipartFile mFile = req.getFile("exp_profile");
 		String fileName = mFile.getOriginalFilename();
 		String newFileName = UUID.randomUUID().toString().replaceAll("-","") + "_" +fileName;
 		System.out.println("파일명: " + newFileName);
 		mFile.transferTo(new File(path+"/"+newFileName));//저장
-		/*// 원본이 업로드된 절대경로와 파일명를 구한다.
-		String fullFileName = path + "/" + fileName;
-	    File f1 = new File(fullFileName);
-	    if(f1.exists()) {     // 업로드된 파일명이 존재하면 Rename한다.
-	         File newFile = new File(path + "/" + newFileName);
-	         f1.renameTo(newFile);   // rename...
-	    }*/
 		
 		ExpertVO VO = new ExpertVO();
 		VO.setU_id(req.getParameter("u_id"));
@@ -238,43 +227,41 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	}
 	
 	@RequestMapping(value="expert/do_update.do")
-	public void do_update(HttpServletRequest req, HttpServletResponse res) throws IOException {
+	public void do_update(MultipartHttpServletRequest req, HttpServletResponse res) throws IOException {
+		ExpertVO VO = new ExpertVO();
 		String path = req.getSession().getServletContext().getRealPath("/resources/exp_profiles");
+		Hashtable<String, String> param = new Hashtable<String, String>();
+		param.put("functionSep", req.getParameter("functionSep"));
+		
+		System.out.println("파일 저장 경로: " + path);
 		
 		File file = new File(path);
 		if(!file.isDirectory()) {
 			file.mkdirs();
 		}
-		MultipartRequest mr = new MultipartRequest(req, path, 1024 * 1024 * 5, "utf-8",
-				new DefaultFileRenamePolicy());
-		
-		String fileName = mr.getOriginalFileName("exp_profile");
-		String newFileName = null;
-		Hashtable<String, String> param = new Hashtable<String, String>();
-		param.put("functionSep", mr.getParameter("functionSep"));
-		
-		if(fileName != null) {
-			param.replace("functionSep", "profile");
-			newFileName = UUID.randomUUID().toString().replaceAll("-","") + "_" +mr.getOriginalFileName("exp_profile");
-			// 원본이 업로드된 절대경로와 파일명를 구한다.
-			String fullFileName = path + "/" + fileName;
-		    File f1 = new File(fullFileName);
-		    if(f1.exists()) {     // 업로드된 파일명이 존재하면 Rename한다.
-		         File newFile = new File(path + "/" + newFileName);
-		         f1.renameTo(newFile);   // rename...
-		    }
+		if(req.getFile("exp_profile") != null) {
+			MultipartFile mFile = req.getFile("exp_profile");
+			String fileName = mFile.getOriginalFilename();
+			String newFileName=null;
+			
+			if(fileName != null) {
+				newFileName = UUID.randomUUID().toString().replaceAll("-","") + "_" +fileName;
+				System.out.println("파일명: " + newFileName);
+				mFile.transferTo(new File(path+"/"+newFileName));//저장
+				VO.setExp_profile(newFileName);
+				param.replace("functionSep", "profile");
+			}
 		}
 		
-		ExpertVO VO = new ExpertVO();
 		VO.setParam(param);
-		VO.setU_id(mr.getParameter("u_id"));
-		VO.setExp_id(mr.getParameter("u_id"));
-		VO.setU_name(mr.getParameter("u_name"));
-		VO.setU_password(mr.getParameter("u_password"));
-		VO.setExp_price(Integer.valueOf(mr.getParameter("exp_price")));
-		VO.setExp_title(mr.getParameter("exp_title"));
-		VO.setExp_ctg(Integer.valueOf(mr.getParameter("exp_ctg")));
-		VO.setExp_profile(newFileName);
+		VO.setU_id(req.getParameter("u_id"));
+		VO.setExp_id(req.getParameter("u_id"));
+		VO.setU_naver(req.getParameter("u_name"));
+		VO.setU_name(req.getParameter("u_name"));
+		VO.setU_password(req.getParameter("u_password"));
+		VO.setExp_price(Integer.valueOf(req.getParameter("exp_price")));
+		VO.setExp_title(req.getParameter("exp_title"));
+		VO.setExp_ctg(Integer.valueOf(req.getParameter("exp_ctg")));
 
 		int flag = 1;
 		

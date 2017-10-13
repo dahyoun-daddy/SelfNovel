@@ -11,4 +11,5 @@ public interface ExpertDao extends WorkDiv {
 	public List<?> do_searchDetail_itm(DTO dto);
 	public DTO do_searchDetail_rsm(DTO dto);
 	public List<?> do_searchDetail(DTO dto);
+	public DTO do_chkNaver(DTO dto);
 }	

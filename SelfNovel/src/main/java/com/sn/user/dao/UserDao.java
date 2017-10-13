@@ -5,4 +5,5 @@ import com.sn.common.WorkDiv;
 
 public interface UserDao extends WorkDiv {
 	public DTO do_chkId(DTO dto);
+	public DTO do_chkNaver(DTO dto);
 }

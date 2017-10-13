@@ -94,4 +94,12 @@ public class ExpertSvcImpl implements ExpertSvc{
 		log.debug("2=======================");	
 		return expertDao.do_searchDetail(dto);
 	}
+
+	@Override
+	public DTO do_chkNaver(DTO dto) {
+		log.debug("2=======================");
+		log.debug(dto.toString());
+		log.debug("2=======================");	
+		return expertDao.do_chkNaver(dto);
+	}
 }

@@ -72,6 +72,7 @@
 	
 	function cancelBtn(){
 		$("#detailModalBody").html('');
+		$('#detailModal').modal('hide');
 	}
 </script>
 <title>Insert title here</title>
@@ -134,6 +135,12 @@
 					<div class="modal-body" id="detailModalBody" align="center">
 						
 					</div>
+					<!-- Modal Footer -->
+		            <div class="modal-footer">
+			            	<button class="btn btn-danger pull-right" onclick="cancelBtn();">
+			                    	닫기
+			                </button>
+		            </div>
 				</div>
 			</div>
 		</div>

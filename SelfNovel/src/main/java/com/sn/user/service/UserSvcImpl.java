@@ -67,6 +67,14 @@ public class UserSvcImpl implements UserSvc {
 		return userDao.do_chkId(dto);
 	}
 	
+	@Override
+	public DTO do_chkNaver(DTO dto) {
+		log.debug("2=======================");
+		log.debug(dto.toString());
+		log.debug("2=======================");	
+		return userDao.do_chkNaver(dto);
+	}
+	
 	/**
 	 * 다중 유저 강제탈퇴
 	 * 최초작성: 2017-09-29

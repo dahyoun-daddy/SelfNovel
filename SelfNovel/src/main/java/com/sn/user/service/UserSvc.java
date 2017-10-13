@@ -14,6 +14,7 @@ public interface UserSvc {
 	DTO do_searchOne(DTO dto) throws IOException;
 	List<?> do_search(DTO dto);
 	DTO do_chkId(DTO dto);
+	DTO do_chkNaver(DTO dto);
 	
 	/**
 	 * 다중 유저 강제탈퇴
