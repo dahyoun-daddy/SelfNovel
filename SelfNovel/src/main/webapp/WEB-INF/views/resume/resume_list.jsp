@@ -209,9 +209,6 @@
 			   cellpadding="2" cellspacing="2" align="center" width="600px;">
 			<thead>
 				<tr>
-					<th style="text-align: center;" colspan="7">공지사항</th>
-				</tr>
-				<tr>
 					<th colspan="7">..........</th>
 				</tr>
 				<tr>

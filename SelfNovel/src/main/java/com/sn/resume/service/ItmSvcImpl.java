@@ -140,7 +140,7 @@ public class ItmSvcImpl implements ItmSvc {
 	 * @return
 	 * @throws IOException 
 	 */
-	public String do_ExcelDownload(DTO dto) throws IOException {
+	public String do_ExcelDownload(DTO dto,String u_name) throws IOException {
 		String fileName = null;						
 		log.debug("======================================");						
 		log.debug("do excel_down: dto: "+dto.toString());						
@@ -148,7 +148,7 @@ public class ItmSvcImpl implements ItmSvc {
 		List<?> list = (List<?>) this.itmDao.do_search(dto);	
 								
 		ExcelUtil excelUtil = new ExcelUtil();						
-		fileName = excelUtil.writeExcel(path, "resume.xls", list);						
+		fileName = excelUtil.writeExcel(path, "resume.xls", list,u_name);						
 								
 		log.debug("======================================");						
 		log.debug("fileName: "+fileName);						

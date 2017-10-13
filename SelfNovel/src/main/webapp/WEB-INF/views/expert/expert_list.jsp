@@ -5,6 +5,7 @@
 <% response.setContentType("text/html; charset=UTF-8"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%
   //contextPath
@@ -157,19 +158,27 @@
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="960px;">
 			<tr>
-				<td style="text-align: center;">분야</td>
-				<td>
-					<input type="checkbox" id="searchCategory_1" value="1">서비스업
-					<input type="checkbox" id="searchCategory_1" value="2">제조·화학
-					<input type="checkbox" id="searchCategory_1" value="3">의료·제약·복지
-					<input type="checkbox" id="searchCategory_1" value="4">판매·유통
-					<input type="checkbox" id="searchCategory_1" value="5">교육업
-					<input type="checkbox" id="searchCategory_1" value="6">건설업
-					<input type="checkbox" id="searchCategory_1" value="7">IT·웹·통신
-					<input type="checkbox" id="searchCategory_1" value="8">미디어·디자인
-					<input type="checkbox" id="searchCategory_1" value="9">은행·금융업
-					<input type="checkbox" id="searchCategory_1" value="10">기관·협회
-				</td>
+				<td colspan="2" style="text-align: center;">분야</td>
+			</tr>
+			<tr>				
+				<td colspan="2">
+					<div align="center">
+					<ul>											
+					<c:forEach var="codeVo" items="${codeList}" varStatus="status">						
+						<div align="left" style="width: 250px; float: left">
+							<label>
+								<input type="checkbox" name="categoryChk" value="${status.index}">
+								${codeVo.dtl_cd_nm }
+							</label>
+						</div>						
+						<%-- <c:set var="remain" value="${status.count % 5 }"></c:set>
+						<c:if test="${remain eq 0 }">
+							<br>
+						</c:if>			 --%>																						
+					</c:forEach>
+					</ul>					
+					</div>
+				</td>								
 			</tr>
 			<tr>
 				<td style="text-align: center;">검색</td>
@@ -234,7 +243,7 @@
 										<tr>
 											<td style="text-align: center;">가격</td>
 											<td style="text-align: right">
-												₩ <c:out value="${expertVO.exp_price}"/>
+												₩ <fmt:formatNumber value="${expertVO.exp_price}" pattern="#,###"/>
 											</td>
 										</tr>
 									</table>

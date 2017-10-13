@@ -51,13 +51,13 @@ public class ExcelUtil {
 	 * @param data
 	 * @throws IOException
 	 */   
-	public String writeExcel(String filePath,String excelFileName,List<?> data)throws IOException{
+	public String writeExcel(String filePath,String excelFileName,List<?> data,String u_name)throws IOException{
 		this.filePath = filePath;
 		this.excelFileName =excelFileName;
 		FileOutputStream out = setFile(this.filePath,this.excelFileName);
 	    
 		// create a new workbook
-		HSSFWorkbook  wb =  createExcel(data);
+		HSSFWorkbook  wb =  createExcel(data,u_name);
 		try{
 			wb.write(out);
 		}finally{
@@ -121,7 +121,7 @@ public class ExcelUtil {
 	 * @param data
 	 * @return HSSFWorkbook
 	 */
-	public HSSFWorkbook createExcel(List<?> data){
+	public HSSFWorkbook createExcel(List<?> data,String u_name){
 	   workbook = new HSSFWorkbook();
 	   HSSFSheet sheet = workbook.createSheet("자기소개서");
 	   int corRow=0;//현재 row
@@ -214,7 +214,7 @@ public class ExcelUtil {
        //이름 데이터 추가
        corCol++;
        nameCell = row.createCell(corCol);
-       nameCell.setCellValue("안녕 나는 핑크빈");
+       nameCell.setCellValue(u_name);
        nameCell.setCellStyle(contentStyle);
        
        //병합될 셀들에 스타일을 줌

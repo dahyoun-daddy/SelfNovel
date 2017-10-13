@@ -26,6 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.sn.codes.dao.CodesDao;
+import com.sn.codes.domain.CodesVO;
 import com.sn.common.StringUtil;
 import com.sn.expert.domain.ExpertVO;
 import com.sn.expert.service.ExpertSvc;
@@ -44,6 +46,9 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	
 	@Autowired
 	private UserSvc userSvc;
+	
+	@Autowired
+	private CodesDao codesDao;
 	
 	@RequestMapping(value="expert/do_detail_list.do")
 	public ModelAndView do_detail_list(HttpServletRequest req) {
@@ -142,6 +147,13 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		int totalNo   = 0;
    	    if(list !=null && list.size()>0)totalNo = list.get(0).getTotalNo();
    	    
+   	    //2017-10-13 @autor LSG
+   	    //for codes
+		CodesVO dto = new CodesVO();
+		dto.setMst_cd_id("C002");	
+		List<CodesVO> codeList = (List<CodesVO>)codesDao.do_search(dto);
+   	    //for codes end
+   	    
 		ModelAndView modelAndView =new ModelAndView();
 		
 		modelAndView.addObject("list",list );
@@ -149,6 +161,7 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		modelAndView.addObject("totalNo",totalNo);
 		modelAndView.addObject("searchDiv",req.getParameter("searchDiv"));
 		modelAndView.addObject("searchCategoryNum",req.getParameter("searchCategoryNum"));
+		modelAndView.addObject("codeList",codeList);
 		req.setAttribute("searchWord",p_searchWord);
 		modelAndView.setViewName("expert/expert_list");
 		

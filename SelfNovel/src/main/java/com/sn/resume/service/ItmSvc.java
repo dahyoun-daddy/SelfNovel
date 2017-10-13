@@ -19,5 +19,5 @@ public interface ItmSvc extends WorkDiv {
 	 * @return
 	 * @throws IOException 
 	 */
-	public String do_ExcelDownload(DTO dto) throws IOException;
+	public String do_ExcelDownload(DTO dto,String u_name) throws IOException;
 }

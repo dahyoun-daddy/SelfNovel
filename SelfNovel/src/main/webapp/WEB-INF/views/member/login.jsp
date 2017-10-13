@@ -78,7 +78,7 @@
 		<br/>
 		<input class="form-control" style="width:30%;" id="login_id" type="text" /><br>
 		<input class="form-control" style="width:30%;" id="login_pwd" type="password" /><br>
-		<form id="loginFrm" action="home.do" method="POST" >
+		<form id="loginFrm" action="/controller/main/main.do" method="POST" >
 			<input class="btn btn-warning" style="width:30%;" type="button" value="일반 로그인" onclick="n_login()"/><br><br> 
 		</form>
 		<form id="naverFrm" action="register_user.do">

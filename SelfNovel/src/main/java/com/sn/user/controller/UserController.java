@@ -118,7 +118,7 @@ public class UserController {
         	session.setAttribute("u_id", userVO.getU_id());
         	session.setAttribute("u_name", userVO.getU_name());
         	session.setAttribute("u_level", userVO.getU_level());
-        	modelAndView.setViewName("home");
+        	modelAndView.setViewName("main/main_view");
         	return modelAndView;
         }
 	}

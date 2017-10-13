@@ -233,14 +233,6 @@
 			frm.submit();			
 		});
 		
-		/**************************
-		* 'pptDown'버튼 클릭시 이벤트
-		* detail : TODO
-		***************************/
-		$("#btnPptDown").on("click", function(){
-
-		});
-		
 	});//close .ready(function)
 	
 	/**************************
@@ -322,6 +314,7 @@
 	<!-- 2017-10-11 autor: lsg -->
 	<form name="doExcelDown" action="do_excelDown.do" method="post">
 		<input type="hidden" name="excel_rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
+		<input type="hidden" name="u_name" value="${rsmVO.u_name}"><!-- 작성자 id -->
 	</form>
 	<!-- for excel download end -->
 
@@ -389,7 +382,6 @@
 					<br/>
 					<div align="right">
 						<input type="button" id="btnResumeDown" value="자기소개서 Down" class="btn btn-default">
-						<input type="button" id="btnPptDown" value="PPT Down" class="btn btn-default">
 					</div>
 					<br/>
 					<div id="items" align="center">

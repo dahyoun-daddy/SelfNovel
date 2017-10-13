@@ -194,7 +194,7 @@
 	 	    //alert('openPopup');
 	 	    var url    ="pptUpload.do";
 	 	    var title  = "testpop";
-	 	    var status = "toolbar=yes,directories=yes,scrollbars=no,resizable=yes,status=yes,menubar=no,width=240, height=200, top=0,left=20"; 
+	 	    var status = "toolbar=yes,directories=yes,scrollbars=yes,resizable=yes,status=yes,menubar=no,width=500, height=150, top=0,left=0"; 
 	 	    window.open(url, title,status); //window.open(url,title,status); window.open 함수에 url을 앞에와 같이 
 	  	});
 	});//close ready

@@ -432,9 +432,10 @@ public class RsmController {
 		ItmVO inVO = new ItmVO();
 		//inVO.setParam(StringUtil.createParam(request));
 		String excel_rsm_id = StringUtil.nvl(request.getParameter("excel_rsm_id"), "");
+		String u_name = StringUtil.nvl(request.getParameter("u_name"), "");
 		inVO.setRsm_id(excel_rsm_id);
 											
-		String fileFullPath = this.itmSvc.do_ExcelDownload(inVO);									
+		String fileFullPath = this.itmSvc.do_ExcelDownload(inVO,u_name);									
 		ModelAndView modelAndView = new ModelAndView();									
 		log.debug("======================================");									
 		log.debug("fileFullPath: "+fileFullPath);									
