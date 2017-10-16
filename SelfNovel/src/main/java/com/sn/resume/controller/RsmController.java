@@ -367,6 +367,29 @@ public class RsmController {
 	}
 	
 	/**
+	 * do_delete
+	 * @param req
+	 * @return flag
+	 */
+	@RequestMapping(value="resume/do_delete.do")
+	@ResponseBody
+	public int do_delete(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.do_delete =====");
+		log.debug("req : " + req.toString());		
+		log.debug("rsm_id : " + req.getParameter("rsm_id"));
+		log.debug("======================================");
+		
+		String rsm_id = req.getParameter("rsm_id");
+		
+		RsmVO inRsmVO = new RsmVO();
+		inRsmVO.setRsm_id(rsm_id);
+		
+		int flag = rsmSvc.do_delete(inRsmVO);
+		
+		return flag;
+	}
+	
+	/**
 	 * do_save_edit
 	 * detail : 첨삭 저장 메소드
 	 * 최초작성   : 2017-09-28	

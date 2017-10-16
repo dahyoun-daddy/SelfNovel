@@ -29,7 +29,7 @@
 	    /*
 	    	textarea 글자수 count 기능
 	    */
-	    $("#editTable").on("keyup","textarea[name='itm_content']",function (){
+	    $("#addTable").on("keyup","textarea[name='itm_content']",function (){
 	        var content = $(this).val();        
 	        $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
 	        
@@ -93,7 +93,7 @@
 			frm.submit();
 		})	
 		
-	    $("#editTable").on("click",".delRow",function(){// 삭제기능
+	    $("#addTable").on("click",".delRow",function(){// 삭제기능
 	    	var count = 0;
 	    	
 	    	$("tr[id=testTr]").each(function(){
@@ -108,7 +108,7 @@
 	    	
 	    })    
 	    
-	    $("#editTable").on("click","#itemAdd",function(){	      
+	    $("#addTable").on("click","#itemAdd",function(){	      
 	        
 	        var contents = '';
 	        contents += '<tr id="testTr">                                                                                                                   ';
@@ -172,12 +172,12 @@
 	 			 //http://ktsmemo.cafe24.com/s/jQueryTip/64
 	    	*/
 	    //*********************************************************************//
-	    $("#editTable").on("click","#moveUp",function(){	    	
+	    $("#addTable").on("click","#moveUp",function(){	    	
 	    	var $tr = $(this).parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
 	    	$tr.prev().before($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
 	    })
 
-	    $("#editTable").on("click","#moveDown",function(){	    	
+	    $("#addTable").on("click","#moveDown",function(){	    	
 	    	var $tr = $(this).parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
 	    	$tr.next().after($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
 	    })
@@ -229,17 +229,16 @@
 <body>	
 	<h2>수정하기</h2>
 	<hr/>
-	<div>
+	<div align="center">
 		<!-- 전체 form -->
 		<form action="#" id="editForm" name="editForm">
-		<!-- 자소서 id값 -->
-		<input type="hidden" id="rsm_id" name="rsm_id" value="${resume.rsm_id }">
-		<input type="hidden" id="u_id" name="u_id" value="${resume.u_id }">
-		<!-- 전체 table -->
-		<table class="table table-bordered table-hover table-condensed" border="1px" 
-				   cellpadding="2" cellspacing="2" align="center" id="editTable">								 	
+			<!-- 자소서 id값 -->
+			<input type="hidden" id="rsm_id" name="rsm_id" value="${resume.rsm_id }">
+			<input type="hidden" id="u_id" name="u_id" value="${resume.u_id }">
+			<!-- 전체 table -->
+			<table class="table table-bordered table-condensed" border="1px" align="center" id="editTable">								 	
 				<tr>					
-					<td>
+					<td style="width:10%">
 						<label>카테고리</label>
 					</td>
 					<td>
@@ -247,17 +246,15 @@
 							<c:forEach var="codeVo" items="${codeList}" varStatus="status">
 								<option value="${status.index}">${codeVo.dtl_cd_nm}</option>
 							</c:forEach>
-				   		</select>
+						</select>
 					</td>
 				</tr>
 				<tr>
 					<td>
 						<label>제목</label>
 					</td>
-					<td>
-						<label>
-							${resume.rsm_title}
-						</label>
+					<td>						
+						${resume.rsm_title}						
 						<input type="hidden" id="rsm_title" name="rsm_title" value="${resume.rsm_title}"/>
 					</td>
 				</tr>
@@ -289,66 +286,74 @@
 						<textarea id="rsm_content" name="rsm_content">${resume.rsm_content }</textarea>						
 					</td>
 				</tr>
-			<!-- end 복붙 -->
-			<tbody id="AddOption" >				
-				<c:forEach var="item" items="${itemList}" varStatus="status">
-					<c:if test="${item.u_id eq resume.u_id }">
-						<tr id="testTr">
-							<td colspan="2">			
-								<div class="container">			  							
-			   						<div class="col-md-10">
-										<table class="table table-bordered table-hover table-condensed" border="1px" 
-								   						cellpadding="2" cellspacing="2" align="center">					
-											<tr>
-												<td>
-													<input type="hidden" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">
-													<input type="text" id="itm_title" name="itm_title" value="${item.itm_title}"/> 
-												</td>
-											</tr>
-											<tr height="150px;">
-												<td>
-													<textarea id="itm_content" name="itm_content"  rows="10" cols="100" >${item.itm_content }</textarea>
-												</td>
-											</tr>							
-											<tr>
-												<td align="right">글자수 :
-													<span id="counter" name="counter">
-														${fn:length(item.itm_content) }
-														자
-													</span>
-												</td>
-											</tr>
-											<tr height="100px;">
-												<td align="right">
-													<input type="button" value="+" id="itemAdd" />
-													<input type="button" name="delRow" class="delRow" value="-" />
-												</td>
-											</tr>
-							   			</table><!-- 내용테이블 -->
-										<table class="table table-bordered table-hover table-condensed" border="1px" 
-										   			cellpadding="2" cellspacing="2" align="center">
-										</table>
-									</div> <!-- span1 -->
-									<div class="col-md-2">
-										<input type="button" id="moveUp" value="▲" /><br/>
-										<input type="button" id="moveDown" value="▼" />
-									</div><!-- span2 -->									
-								</div><!-- 컨테이너 -->
+				</table>
+				<!-- end 복붙 -->				
+				<table class="table table-bordered table-condensed" align="center" id="addTable" style="border: hidden;">				
+					<tbody id="AddOption" >				
+						<c:forEach var="item" items="${itemList}" varStatus="status">
+							<c:if test="${item.u_id eq resume.u_id }">
+								<tr id="testTr">
+									<td colspan="2">			
+										<div class="container">			  							
+					   						<div style="width:100%; display:inline-block;">
+												<table class="table table-bordered table-condensed" border="1px" align="center" style="width:100%; border:hidden;">					
+													<tr>
+														<td style="width:98%;">
+															<input type="hidden" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">
+															<input type="text" id="itm_title" name="itm_title" style="width:100%;" value="${item.itm_title}"/>														 
+														</td>
+														<td style="width:2%;">
+															<input type="button" name="delRow" class="delRow" value="x" />
+														</td>														
+													</tr>
+													<tr height="150px;">
+														<td colspan="2">
+															<textarea id="itm_content" name="itm_content"  rows="10" cols="100" >${item.itm_content }</textarea>
+														</td>
+													</tr>							
+													<tr>
+														<td colspan="2" align="right">글자수 :
+															<span id="counter" name="counter">
+																${fn:length(item.itm_content) }
+																자
+															</span>
+														</td>
+													</tr>
+<!--  													<tr height="100px;">
+														<td align="right">
+															<input type="button" value="+" id="itemAdd" />
+															<input type="button" name="delRow" class="delRow" value="-" />
+														</td>
+													</tr> -->
+									   			</table><!-- 내용테이블 -->										
+											</div> <!-- span1 -->
+											<div style="margine:0 auto;">
+												<input type="button" id="moveDown" value="▼" style="width: 50%; float:right;"/>
+												<input type="button" id="moveUp" value="▲" style="width: 50%; float:left;"/>
+											</div><!-- span2 -->									
+										</div><!-- 컨테이너 -->
+									</td>
+								</tr><!-- testTr -->
+							</c:if>					
+						</c:forEach>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td align="center">								 
+								<input type="button" value="+" id="itemAdd" />
 							</td>
-						</tr><!-- testTr -->
-					</c:if>					
-				</c:forEach>
-			</tbody>
-			<tr>
-				<td colspan="2">
-				<div align="center">
-					<input type="button" id="btnCancel" value="작성취소">
-					<input type="button" id="btnSubmit" value="작성완료">
-				</div>	
-				</td>
-			</tr>							
-		</table><!-- 바깥테이블 -->
-		</form>
-	</div><!-- 바깥테이블 div -->
+						</tr>
+						<tr>							
+							<td colspan="2">							
+							<div align="center">
+								<input type="button" id="btnCancel" value="작성취소">
+								<input type="button" id="btnSubmit" value="작성완료">
+							</div>	
+							</td>
+						</tr>		
+					</tfoot>					
+				</table><!-- 바깥테이블 -->
+			</form>
+		</div><!-- 바깥테이블 div -->
 </body>
 </html>
