@@ -165,7 +165,7 @@
 	</select>
 	
 	<select id="do_searchRank" resultType="ExpertVO">
-		SELECT u_id,
+		SELECT u_id as exp_id,
 		       u_name,
 		       exp_title,
 		       exp_profile,

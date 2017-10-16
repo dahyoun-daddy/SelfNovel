@@ -194,4 +194,25 @@ SELECT a1.*,
 		START WITH itm_prd_id IS NULL
 		CONNECT BY PRIOR itm_form_id = itm_prd_id 
 	</select>
+	
+	
+	<!-- 2017-10-16 @autor LSG -->
+	<!-- order전용 원본 조회 -->
+	<select id="do_search_order" parameterType="com.sn.resume.domain.ItmVO"
+							  resultType="com.sn.resume.domain.ItmVO">
+		SELECT rsm_id,
+		       itm_form_id,
+		       itm_prd_id,
+		       itm_title,       
+		       itm_content,
+		       u_id,
+		       itm_reg_dt,
+		       itm_seq,
+		       itm_use_yn
+		FROM item
+		WHERE rsm_id = 144
+      	  AND itm_prd_id IS NULL
+		  AND itm_use_yn = 1 
+   		ORDER BY itm_seq	
+	</select>
 </mapper>    

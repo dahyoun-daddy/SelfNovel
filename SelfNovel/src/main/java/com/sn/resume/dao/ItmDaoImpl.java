@@ -121,4 +121,21 @@ public class ItmDaoImpl implements ItmDao {
 		
 		return sqlSession.update(statement, inItmVO);
 	}
+	
+	/**
+	 * do_search_order
+	 * detail: order에서 사용되는 조회
+	 * 최초작성: 2017-10-16
+	 * 
+	 * @author LSG
+	 * @param dto
+	 * @return
+	 */
+	@Override
+	public List<?> do_search_order(DTO dto) {
+		String statement = namespace +".do_search_order";//item.xml연결
+		ItmVO  inItmVO   = (ItmVO)dto;             //파라미터 주입
+		return sqlSession.selectList(statement, inItmVO);		
+	}
 }
+

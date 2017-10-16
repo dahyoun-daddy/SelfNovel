@@ -76,14 +76,17 @@ public class OrdersDaoImpl implements OrdersDao {
 		//SEARCH_ID	: 입력 아이디
 		//PAGE_SIZE	: 기본값 10
 		//PAGE_NUM	: 기본값 1		
+//		OrdersVO inUserVO = (OrdersVO)dto;
+//		Hashtable<String, String> param = inUserVO.getParam();
+//		param.put("SEARCH_DIV",StringUtil.nvl(param.get("SEARCH_DIV"), "user"));
+//		param.put("SEARCH_ID",StringUtil.nvl(param.get("SEARCH_ID"), "noUser"));
+//		param.put("PAGE_SIZE",StringUtil.nvl(param.get("PAGE_SIZE"), "10"));
+//		param.put("PAGE_NUM",StringUtil.nvl(param.get("PAGE_NUM"), "1"));
+		
+//		log.debug("in dto param: "+inUserVO.getParam().toString());	
+		
 		OrdersVO inUserVO = (OrdersVO)dto;
 		Hashtable<String, String> param = inUserVO.getParam();
-		param.put("SEARCH_DIV",StringUtil.nvl(param.get("SEARCH_DIV"), "user"));
-		param.put("SEARCH_ID",StringUtil.nvl(param.get("SEARCH_ID"), "noUser"));
-		param.put("PAGE_SIZE",StringUtil.nvl(param.get("PAGE_SIZE"), "10"));
-		param.put("PAGE_NUM",StringUtil.nvl(param.get("PAGE_NUM"), "1"));
-		
-		log.debug("in dto param: "+inUserVO.getParam().toString());		
 		return sqlSession.selectList(statement, param);
 	}
 

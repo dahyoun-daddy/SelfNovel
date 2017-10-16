@@ -31,8 +31,8 @@
 	<!-- parameter로 map을 사용한다. -->
 	<!-- 필요 String: page_num, page_size, isExpert, (expert_id or u_id)-->
 	<!-- 
-		isExpert가 exp_id일시 exp_id가 검색조건
-		isExpert가 u_id일시 u_id가 검색조건
+		isExpert가 2(exp_id)일시 exp_id가 검색조건
+		isExpert가 1(u_id)일시 u_id가 검색조건
 	 -->
 	<select id="do_search" parameterType="String" resultType="OrdersVO">
 		<include refid="com.sn.common.pagingPre"/>
@@ -46,7 +46,7 @@
 	             GET_CD_NM('C001',ord_state) as ord_state_nm,
 		  		 GET_RS_NM(rsm_id) as rsm_title
 	      FROM ORDERS A
-	      <include refid="orderIdSearchCondition" />
+ 		  <include refid="orderIdSearchCondition" />
 	      ORDER BY A.ord_reg_dt DESC
 	    <include refid="com.sn.common.pagingPost" /> 
 	</select>
@@ -54,11 +54,11 @@
 	<sql id="orderIdSearchCondition">
  		<where>    
 		    <choose>
-		    	<when test="SEARCH_DIV == 'exp'">
-		    		AND A.exp_id=#{SEARCH_ID}
+		    	<when test="SEARCH_DIV == 2">
+		    		A.exp_id=#{SEARCH_ID}
 		    	</when>
-		    	<when test="SEARCH_DIV == 'user'">
-		    		AND A.u_id=#{SEARCH_ID}
+		    	<when test="SEARCH_DIV == 1">
+		    		A.u_id=#{SEARCH_ID}
 		    	</when>
 		    	<otherwise>
 		    	

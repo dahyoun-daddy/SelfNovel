@@ -38,6 +38,8 @@ public class OrdersController {
 	//servlet
 	/***********************************************/
 	/**
+	 * not use
+	 * 
 	 * ModelAndView
 	 * detail: main list view
 	 * @param request
@@ -95,34 +97,52 @@ public class OrdersController {
 	
 	@RequestMapping(value = "/mypage/orders/pagelist.do", method = RequestMethod.GET)
 	public ModelAndView do_search(HttpServletRequest req) {
-
+		//*******************시나리오*************************
+		//1. 먼저 session으로부터 유저의 등급, 아이디를 얻는다.
+		//2. 유저의 등급, 아이디, 페이지 사이즈, 페이지 번호를 inVO에 넣는다.
+		//3. 가져온 데이터 리스트를 modelAndView에 넣는다.
+		//4. 유저의 등급을 modelAndView에 넣는다.
+		//5. 페이징을 위한 기타 변수들을 넣는다. 끝.		
+		
 		OrdersVO ordersVO = new OrdersVO();
 		Hashtable<String, String> searchParam = new Hashtable<String, String>();// 검색조건
+		List<OrdersVO> ordersList;
+		String u_id 	  = "";	//유저 아이디
+		int	   u_level	  = 0;	//유저 등급
+		String p_pageSize = "";	//페이지 사이즈
+		String p_pageNo	  = "";	//페이지 번호
+		int TOTALCNT 	  = 0;	//전체 게시글수
 		
-		searchParam.put("SEARCH_DIV", "user");
-		searchParam.put("SEARCH_ID", "sty2003");	 
+		//1. 먼저 session으로부터 유저의 등급, 아이디를 얻는다.
+		u_id 	= (String) req.getSession().getAttribute("u_id");
+		u_level = (Integer) req.getSession().getAttribute("u_level");
 		
-		String p_pageSize = StringUtil.nvl(req.getParameter("PAGE_SIZE"), "10");
-		String p_pageNo = StringUtil.nvl(req.getParameter("PAGE_NUM"), "1");
+		//2. 아이디, 유저의 등급, 페이지 사이즈, 페이지 번호를 inVO에 넣는다.	
+		p_pageSize = StringUtil.nvl(req.getParameter("PAGE_SIZE"), "10");
+		p_pageNo = StringUtil.nvl(req.getParameter("PAGE_NUM"), "1");
 		searchParam.put("PAGE_SIZE", p_pageSize);
 		searchParam.put("PAGE_NUM", p_pageNo);
-
+		searchParam.put("SEARCH_ID", u_id);	 
+		searchParam.put("SEARCH_DIV", String.valueOf(u_level));	
 		ordersVO.setParam(searchParam);
 
-		List<OrdersVO> ordersList = (List<OrdersVO>) orderSvc.do_search(ordersVO);
-		int TOTALCNT = 0;
+		log.debug(searchParam.toString());
+		
+		//3. 가져온 데이터 리스트를 modelAndView에 넣는다.		
+		ordersList = (List<OrdersVO>) orderSvc.do_search(ordersVO);
+		
+		//3-1. totalCnt 구함
 		if (ordersList != null && ordersList.size() > 0)
 			TOTALCNT = ordersList.get(0).getTotalNo();
 		
-		// TO_DO: pageing처리 할것
+		//4. 유저의 등급을 modelAndView에 넣는다.
+		//5. 페이징을 위한 기타 변수들을 넣는다. 끝.			
 		ModelAndView modelAndView = new ModelAndView();
-
+		modelAndView.addObject("u_level", u_level);
 		modelAndView.addObject("ordersList", ordersList);
 		modelAndView.addObject("PAGE_SIZE", p_pageSize);
 		modelAndView.addObject("PAGE_NUM", p_pageNo);
-		// 총글수
 		modelAndView.addObject("TOTALCNT", TOTALCNT);
-		log.debug("TOTALCNT : "+TOTALCNT);
 		modelAndView.setViewName("/mypage/orders/orders_list");
 
 		return modelAndView;

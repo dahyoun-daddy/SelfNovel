@@ -123,12 +123,43 @@
 		/********************************************************/
 		/* do_save */
 		/********************************************************/
-		$('#do_save').on('click', function() {
-			alert(1);
-			
+		$('#do_save').on('click', function() {			
 			var saveFrm = document.saveFrm;	
 			saveFrm.submit();
 		});
+		
+		/********************************************************/
+		/* 중복검사 */
+		/********************************************************/	
+		$('#do_chkId').on('click', function() {
+			if($('#u_id').val() == ""){
+        		alert("값이 입력되지 않았습니다.");
+        		return;				
+			}
+			
+			$.ajax({
+	            url: "/controller/user/do_chkId.do",
+	            data: {u_id: $("#u_id").val()},
+	            type: 'POST',
+	            success: function(result){
+	            	if(result == 'fail'){
+	            		alert("이미 존재하는 아이디입니다.");
+	            		return;
+	            	} else{
+	            		alert("사용 가능한 아이디입니다.");
+	            		$('#do_save').attr("disabled", false);
+	            		return;
+	            	}	
+	            }
+	        });
+		});//end_do_chkId
+		
+		/********************************************************/
+		/* 아이디창 비활성화 */
+		/********************************************************/	
+		$('#u_id').on('keyup', function() {
+			$('#do_save').attr("disabled", true);
+		});//end_do_chkId
 	});
 
 
@@ -220,7 +251,7 @@
 		<%=StringUtil.renderPaging(oTotalCnt, oPage_num, oPage_size, 10, "manager_user_list.do", "do_search_page") %>
 	</div>		
 	<form action="">
-		<input type="button" class="btn btn-success" value="관리자 추가" data-toggle="modal" data-target="#addManager">
+		<input type="button" class="btn btn-success" id="addManagerBtn" value="관리자 추가" data-toggle="modal" data-target="#addManager">
 	</form>
 
 	<!-- Modal -->
@@ -234,12 +265,13 @@
 	      <div class="modal-body" align="center">
 			 <form name='saveFrm' action='do_save.do' method='post'>
 			 	<label>아이디</label>
-			 	<input type="text" id="u_id" name="u_id"/><br/>
+			 	<input type="text" id="u_id" name="u_id"/>
+			 	<input type="button" id="do_chkId" value="중복검사"><br/>
 			 	<label>비밀번호</label>
 				<input type="text" id='u_password' name='u_password'><br/>
 				<label>이름</label>
 				<input type="text" id='u_name' name='u_name'><br/>
-				<button type="button" class="btn btn-success" data-dismiss="modal" id="do_save">등록</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" id="do_save" disabled="disabled">등록</button>
 			 </form>
 	      </div>
 	      <div class="modal-footer">
