@@ -50,6 +50,59 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	@Autowired
 	private CodesDao codesDao;
 	
+	@RequestMapping(value="expert/do_order.do")
+	public void do_order(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		Hashtable<String, String> param = new Hashtable<String, String>();
+		RsmVO rsmVO = new RsmVO();
+		
+		String[] itm_title_arr = req.getParameter("itm_titles").split("\\\\");
+		String[] itm_content_arr = req.getParameter("itm_contents").split("\\\\");
+		System.out.println("asdf33: " + itm_title_arr.toString());
+		String itm_inserts ="";
+		String itm_contents = "";
+		
+		for(int i=0; i<itm_title_arr.length; i++) {
+			if(i==0 || itm_title_arr.length == 1) {	// 처음
+				if(itm_title_arr.length == 1) {	// 항목이 하나밖에 없으면
+					itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
+					itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + "\n";
+				} else {
+					itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
+					itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + ",\n";
+				}
+				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
+				itm_inserts += "VALUES (resume_seq.currval, item_seq.nextval, resume_seq.currval, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
+			}else if(i == itm_title_arr.length-1) {	// 마지막 경우
+				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
+				itm_inserts += "VALUES (resume_seq.currval, item_seq.currval+" + i + ", resume_seq.currval, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
+				itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
+				itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + "\n";
+				break;
+			}else {	// 이외
+				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
+				itm_inserts += "VALUES (resume_seq.currval, item_seq.currval+" + i + ", resume_seq.currval, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
+				itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
+				itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + ",\n";
+			}
+		}
+		
+		param.put("itm_inserts", itm_inserts);
+		param.put("itm_contents", itm_contents);
+		rsmVO.setParam(param);
+		rsmVO.setU_id(req.getParameter("u_id"));
+		rsmVO.setRsm_title(req.getParameter("rsm_title"));
+		rsmVO.setRsm_content(req.getParameter("rsm_content"));
+		
+		if(expertSvc.do_saveOrder(rsmVO) > 0) {
+			for(int i=0; i<itm_title_arr.length; i++) {
+				expertSvc.do_nextSeq();
+			}
+			res.getWriter().write("success");
+		} else {
+			res.getWriter().write("fail");
+		}
+	}
+	
 	@RequestMapping(value="expert/do_detail_list.do")
 	public ModelAndView do_detail_list(HttpServletRequest req) {
 		ExpertVO expertVO = new ExpertVO();

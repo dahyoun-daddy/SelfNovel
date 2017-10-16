@@ -4,6 +4,33 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sn.expert.repository.mappers.expert">
+	<select id="do_nextSeq" resultType="com.sn.resume.domain.RsmVO">
+		SELECT item_seq.nextval as rsm_count FROM dual
+	</select>
+	
+	<update id="do_saveOrder" parameterType="com.sn.resume.domain.RsmVO">
+		INSERT ALL
+		    INTO resume (rsm_id, img_id, rsm_title, rsm_content, u_id, rsm_reg_dt, rsm_count, rsm_recommend, rsm_use_yn, rsm_ord_yn, rsm_div)
+		    VALUES (resume_seq.nextval, img_id, rsm_title, rsm_content, u_id, SYSDATE, rsm_count, rsm_recommend, rsm_use_yn, rsm_ord_yn, rsm_div)
+		    ${itm_inserts}
+		SELECT *
+		FROM
+		(
+		    SELECT 
+		           null img_id,
+		           '${rsm_title}' rsm_title,
+		           '${rsm_content}' rsm_content,
+		           '${u_id}' u_id,
+		           0 rsm_count,
+		           0 rsm_recommend,
+		           1 rsm_use_yn,
+		           0 rsm_ord_yn,
+		           7 rsm_div,
+		           ${itm_contents}
+		    FROM dual
+		)
+	</update>
+
 	<select id="do_chkNaver" parameterType="ExpertVO" resultType="ExpertVO">
 		SELECT *
 		  FROM users, expert, codes
@@ -28,7 +55,6 @@
 		  FROM users, expert
 		 WHERE u_id = exp_id
 		   AND u_id = '${u_id}'
-		   AND u
 		   AND u_password = '${u_password}'
 		   AND u_level = 2
 	</select>

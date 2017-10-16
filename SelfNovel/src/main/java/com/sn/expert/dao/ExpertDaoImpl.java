@@ -52,7 +52,6 @@ public class ExpertDaoImpl implements ExpertDao {
 		searchParam.put("PAGE_SIZE", page_size+"");
 		searchParam.put("PAGE_NUM", page_num+"");
 		
-		
 		String searchWord  = searchParam.get("searchWord").toString();
 		String searchDiv   = searchParam.get("searchDiv").toString();
 		String searchCategory   = searchParam.get("searchCategory").toString();
@@ -147,6 +146,33 @@ public class ExpertDaoImpl implements ExpertDao {
 		log.debug("dto.toString(): " + dto.toString());
 		log.debug("=================================");
 		return sqlSession.selectOne(namespace+".do_chkNaver", (ExpertVO) dto);
+	}
+
+	@Override
+	public int do_saveOrder(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_saveOrder");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		
+		RsmVO param=(RsmVO)dto;		
+		Hashtable<String, String> searchParam = param.getParam();
+		
+		searchParam.put("rsm_title", param.getRsm_title());
+		searchParam.put("rsm_content", param.getRsm_content());
+		searchParam.put("u_id", param.getU_id());
+		searchParam.put("itm_inserts", param.getParam().get("itm_inserts"));
+		searchParam.put("itm_contents", param.getParam().get("itm_contents"));
+		
+		return sqlSession.update(namespace+".do_saveOrder", searchParam);
+	}
+
+	@Override
+	public DTO do_nextSeq() {
+		log.debug("=================================");
+		log.debug(".do_nextSeq");
+		log.debug("=================================");
+		return sqlSession.selectOne(namespace+".do_nextSeq");
 	}
 	
 }

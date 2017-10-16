@@ -102,4 +102,19 @@ public class ExpertSvcImpl implements ExpertSvc{
 		log.debug("2=======================");	
 		return expertDao.do_chkNaver(dto);
 	}
+
+	@Override
+	public int do_saveOrder(DTO dto) {
+		log.debug("2=======================");
+		log.debug(dto.toString());
+		log.debug("2=======================");	
+		return expertDao.do_saveOrder(dto);
+	}
+
+	@Override
+	public DTO do_nextSeq() {
+		log.debug("2=======================");
+		log.debug("2=======================");	
+		return expertDao.do_nextSeq();
+	}
 }
