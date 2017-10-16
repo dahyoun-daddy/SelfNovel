@@ -4,6 +4,11 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 <% response.setContentType("text/html; charset=UTF-8"); %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<jsp:useBean id="toDay" class="java.util.Date" />
+
 <%
   //contextPath
   String firstContextPath = request.getContextPath();
@@ -32,14 +37,33 @@
 <script type="text/javascript">
 		
 	$(function() {
+		
+		var btn_show = "<span class='btn-label'>"
+						+ "<i class='glyphicon glyphicon-menu-down'></i>"
+						+ "</span>"
+						+ "첨삭 보기";
+		var btn_hide = "<span class='btn-label'>"
+		  				+ "<i class='glyphicon glyphicon-menu-up'></i>"
+						+ "</span>"
+						+ "첨삭 접기";					   
+		
 		//첨삭부분의 히든속성을 토글시켜주는 메소드
 		$("form[name=frm]").on("click", "#doShowEdit", function(){
 			
 			//버튼 모양 변경
-			if($(this).val() == "첨삭보기"){
+/* 			if($(this).val() == "첨삭보기"){
 				$(this).val("첨삭접기");
 			}else if($(this).val() == "첨삭접기"){
 				$(this).val("첨삭보기");
+			} */
+			
+			if($("#toggleFlag").val() == "false"){				
+				$("#toggleFlag").val("true");
+				$(this).html(btn_hide);
+				
+			}else{
+				$("#toggleFlag").val("false");				
+				$(this).html(btn_show);
 			}
 			
 			var parent = $(this).parent();					//현재 선택된 Item
@@ -79,6 +103,25 @@
 		});//close doShowEdit_click
 		
 		/**************************
+		* '삭제하기' 버튼 클릭시 이벤트
+		**************************/
+		$("#btnDelete").on("click", function(){			
+			if(confirm("정말 삭제하시겠습니까??") == true){				
+				var rsm_id = $("#rsm_id").val();
+				$.ajax({
+					type : "POST",
+					url : "do_delete.do",
+					dataType : "html",
+					data : {"rsm_id" : rsm_id},
+					success : function(data){
+						alert("삭제 성공!");						
+						location.href="do_search.do";
+					}
+				});
+			}				
+		});//close btnDelete_on_click
+		
+		/**************************
 		* '수정하기'버튼 클릭시 이벤트
 		***************************/
 		$("#btnModify").on("click", function(){			
@@ -93,11 +136,13 @@
 		$("form[name=frm]").on("click", "#btnModResume", function(){
 			var selected = $(this).parent().parent().parent();	   //현재 선택된 항목
 			var sel_title = selected.find("#itm_title").val();	   //선택된 항목의 제목
-			var sel_content = selected.find("#itm_content").html();//첨삭 선택된 항목의 내용
+			var sel_content = selected.find("#itm_content").html();//첨삭 선택된 항목의 내용			
 			var sel_id = selected.find("#itm_form_id").val();	   //첨삭 선택된 항목의 id
 			
+			var sel_contentR = sel_content.trim();
+			
 			$("#modTitle").val(sel_title);
-			$("#modContent").val(sel_content);			
+			$("#modContent").val(sel_contentR);			
 			$("#modItmId").val(sel_id);
 			$("#modModal").modal();
 		});//close btnAddResume_click
@@ -137,10 +182,12 @@
 			var sel_content = selected.find("#itm_content").html();//첨삭 선택된 항목의 내용
 			var sel_id = selected.find("#itm_form_id").val();	   //첨삭 선택된 항목의 id
 			
+			var sel_contentR = sel_content.trim();//첨삭 선택된 항목의 내용
+			
 			$("#modalTitleOrigin").val(sel_title);
-			$("#modalContentOrigin").val(sel_content);
+			$("#modalContentOrigin").val(sel_contentR);
 			$("#modalTitleNew").val(sel_title);
-			$("#modalContentNew").val(sel_content);
+			$("#modalContentNew").val(sel_contentR);
 			$("#modalItmId").val(sel_id);
 			$("#itmModal").modal();
 		});//close btnAddResume_click		
@@ -249,35 +296,31 @@
 		}
 		
 		
-		var item_table = "<table class='table table-bordered table-hover table-condensed' border='1px'" 
+		var item_table = "<table class='table table-bordered table-condensed' border='1px'" 
 		   	+ "cellpadding='2' cellspacing='2' align='center' width='550px;'>"
 		   	+ "<tr>"		   	 
-		   	+ "<td>"
+		   	+ "<td style='text-align: center; background-color: D6E6F5; width:15%;'>"
 		   	+ "<label>"
 		   	+ "작성자"
 		   	+ "</label>"
 		   	+ "</td>"
-		   	+ "<td>"
-		   	+ "<label>"
-		   	+ u_name
-		   	+ "</label>"
+		   	+ "<td style='width:50%;'>"		   	
+		   	+ u_name		   	
 		   	+ "</td>"
-		   	+ "<td>"
+		   	+ "<td style='text-align: center; background-color: D6E6F5; width:15%;'>"
 		   	+ "<label>"
 		   	+ "작성일"
 		   	+ "</label>"
 		   	+ "</td>"
-		   	+ "<td>"
-		   	+ "<label>"
-		   	+ item.itm_reg_dt
-		   	+ "</label>"		   	
+		   	+ "<td style='width:30%'>"		   	
+		   	+ item.itm_reg_dt		   			   	
 		   	+ "</td>"
 		   	+ "</tr>"
 			+ "<tr>"
-			+ "<td colspan='5'>"
-			+ "<label>"
-			+ item.itm_title
-			+ "</label>"
+			+ "<td colspan='5' >"
+			+ "<h4><b>"
+			+ "RE:" + item.itm_title
+			+ "</b></h4>"
 			+ "<input type='hidden' id='u_id' value=" + item.u_id + ">"
 			+ "<input type='hidden' id='itm_title' value=" + item.itm_title + ">"
 			+ "<input type='hidden' id='itm_form_id' value=" + item.itm_form_id + ">"
@@ -286,7 +329,9 @@
 			+ "</tr>"
 			+ "<tr>"
 			+ "<td colspan='5'>"
-			+ "<textarea rows='5' cols='80' style='border: 0px;' readonly>" + item.itm_content + "</textarea>"
+			+ "<div style='background-color: #FAFAFA; border: 1px solid #E6E6E6;'>"												
+			+ item.itm_content
+		    + "</div>"			
 			+ "</td>"
 			+ "</tr>"
 		+"</table>"	
@@ -301,10 +346,18 @@
 		resize: vertical;
 		height: 200px;
 	}
+	img, input {
+	   vertical-align:middle;  
+	}
+	
+	.btn-recommend{
+		padding-top: 0;
+		padding-bottom: 0;
+		height: 35px;		
+	}
 	
 	.btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
-	.btn-labeled {padding-top: 0;padding-bottom: 0;}
-	.btn { margin-bottom:10px; }
+	.btn-labeled {padding-top: 0;padding-bottom: 0;}	
 	
 </style>
 
@@ -319,69 +372,111 @@
 	<!-- for excel download end -->
 
 	<h2>자기소개서 view</h2>
-	<hr/>
-	<div id="good"></div>
-	<form action="#" name="frm" method="post" class="form-inline">
+	<hr/>	
+	<form action="#" name="frm" method="post" class="form-inline">		
 		<input type="hidden" id="rsm_id" name="rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
 		<input type="hidden" id="u_name" value="${rsmVO.u_name}" ><!-- 작성자 id -->
 		<input type="hidden" id="rsm_title" value="${rsmVO.rsm_title}"><!-- 자소서 제목 -->
 		
+		<!-- 버튼 div -->
+		<div style="float:right;">
+		
 		<!-- 세션에 아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 일치하는 경우에만 수정하기 버튼을 보여준다. -->
 		<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq rsmVO.u_id}">
-			<input type="button" id="btnModify" value="수정하기" class="btn btn-default" style="float:right;">
+			<button type="button" id="btnDelete" value="삭제하기 " class="btn btn-labeled btn-info" >			
+				<span class="btn-label" style="height: 34px;">  
+					<i class="glyphicon glyphicon-erase" ></i>																											
+				</span>
+				삭제			
+			</button>						
+			&nbsp;
+			<button type="button" id="btnModify" value="수정하기" class="btn btn-labeled btn-info">
+				<span class="btn-label" style="height: 34px;">
+					<i class="glyphicon glyphicon-edit"></i>																																
+				</span>
+				수정
+			</button>
+			&nbsp;			
 		</c:if>										
 		<!-- 세션아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 다른 경우에만 신고하기 버튼을 보여준다. -->
 		<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne rsmVO.u_id}">
-			<input type="button" id="btnReport" value="신고하기" class="btn btn-default" style="float:right;">
-		</c:if>					
-		<input type="button" id="btnBackToList" value="목록으로" class="btn btn-default" style="float:right;">
+			<button type="button" id="btnReport" value="신고하기" class="btn btn-labeled btn-info">
+				<span class="btn-label" style="height: 34px;">
+					<i class="glyphicon glyphicon-list"></i>			
+				</span>
+				신고
+			</button>
+			&nbsp;			
+		</c:if>			
+		<button type="button" id="btnBackToList" value="목록으로" class="btn btn-labeled btn-info">
+			<span class="btn-label" style="height: 34px;">
+				<i class="glyphicon glyphicon-list"></i>				
+			</span>			
+			목록
+		</button>				
 		<br>
 		<br/>				
 		<br>
-		<table class="table table-bordered table-hover table-condensed" border="1px" align="center" width="600px;">
+		</div>
+		<!-- //버튼 div -->
+		<table class="table table-bordered table-condensed" border="1px" align="center">
 			<tr>
-				<td style="text-align: center;" width="15%">
+				<td style="text-align: center; background-color: D6E6F5;" width="15%">
 					<label>제목</label>
 				</td>
-				<td width="65%">					
-					<label class="table_item">${rsmVO.rsm_title}</label>					
+				<td width="50%">					
+					${rsmVO.rsm_title}					
 				</td>
-				<td width="5%">
+				<td style="text-align: center; background-color: D6E6F5;" width="15%">					
 					<label class="table_item">
 						작성일
 					</label>
 				</td>
-				<td width="15%">
-					<label class="table_item">${rsmVO.rsm_reg_dt}</label>
+				<td width="30%" align="center">
+					<c:set var="temp" value="${rsmVO.rsm_reg_dt }" />
+					<fmt:parseDate value="${temp}" pattern="yyyy-MM-dd HH:mm:SS" var="reg_dt" />
+					<fmt:formatDate value="${reg_dt }" pattern="HH:mm:SS" var="f_reg_tm" />
+					<fmt:formatDate value="${reg_dt }" pattern="yyyy-MM-dd" var="f_reg_dt" />
+					<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd" var="now"/>
+					<!-- 작성일이 오늘이면 시간만 표시, 그 외는 날짜만 표시 -->								
+					<c:choose>										
+						<c:when test="${f_reg_dt eq now}">											
+							<c:out value="${f_reg_tm }"></c:out>
+						</c:when>
+						<c:otherwise>
+							<c:out value="${f_reg_dt}"/>
+						</c:otherwise>
+					</c:choose>					
 				</td>
 			</tr>
 			<tr>
-				<td style="text-align: center;">
+				<td style="text-align: center; background-color: D6E6F5;">
 					<label>작성자</label>
 				</td>
 				<td colspan="3">
-					<label>
-						${rsmVO.u_name}
-					</label>					
+					${rsmVO.u_name}										
 				</td>				
 			</tr>
 			<tr>
-				<td style="text-align: center;">
+				<td style="text-align: center; background-color: D6E6F5;">
 					<label>
 						내용
 					</label>
 				</td>
-				<td colspan="3">
-					<label>
-						${rsmVO.rsm_content }
-					</label>					 
+				<td colspan="3">				
+					${rsmVO.rsm_content }									 
 				</td>
 			</tr>
 			<tr>
 				<td colspan="4">
 					<br/>
 					<div align="right">
-						<input type="button" id="btnResumeDown" value="자기소개서 Down" class="btn btn-default">
+						<button type="button" id="btnResumeDown" value="자기소개서 Down" class="btn btn-labeled btn-default">
+							<span class="btn-label" style="height: 34px;">
+								<i class="glyphicon glyphicon-download" style="size: 350"></i>
+							</span>							
+							자기소개서 Down
+						</button>
 					</div>
 					<br/>
 					<div id="items" align="center">
@@ -389,12 +484,13 @@
 					<c:forEach var="item" items="${itmList}">
 						<c:choose>							
 							<c:when test="${item.itm_prd_id eq null}">
-								<!-- 본문영역 -->						
-								<table class="table table-bordered table-hover table-condensed" border="1px" 
+								<!-- 본문영역 -->
+								<hr/>						
+								<table class="table table-condensed" style="border: hidden;" 
 											cellpadding="2" cellspacing="2" align="center" width="550px;">									
 									<tr>
 										<td>
-											<label>${item.itm_title }</label>											
+											<h4><b>${item.itm_title }</b></h4>											
 											<input type="hidden" id="itm_title" value="${item.itm_title}">
 											<input type="hidden" id="itm_form_id" value="${item.itm_form_id}"><!-- 항목 아이디 -->
 											<input type="hidden" id="itm_childs" value="${item.totalNo}"><!-- 하위노드 개수 -->
@@ -402,27 +498,53 @@
 										
 									</tr>
 									<tr>
-										<td><textarea id="itm_content" readonly>${item.itm_content}</textarea></td>
+										<td style="border: hidden;">
+											<div id="itm_content" style="background-color: #FAFAFA; border: 1px solid #E6E6E6;">												
+												${item.itm_content}
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="border: hidden;" align="right">
+											글자수 : <b>${fn:length(item.itm_content) } </b>자
+										</td>
 									</tr>
 									<tr>																					
 										<!-- 1. 글의 작성자와 세션아이디가 일치하면 수정하기 버튼을 보여준다. -->
 										<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq item.u_id}">
-											<td style="float: right;">
-												<input type="button" value="수정하기" id="btnModResume" class="btn btn-default">
+											<td style="float: right; border:hidden;">												
+												<button type="button" id="btnModResume" value="수정하기" class="btn btn-labeled btn-default">
+													<span class="btn-label" style="height: 34px;">
+														<i class="glyphicon glyphicon-edit"></i>																																
+													</span>
+													수정하기
+												</button>
 											</td>
 										</c:if>
 										<!-- 2. 글의 작성자와 세션아이디가 다르면 첨삭하기 버튼을 보여준다. -->
-										<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne item.u_id}">
-											<td style="float: right;">	
-												<input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default">
+										<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne item.u_id}">										
+											<td style="float: right; border:hidden;">	
+												<button type="button" id="btnAddResume" class="btn btn-labeled btn-default">
+													<span class="btn-label" style="height: 34px;">
+														<i class="glyphicon glyphicon-edit"></i>
+													</span>
+													첨삭하기
+												</button> 
+												<!-- <input type="button" value="첨삭하기" id="btnAddResume" class="btn btn-default"> -->
 											</td>
 										</c:if>										
 									</tr>
 									<c:if test="${item.totalNo ne '0'}">
 										<!-- <img src="" width="60px" height="50px" name="doShowEdit" id="doShowEdit">-->
-										<tr>
-											<td>
-												<input type="button" name="doShowEdit" id="doShowEdit" value="첨삭보기">
+										<tr>											 
+											<td align="center" style="border:hidden;">
+												<input type="hidden" id="toggleFlag" value="false">
+												<button type="button" name="doShowEdit" id="doShowEdit" class="btn btn-labeled btn-primary">
+													<span class="btn-label">
+														<i class="glyphicon glyphicon-menu-down"></i>																											
+													</span>
+													첨삭보기
+												</button>													
 												<!-- 임의로 버튼으로 구현을 시도한다. 나중에 이미지 변경시 같은 이름으로 만들어주거나, 아니면 버튼을 이미지로 만들어도 좋다 -->
 												<!-- 2017-09-26 pinkbean -->																		
 												<!-- 숨겨지는 부분이다. 버튼을 클릭하면 토글된다. -->
@@ -498,7 +620,7 @@
 		<!-- **************************** ppt 미리보기 부분 end**************************** -->
 		<div>
 			<div align="center">				
-				<button type="button" id="btnRecommend" class="btn btn-labeled btn-primary" >								
+				<button type="button" id="btnRecommend" class="btn btn-labeled btn-primary btn-recommend" >								
                 	<span class="btn-label">
                 		<i class="glyphicon glyphicon-thumbs-up"></i>
                 	</span>
@@ -528,7 +650,7 @@
 	      		<!-- modal-body -->
 				<div class="modal-body">
 					<input type="hidden" id="modItmId">					
-					<table class="table table-bordered table-hover table-condensed" border="1px" 
+					<table class="table table-bordered table-condensed" border="1px" 
 					   				   			cellpadding="2" cellspacing="2" align="center" width="100%">
 						<tr>
 							<td>
@@ -544,8 +666,8 @@
 			    </div>
 			    <!-- //modal-body -->
 				<div class="modal-footer">
-					<button id="btnModSave" type="button" class="btn btn-default">수정완료</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+					<button id="btnModSave" type="button" class="btn btn-primary">수정완료</button>
+					<button id="btnModClose" type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 				</div>
 				<!-- //modal-footer -->	
 			</div>	
@@ -573,7 +695,7 @@
 				<div class="modal-body">
 					<input type="hidden" id="modalItmId">
 					<h3>원본</h3>
-					<table class="table table-bordered table-hover table-condensed" border="1px" 
+					<table class="table table-bordered table-condensed" border="1px" 
 					   				   			cellpadding="2" cellspacing="2" align="center" width="100%">
 						<tr>
 							<td>

@@ -155,10 +155,14 @@
 	<form action="#" name="frm" method="post" class="form-inline">		
 		<input type="hidden" name="page_num" id="page_num" value="<%=page_num %>">		
 		<input type="hidden" name="search_category" id="search_category" value="${searchCat}">
-		<table class="table table-bordered table-hover table-condensed" border="1px" 
+		<table class="table table-bordered table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="600px;">
 			<tr>
-				<td colspan="2" style="text-align: center;">분야</td>
+				<td colspan="2" style="text-align: center;">
+					<label>
+						분야
+					</label>
+				</td>
 			</tr>
 			<tr>				
 				<td colspan="2">
@@ -181,7 +185,11 @@
 				</td>								
 			</tr>
 			<tr>
-				<td style="text-align: center;">검색</td>
+				<td style="text-align: center;">
+					<label>
+						검색
+					</label>
+				</td>
 				<td>
 					<input type="text" id="searchWord" name="searchWord" value="${searchWord}"/>
 					<button type="button" id="btn_search" class="btn btn-labeled btn-primary">
