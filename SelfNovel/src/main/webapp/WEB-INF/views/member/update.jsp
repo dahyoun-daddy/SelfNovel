@@ -50,7 +50,12 @@
             		} else {
             			$("#profileHolder").attr("src", "/controller/resources/exp_profiles/" + data.exp_profile);	
             		}            		
-            		$("#exp_ctg").val(data.exp_ctg);
+        			//2017-10-16 @autor LSG
+        			//전문가일 경우
+        			/*******************
+        			* 셀렉트박스 유지 처리
+        			********************/			
+        			$("#exp_ctg > option[value=" + data.exp_ctg + "]").attr("selected", true);
             		$("#old_profile").val(data.exp_profile);
             	}
             }
@@ -171,7 +176,7 @@
 		formData.append("exp_profile", $("#exp_profile")[0].files[0]);
 		formData.append("exp_title", $("#exp_title").val());
 		formData.append("exp_price", $("#exp_price").val());
-		formData.append("exp_ctg", $("#ext_ctg").val());
+		formData.append("exp_ctg", $("#exp_ctg").val());
 		formData.append("functionSep", functionSep);
 		
 		$.ajax({
@@ -338,18 +343,11 @@
 					</div>
 				</td>
 				<td style="width:70%;">
-					<div class="col-xs-5 selectContainer" id="item3">
-            			<select id="ext_ctg" name="ext_ctg" class="form-control">
-						  <option value="1">서비스업</option>
-						  <option value="2">제조·화학</option>
-						  <option value="3">의료·제약·복지</option>
-						  <option value="4">판매·유통</option>
-						  <option value="5">교육업</option>
-						  <option value="6">건설업</option>
-						  <option value="7">IT·웹·통신</option>
-						  <option value="8">미디어·디자인</option>
-						  <option value="9">은행·금융업</option>
-						  <option value="10">기관·협회</option>
+					<div class="selectContainer" id="item3">
+						<select name="exp_ctg" id="exp_ctg" class="form-control">
+							<c:forEach var="codeVo" items="${codeList}" varStatus="status">
+								<option value="${codeVo.dtl_cd_id}">${codeVo.dtl_cd_nm}</option>
+							</c:forEach>
 						</select>
 					</div>
 				</td>

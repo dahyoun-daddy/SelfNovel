@@ -46,6 +46,8 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.gson.Gson;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.sn.codes.dao.CodesDao;
+import com.sn.codes.domain.CodesVO;
 import com.sn.common.DTO;
 import com.sn.user.domain.SMTPAuthenticator;
 import com.sn.user.domain.UserVO;
@@ -60,6 +62,9 @@ public class UserController {
 	@Autowired
 	private UserSvc userSvc;
 	
+	@Autowired
+	private CodesDao codesDao;
+	
 	NaverLoginBO naverLoginBO = new NaverLoginBO();
 	
 	@RequestMapping(value = "login_user.do", method = RequestMethod.POST)
@@ -73,8 +78,16 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "update_user.do", method = RequestMethod.POST)
-	public String update(Locale locale, Model model) {
-		return "member/update";
+	public ModelAndView update(Locale locale, Model model) {
+		// code 테이블 조회//2017-10-16//@autor LSG 
+		CodesVO dto = new CodesVO();
+		dto.setMst_cd_id("C002");	
+		List<CodesVO> codeList = (List<CodesVO>)codesDao.do_search(dto);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("codeList", codeList);
+		modelAndView.setViewName("member/update");
+		return modelAndView;
 	}
 	
 	@RequestMapping(value="user/naver_login.do")
