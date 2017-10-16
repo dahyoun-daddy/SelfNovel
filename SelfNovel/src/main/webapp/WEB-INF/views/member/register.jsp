@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	//contextPath
+	String contextPath = request.getContextPath();
+%>
 <% 
 	request.setCharacterEncoding("utf-8");
 	if(session.getAttribute("isNaver") == null){
@@ -187,7 +191,7 @@
 		alert(userSep);
 		
 		$.ajax({
-            url: "../" + userSep+"/do_save.do",
+            url: "<%=contextPath %>/"+userSep+"/do_save.do",
             processData: false,
             contentType: false,
             data: formData,
@@ -237,7 +241,7 @@
 		
 		
 		$.ajax({
-            url: "do_chkId.do",
+            url: "<%=contextPath %>/user/do_chkId.do",
             data: {u_id: $("#u_id").val()},
             type: 'POST',
             success: function(result){
@@ -247,7 +251,7 @@
             	} else{
             		$('#emailAuth_modal').modal({backdrop: 'static', keyboard: false});
 	            	$.ajax({
-	            	        url: "send_email.do",
+	            	        url: "<%=contextPath %>/user/send_email.do",
 	            	        data: {u_id: $("#u_id").val()},
 	            	        type: 'POST',
 	            	        success: function(authNum){
@@ -280,7 +284,7 @@
 	회원가입
 	<hr/>
 	<div align="center" style="width:50%; height:800px; display: inline-block;" >
-		<form action="../login_user.do" method="POST" name="registerFrm" id="registerFrm">
+		<form action="<%=contextPath %>/login_user.do" method="POST" name="registerFrm" id="registerFrm">
 		<table>
 			<tr>
 				<td colspan="2">
@@ -465,7 +469,7 @@
 				<div class="modal-content panel-info %>" >
 					<div class="modal-header panel-heading">
 						<h4 class="modal-title">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelAuth();">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 			          		×
 			        		</button>
 							<b>이메일 인증</b>

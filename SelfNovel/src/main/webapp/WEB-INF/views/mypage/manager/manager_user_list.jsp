@@ -45,6 +45,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+	.table-head-rows {
+		text-align: center;
+		background-color: #4f81bd;
+		color: #FFF;
+		font-size: large;
+	}
+	
+	.table_body_rows {
+		font-size: medium;
+		margin: auto;				
+	}	
+</style>
 <!-- 부트스트랩 -->
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css"
 	rel="stylesheet">
@@ -182,10 +195,18 @@
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="600px;" >
 			<tr>
-				<td>검색</td>
+				<td class="text-center">검색</td>
 				<td>
-					<input type="text" id="SEARCH_WORD" name="SEARCH_WORD" value="<%=SEARCH_WORD%>"/>
-					<input type="button" class="btn btn-success" id="do_search" value="검색"/>
+					<div class="row">
+					  <div class="col-lg-6">
+					    <div class="input-group">
+					      <input type="text" class="form-control" id="SEARCH_WORD" name="SEARCH_WORD" value="<%=SEARCH_WORD%>" placeholder="ID"/>
+					      <span class="input-group-btn">
+					        <button class="btn btn-default" type="button" id="do_search">검색</button>
+					      </span>
+					    </div><!-- /input-group -->
+					  </div><!-- /.col-lg-6 -->
+					</div><!-- /.row -->
 				</td>
 			</tr>
 		</table>
@@ -195,7 +216,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-10">
-				선택 멤버를 <input type="button" class="btn btn-success" id="do_delete" value="강제 탈퇴"/>
+				선택 멤버를 <input type="button" class="btn btn-primary" id="do_delete" value="강제 탈퇴"/>
 			</div>			
 			<div class="col-md-2">
 				<select name="ORDER_DIV" class="form-control input-sm" style="text-align: right;">
@@ -217,20 +238,20 @@
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="600px;">
 			<tr>
-				<th><input type="checkbox"  id="allCheck"></th>
-				<th>글번호</th>
-				<th>아이디</th>
-				<th>가입일</th>
-				<th>등급</th>
-				<th>게시글 수</th>
-				<th>첨삭 수</th>
+				<th class="table-head-rows text-center"><input type="checkbox"  id="allCheck"></th>
+				<th class="table-head-rows">글번호</th>
+				<th class="table-head-rows">아이디</th>
+				<th class="table-head-rows">가입일</th>
+				<th class="table-head-rows">등급</th>
+				<th class="table-head-rows">게시글 수</th>
+				<th class="table-head-rows">첨삭 수</th>
 			</tr>
 			<c:choose>
 				<c:when test="${userList.size()>0}">
 					<c:forEach var="userVO" items="${userList}">
 						<tr id="userInfo">
-							<td><input type="checkbox" name="chkList"></td>
-							<td>${userVO.no}</td>
+							<td align="center"><input type="checkbox" name="chkList"></td>
+							<td class="text-center">${userVO.no}</td>
 							<td>${userVO.u_id}</td>
 							<td>${userVO.u_reg_dt}</td>
 							<td>${userVO.u_level}</td>
@@ -251,7 +272,10 @@
 		<%=StringUtil.renderPaging(oTotalCnt, oPage_num, oPage_size, 10, "manager_user_list.do", "do_search_page") %>
 	</div>		
 	<form action="">
-		<input type="button" class="btn btn-success" id="addManagerBtn" value="관리자 추가" data-toggle="modal" data-target="#addManager">
+		<!-- Button trigger modal -->
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addManager" id="addManagerBtn" >
+		 	<span class="glyphicon glyphicon-user" aria-hidden="true"></span>관리자 추가
+		</button>
 	</form>
 
 	<!-- Modal -->
@@ -260,19 +284,35 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+	        <h4 class="modal-title" id="myModalLabel" align="center"> :: 관리자 등록 :: </h4>
 	      </div>
 	      <div class="modal-body" align="center">
-			 <form name='saveFrm' action='do_save.do' method='post'>
-			 	<label>아이디</label>
-			 	<input type="text" id="u_id" name="u_id"/>
-			 	<input type="button" id="do_chkId" value="중복검사"><br/>
-			 	<label>비밀번호</label>
-				<input type="text" id='u_password' name='u_password'><br/>
-				<label>이름</label>
-				<input type="text" id='u_name' name='u_name'><br/>
-				<button type="button" class="btn btn-success" data-dismiss="modal" id="do_save" disabled="disabled">등록</button>
-			 </form>
+		      <form class="form-horizontal">
+				  <div class="form-group">
+				    <label class="col-sm-2 control-label">아이디</label>
+				    <div class="col-sm-8">
+				      <input type="text" class="form-control" id="u_id" name="u_id" placeholder="ID">
+				    </div>
+				    <div class="col-sm-2">
+				      <input type="button" class="btn btn-default" id="do_chkId" value="중복">
+				    </div>				    
+				  </div>			  
+				  <div class="form-group">
+				    <label class="col-sm-2 control-label">비밀번호</label>
+				    <div class="col-sm-10">
+				      <input type="password" class="form-control" id='u_password' name='u_password' placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-2 control-label">이름</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id='u_name' name='u_name' placeholder="name">
+				    </div>
+				  </div>			  
+				  <div class="form-group">
+				      <button type="button" class="btn btn-default" data-dismiss="modal" id="do_save" disabled="disabled">등록</button>
+				  </div>
+			  </form>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -280,6 +320,5 @@
 	    </div>
 	  </div>
 	</div>	
-	
 </body>
 </html>
