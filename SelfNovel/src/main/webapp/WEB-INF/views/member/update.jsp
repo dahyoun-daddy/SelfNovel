@@ -2,6 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% request.setCharacterEncoding("utf-8"); %>
+<%
+	//contextPath
+	String contextPath = request.getContextPath();
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -242,7 +246,7 @@
 	<hr/>
 	<input type="hidden" value="" id="h_password" />
 	<input type="hidden" value="" id="old_profile" />
-	<form action="home.do" method="POST" id="updateFrm">
+	<form action="<%=contextPath %>/main/main.do" method="POST" id="updateFrm">
 	<div style="width:49%; display: inline-block;" align="center">
 		<table style="width:80%;">
 			<tr>
