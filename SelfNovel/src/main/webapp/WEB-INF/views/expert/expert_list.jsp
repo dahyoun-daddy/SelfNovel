@@ -120,7 +120,7 @@
 											<td colspan="2" align="center">
 													<% i++; str = "/resources/img/rank"+String.valueOf(i)+".png"; %>
 													<img src="<c:url value='<%=str %>' />" />
-												<a href="javascript:do_detail()">
+												<a href="do_detail_list.do?exp_id=${expertVO.exp_id }">
 													<c:set var="d" value="${expertVO.exp_profile }"/>
 													<c:set var="e" value="${fn:substring(d,0,7) }"/>
 													<c:choose>
@@ -167,7 +167,7 @@
 					<c:forEach var="codeVo" items="${codeList}" varStatus="status">						
 						<div align="left" style="width: 250px; float: left">
 							<label>
-								<input type="checkbox" name="categoryChk" value="${status.index}">
+								<input type="checkbox" id="searchCategory_1" value="${status.index}">
 								${codeVo.dtl_cd_nm }
 							</label>
 						</div>						
