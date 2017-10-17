@@ -23,6 +23,7 @@ public class LogVO extends DTO {
 	String log_reg_id		;//작성아이디
 	String log_lv			;//로그레벨
 	String log_errormsg		;//에러메시지
+	long   log_time			;//소요시간
 
 	
 	/***********************************************/
@@ -32,7 +33,7 @@ public class LogVO extends DTO {
 		
 	}	
 	public LogVO(String log_class_path, String log_sql, String log_param,
-			String log_reg_id, String log_errormsg) {
+			String log_reg_id, String log_errormsg, long log_time) {
 		super();
 		
 		this.log_class_path = log_class_path;
@@ -40,6 +41,7 @@ public class LogVO extends DTO {
 		this.log_param = log_param;
 		this.log_reg_id = log_reg_id;
 		this.log_errormsg = log_errormsg;
+		this.log_time	  = log_time;
 	}
 
 	/***********************************************/
@@ -93,7 +95,12 @@ public class LogVO extends DTO {
 	public void setLog_errormsg(String log_errormsg) {
 		this.log_errormsg = log_errormsg;
 	}
-
+	public long getLog_time() {
+		return log_time;
+	}
+	public void setLog_time(long log_time) {
+		this.log_time = log_time;
+	}
 	/***********************************************/
 	//method
 	/***********************************************/
@@ -101,7 +108,7 @@ public class LogVO extends DTO {
 	public String toString() {
 		return "LogVO [log_id=" + log_id + ", log_class_path=" + log_class_path + ", log_sql=" + log_sql
 				+ ", log_param=" + log_param + ", log_reg_dt=" + log_reg_dt + ", log_reg_id=" + log_reg_id + ", log_lv="
-				+ log_lv + ", log_errormsg=" + log_errormsg + "]";
+				+ log_lv + ", log_errormsg=" + log_errormsg + ", log_time=" + log_time + "]";
 	}
-	
+
 }

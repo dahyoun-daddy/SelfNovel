@@ -15,7 +15,8 @@
 		    LOG_REG_DT,
 		    LOG_REG_ID,
 		    LOG_LV,
-		    LOG_ERRORMSG
+		    LOG_ERRORMSG,
+		    LOG_TIME
 		  )
 		  VALUES
 		  (
@@ -26,7 +27,8 @@
 		    sysdate,
 		    #{log_reg_id},
 		    #{log_lv},
-		    #{log_errormsg}
+		    #{log_errormsg},
+		    #{log_time}
 		  )		
 	</insert>
 

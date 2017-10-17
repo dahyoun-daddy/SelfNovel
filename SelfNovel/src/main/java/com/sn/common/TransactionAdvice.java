@@ -1,5 +1,8 @@
 package com.sn.common;
 
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Logger;
@@ -50,31 +53,59 @@ public class TransactionAdvice implements MethodInterceptor {
 	/***********************************************/
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
+		InetAddress ip = InetAddress.getLocalHost();
+		Object ret 	 = null;
+		Method mtd 	 = null;
+		Object[] arg = null;
+		String param = "";
+		long startTime = 0;
+		long endTime = 0;
+		long time = 0;
+		
 		TransactionStatus status=
 		this.transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
 			//시간측정 시작시간
-			long startTime = System.currentTimeMillis();			
+			startTime = System.currentTimeMillis();			
 			
 			log.debug("******************in transaction******************");
-			Object ret = invocation.proceed();
+			ret = invocation.proceed();
+			mtd = invocation.getMethod();
+			arg = invocation.getArguments();
 			this.transactionManager.commit(status);
 			log.debug("ret: "+ret.toString());
+			log.debug("mtd: "+mtd.toString());
+			for(int i=0;i<arg.length;i++) {
+				param += "arg["+i+"]: "+arg[i].toString()+",";
+			}
 			log.debug("******************after commit********************");
 			
 			//시간측정 끝난시간
-			long endTime = System.currentTimeMillis();
-			log.debug("성능측정 - 소요시간: "+(endTime-startTime)+"ms");
-			this.logSvc.debug(new LogVO("클래스패스", "성능측정 - 소요시간: "+(endTime-startTime)+"ms", "파람", "아이디", ""));
+			endTime = System.currentTimeMillis();
+			time 	= (endTime-startTime);
+			log.debug("성능측정 - 소요시간: "+time+"ms");
+			setLog(new LogVO(mtd.toString(), "", param, ip.getHostAddress(), "",time));
 			
 			return ret;
 		}catch(RuntimeException e) {
 			this.transactionManager.rollback(status);
 			log.debug("******************after rollback********************");
-			this.logSvc.error(new LogVO("클래스패스", "에러", "파람", "아이디", e.getMessage()));
+			endTime = System.currentTimeMillis();
+			time 	= (endTime-startTime);
+			log.debug("성능측정 - 소요시간: "+(endTime-startTime)+"ms");
+			setErrorLog(new LogVO(mtd.toString(), "", arg.toString(), ip.getHostAddress(), e.getMessage(),time));
 			
 			throw e;
 		}
 	}
-
+	
+	private void setLog(LogVO inVO) {
+		log.debug("invo: "+inVO.toString());
+		this.logSvc.debug(inVO);
+	}
+	
+	private void setErrorLog(LogVO inVO) {
+		log.debug("invo: "+inVO.toString());
+		this.logSvc.error(inVO);
+	}
 }

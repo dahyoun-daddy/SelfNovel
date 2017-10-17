@@ -53,7 +53,7 @@
     <bean  id="transactionPointcut" 
         class="com.sn.common.NameMatchClassMethodPointcut" >
         <property name="mappedClassName" value="*SvcImpl" />
-        <property name="mappedName" value="*Tx"></property>        
+        <property name="mappedName" value="*save*"></property>        
     </bean>
     
     <!-- Tx Advisor -->
