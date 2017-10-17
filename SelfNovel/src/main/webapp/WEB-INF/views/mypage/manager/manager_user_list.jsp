@@ -56,7 +56,7 @@
 	.table_body_rows {
 		font-size: medium;
 		margin: auto;				
-	}	
+	}
 </style>
 <!-- 부트스트랩 -->
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css"
@@ -213,12 +213,12 @@
 	
 	<h3>총 회원수: <c:out value="${totalCnt}명"/></h3>
 	<hr/>
-	<div class="container">
+	<div class="container" style="width: 100%;">
 		<div class="row">
-			<div class="col-md-10">
+			<div class="col-sm-10">
 				선택 멤버를 <input type="button" class="btn btn-primary" id="do_delete" value="강제 탈퇴"/>
 			</div>			
-			<div class="col-md-2">
+			<div class="col-sm-2">
 				<select name="ORDER_DIV" class="form-control input-sm" style="text-align: right;">
 					<c:forEach var="codeVO" items="${codeList}">
 						<c:choose>
@@ -253,10 +253,22 @@
 							<td align="center"><input type="checkbox" name="chkList"></td>
 							<td class="text-center">${userVO.no}</td>
 							<td>${userVO.u_id}</td>
-							<td>${userVO.u_reg_dt}</td>
-							<td>${userVO.u_level}</td>
-							<td>${userVO.u_write_cnt}</td>
-							<td>${userVO.u_mod_cnt}</td>
+							<td class="text-center">${userVO.u_reg_dt}</td>
+							<td class="text-center">
+								<c:choose>
+									<c:when test="${userVO.u_level eq 0}">
+										<c:out value="관리자"></c:out>
+									</c:when>
+									<c:when test="${userVO.u_level eq 1}">
+										<c:out value="일반 회원"></c:out>
+									</c:when>
+									<c:when test="${userVO.u_level eq 2}">
+										<c:out value="전문가"></c:out>
+									</c:when>																		
+								</c:choose>		
+							</td>
+							<td class="text-right">${userVO.u_write_cnt}</td>
+							<td class="text-right">${userVO.u_mod_cnt}</td>
 						</tr>
 					</c:forEach>
 				</c:when>	
