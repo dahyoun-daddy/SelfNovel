@@ -30,16 +30,18 @@
 			<td style="width:15%;">
 			</td>
 			<td style="width: 35%;">
-			<table align="left">
-   				<tr>
-   					<td>
-   						<input type="text" />
-   					</td>
-   					<td>
-   						<input type="button" value="검색" />
-   					</td>
-	   			</tr>
-			</table>
+			<form name="mainSearchFrm" action="/controller/main/do_search.do" method="POST">
+				<table align="left">
+	   				<tr>
+	   					<td>
+	   						<input type="text" name="SEARCH_WORD_MAIN"/>
+	   					</td>
+	   					<td>
+	   						<input type="submit" value="검색" />
+	   					</td>
+		   			</tr>
+				</table>
+			</form>
 			</td>
 			<td style="width: 35%;">
 				<table style="display:inline-block;" align="right">
