@@ -262,11 +262,20 @@
 		
 		
 		/**************************
-		* '신고'버튼 클릭시 이벤트
-		* detail : TODO
+		* '신고하기'버튼 클릭시 이벤트
 		***************************/
-		$("#btnReport").on("click", function(){
-									
+		$("#btnReport").on("click", function(){			
+			
+			var pop_title = "popup_window"
+			var frm = document.frm;
+			frm.setAttribute("current_id", "current_id", "${sessionScope.u_id}")	
+						
+			window.open("", pop_title, "width=500, height=300, scrollbars=no");		
+	        
+	        frm.target = pop_title;
+	        frm.action = "../message/reportForm.do";	         
+	        frm.submit() ;
+	        
 		});//close btn_report_on_click
 		
 		/**************************
@@ -375,8 +384,9 @@
 	<hr/>	
 	<form action="#" name="frm" method="post" class="form-inline">		
 		<input type="hidden" id="rsm_id" name="rsm_id" value="${rsmVO.rsm_id}"><!-- 자소서 id -->
-		<input type="hidden" id="u_name" value="${rsmVO.u_name}" ><!-- 작성자 id -->
-		<input type="hidden" id="rsm_title" value="${rsmVO.rsm_title}"><!-- 자소서 제목 -->
+		<input type="hidden" id="rsm_u_id" name="rsm_u_id" value="${rsmVO.u_id }"> <!-- 작성자 id -->
+		<input type="hidden" id="u_name" name="u_name" value="${rsmVO.u_name}" ><!-- 작성자 닉네임 -->
+		<input type="hidden" id="rsm_title" name="rsm_title" value="${rsmVO.rsm_title}"><!-- 자소서 제목 -->
 		
 		<!-- 버튼 div -->
 		<div style="float:right;">
@@ -454,7 +464,7 @@
 					<label>작성자</label>
 				</td>
 				<td colspan="3">
-					${rsmVO.u_name}										
+					${rsmVO.u_name}			
 				</td>				
 			</tr>
 			<tr>

@@ -42,10 +42,10 @@ public class MsgDaoImpl implements MsgDao {
 		//아래의 이름으로 codes.xml에서 해당하는 select를 불러온다.
 		String statement = namespace +".do_save";
 		
-		log.debug("in do_save========================");
-		log.debug("statement: "+statement);
-		log.debug("dto: "+dto.toString());
-		log.debug("=======================================");
+		log.info("in do_save========================");
+		log.info("statement: "+statement);
+		log.info("dto: "+dto.toString());
+		log.info("=======================================");
 		
 		MsgVO inUserVO = (MsgVO)dto;
 		return sqlSession.insert(statement, inUserVO);

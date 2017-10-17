@@ -3,34 +3,40 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sn.msg.repository.mappers.msg">
-	<insert id="do_save" parameterType="MsgVO">
+	<insert id="do_save" parameterType="MsgVO">		
 		INSERT
 		INTO MESSAGE
-		  (
-		    MSG_ID,
-		    MSG_SENDER,
-		    MSG_RECEIVER,
-		    MSG_CONTENT,
-		    MSG_SEP,
-		    MSG_REG_DT,
-		    RSM_ID,
-		    MSG_NOTIFY,
-		    MSG_READ_YN,
-		    MSG_USE_YN
-		  )
-		  VALUES
-		  (
-		    MSG_SEQ.NEXTVAL,
-		    #{msg_sender},
-		    #{msg_receiver},
-		    #{msg_content},
-		    #{msg_sep},
-		    SYSDATE,
-		    #{rsm_id},
-		    #{msg_notify},
-		    1,
-		    1
-		  )
+		(
+		 MSG_ID,
+   		 MSG_SENDER,
+   		 MSG_RECEIVER,
+   		 MSG_CONTENT,
+   		 MSG_SEP,
+   		 MSG_REG_DT,
+   		 MSG_READ_YN,
+   		 MSG_USE_YN
+   		 <if test="msg_sep == 0">
+   		 , 
+   		 RSM_ID,
+   		 MSG_NOTIFY		    		 
+   		 </if>
+		  			)		           
+		VALUES
+		(
+		MSG_SEQ.NEXTVAL,
+	    #{msg_sender},
+	    #{msg_receiver},
+	    #{msg_content},
+	    #{msg_sep},
+	    SYSDATE,
+	    1,
+	    1
+	    <if test="msg_sep == 0">	 
+	    ,   
+		#{rsm_id},
+		#{msg_notify}		    
+	    </if>
+		)							
 	</insert>
 	
 	<!-- do_search -->

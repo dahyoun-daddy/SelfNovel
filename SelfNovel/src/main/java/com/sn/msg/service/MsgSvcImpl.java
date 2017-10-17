@@ -37,6 +37,9 @@ public class MsgSvcImpl implements MsgSvc {
 	   */
 	@Override
 	public int do_save(DTO dto) {
+		log.info("===== MsgSvc/do_save.do =====");
+		log.info("req : " + dto.toString());		
+		log.info("====================================");		
 		return msgDao.do_save(dto);
 	}
 	  /**
