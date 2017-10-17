@@ -1,5 +1,7 @@
 package com.sn.msg.dao;
 
+import java.util.List;
+
 import com.sn.common.DTO;
 import com.sn.common.WorkDiv;
 /**
@@ -25,4 +27,12 @@ public interface MsgDao extends WorkDiv {
 	   * @return flag
 	   */
 	public int do_count(DTO dto);
+	
+	/**
+	 * do_searchReport
+	 * detail : 신고목록을 조회
+	 * @param dto
+	 * @return List<DTO>
+	 */
+	public List<?> do_searchReport(DTO dto);
 }

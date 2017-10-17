@@ -71,6 +71,35 @@
 		WHERE no BETWEEN (#{PAGE_SIZE}*(#{PAGE_NUM}-1)+1) AND (#{PAGE_SIZE}*(#{PAGE_NUM}))
 	</select>
 	
+	<!-- do_searchReport -->
+	<!-- 신고내역만 조회하는 관리자용 쿼리 -->
+	<select id="do_searchReport" parameterType="String" 
+								 resultType="com.sn.msg.domain.MsgVO">
+	SELECT
+		  msg_id,
+		  msg_sender,
+		  msg_receiver,
+		  msg_content,
+		  msg_sep,
+		  msg_reg_dt,
+		  rsm_id,
+		  msg_notify,
+    	  msg_read_yn,
+     	  msg_use_yn,   
+		  no,
+		  totalNo
+		FROM (
+	      SELECT A.*,
+	             ROW_NUMBER() OVER (ORDER BY A.msg_reg_dt DESC) AS no,
+	             COUNT(*) OVER() AS totalNo
+	      FROM MESSAGE A
+	      WHERE msg_sep = 0 
+	        AND msg_use_yn = 1	      	 
+	      ORDER BY A.msg_reg_dt 
+	    )
+		WHERE no BETWEEN (#{page_size}*(#{page_num}-1)+1) AND (#{page_size}*(#{page_num}))
+	</select>
+	
 	<!-- do_delete -->
 	<!-- 
 		실제 삭제하지는 않으며 플래그만 0으로 바꾸면 됨

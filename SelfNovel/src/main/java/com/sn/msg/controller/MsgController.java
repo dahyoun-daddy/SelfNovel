@@ -1,5 +1,8 @@
 package com.sn.msg.controller;
 
+import java.util.Hashtable;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -7,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sn.common.StringUtil;
 import com.sn.msg.domain.MsgVO;
 import com.sn.msg.service.MsgSvc;
 @Controller
@@ -90,5 +95,78 @@ public class MsgController {
 		
 		//flag(결과) 리턴
 		return flag+"";
+	}
+	
+	/**
+	 * 2017_10_17
+	 * do_searchReport
+	 * detail : 신고 조회
+	 * @author MinSeok <dev.edwinner@gmail.com>
+	 * @return List<MsgVO>
+	 */
+	@RequestMapping(value="/mypage/manager/manager_report_list.do")
+	public ModelAndView do_searchReport(HttpServletRequest req) {
+		log.info("===== MsgController/do_searchReport.do =====");
+		log.info("req : " + req.toString());		
+		log.info("============================================");
+		
+		//request로부터 parameter load
+		String page_size = StringUtil.nvl(req.getParameter("page_size"),"10");
+		String page_num  = StringUtil.nvl(req.getParameter("page_num"),"1");
+		String searchDiv = StringUtil.nvl(req.getParameter("searchDiv"),"");
+		String searchWord = StringUtil.nvl(req.getParameter("searchWord"),"");
+		String total_cnt = "";
+		
+		Hashtable<String, String> searchParam = new Hashtable<String, String>();
+		
+		//searchParam에 request로부터 읽은 파라미터 set
+		searchParam.put("page_size", page_size);
+		searchParam.put("page_num", page_num);
+		searchParam.put("searchDiv", searchDiv);
+		searchParam.put("searchWord", searchWord);		
+		
+		//Vo생성 후, searchParam set
+		MsgVO inDto = new MsgVO();
+		inDto.setParam(searchParam);
+		
+		//list객체 생성 후, inRsmVo 주입
+		List<?> reportList = msgSvc.do_searchReport(inDto);
+		if(reportList.size()>0) {
+			MsgVO msgVO = (MsgVO) reportList.get(0);
+			total_cnt = String.valueOf(msgVO.getTotalNo());			
+		}
+		
+		//ModelAndView 생성
+		ModelAndView modelAndView = new ModelAndView();
+		
+		modelAndView.addObject("reportList", reportList);
+		modelAndView.addObject("page_size", page_size);
+		modelAndView.addObject("page_num", page_num);
+		modelAndView.addObject("searchDiv", searchDiv);
+		modelAndView.addObject("searchWord", searchWord);
+		modelAndView.addObject("totalCnt", total_cnt);		
+		modelAndView.setViewName("/mypage/manager/manager_report_list");		
+		
+		return modelAndView;
+	}
+
+	@RequestMapping(value="/mypage/manager/do_deleteMsg.do", method=RequestMethod.POST)
+	@ResponseBody
+	public String do_delete(HttpServletRequest req) {
+		log.info("===== MsgController/do_deleteAll.do =====");
+		log.info("req : " + req.toString());		
+		log.info("============================================");
+		
+		String msgList = StringUtil.nvl(req.getParameter("msgList"),"");
+		
+		Hashtable<String, String> param = new Hashtable<String, String>();
+		param.put("msgList", msgList);
+		
+		MsgVO inDto = new MsgVO();
+		inDto.setParam(param);
+		
+		int count = msgSvc.do_deleteAll(inDto);
+		
+		return count + "";
 	}
 }

@@ -168,4 +168,25 @@ public class MsgDaoImpl implements MsgDao {
 		MsgVO inUserVO = (MsgVO)dto;
 		return sqlSession.selectOne(statement, inUserVO);		
 	}
+	
+	/**
+	 * do_searchReport
+	 * detail : 신고 목록 조회
+	 * @param dto
+	 * @return list<dto>
+	 * @author MinSeok <dev.edwinner@gmail.com>
+	 */
+	@Override
+	public List<?> do_searchReport(DTO dto) {
+		//아래의 이름으로 codes.xml에서 해당하는 select를 불러온다.
+		String statement = namespace +".do_searchReport";
+		
+		log.debug("in do_searchReport=====================");
+		log.debug("statement: "+statement);
+		log.debug("dto: "+dto.getParam().toString());
+		log.debug("=======================================");
+		
+		MsgVO inMsgVO = (MsgVO)dto;
+		return sqlSession.selectList(statement, inMsgVO.getParam());
+	}
 }

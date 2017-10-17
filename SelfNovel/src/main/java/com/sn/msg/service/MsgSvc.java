@@ -3,6 +3,7 @@ package com.sn.msg.service;
 import java.util.List;
 
 import com.sn.common.DTO;
+import com.sn.msg.domain.MsgVO;
 
 /**
  * MsgSvc 
@@ -48,4 +49,20 @@ public interface MsgSvc {
 	   * @return flag
 	   */
 	public int do_count(DTO dto);
+	
+	/**
+	 * do_searchReport
+	 * detail : 신고목록을 조회
+	 * @param dto
+	 * @return List<DTO>
+	 */
+	public List<?> do_searchReport(DTO dto);
+	
+	/**
+	 * do_deleteAll
+	 * detail : 다건 삭제
+	 * @param inDto
+	 * @return int(삭제건수)
+	 */
+	public int do_deleteAll(MsgVO inDto);
 }

@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.sn.common.DTO;
 import com.sn.msg.dao.MsgDao;
+import com.sn.msg.domain.MsgVO;
 /**
  * MsgSvcImpl 
  * detail : 메시지 Svc 구현체
  * 최초작성: 2017-09-25
- * 최종수정: 2017-09-25
+ * 최종수정: 2017-10-17
  * @author SeulGi <dev.leewisdom92@gmail.com>
+ * @author MinSeok<dev.edwinner@gmail.com>
  *
  */
 @Service
@@ -81,5 +83,48 @@ public class MsgSvcImpl implements MsgSvc {
 	@Override
 	public int do_count(DTO dto) {
 		return msgDao.do_count(dto);
+	}
+	
+	/**
+	 * do_searchReport
+	 * detail : 신고목록을 조회
+	 * @param dto
+	 * @return List<DTO>
+	 */
+	@Override
+	public List<?> do_searchReport(DTO dto) {
+		log.info("===== MsgSvc/do_searchReport.do =====");
+		log.info("dto : " + dto.getParam().toString());		
+		log.info("=====================================");		
+		return msgDao.do_searchReport(dto);
+	}
+	
+	/**
+	 * do_deleteAll
+	 * detail : 다건 삭제
+	 * @param inDto
+	 * @return int(삭제건수)
+	 */
+	@Override
+	public int do_deleteAll(MsgVO dto) {
+		log.info("===== MsgSvc/do_deleteAll.do =====");
+		log.info("dto : " + dto.getParam().toString());		
+		log.info("===================================");
+		
+		int count = 0;
+		String[] msgArray = dto.getParam().get("msgList").split("&");
+		
+		if(msgArray[0].equals("")) {
+			
+		}else {
+			for(String msg : msgArray) {
+				MsgVO inMsgVO = new MsgVO();
+				inMsgVO.setMsg_id(msg);
+				msgDao.do_delete(inMsgVO);
+				count++;
+			}
+		}
+		
+		return count;
 	}	
 }
