@@ -78,6 +78,7 @@ public class mainController {
 		List<?> rsmList = rsmSvc.do_search(rsmVO);
 		
 		ModelAndView modelAndView =new ModelAndView();
+		modelAndView.addObject("searchWord",SEARCH_WORD);
 		modelAndView.addObject("expList",expList );
 		modelAndView.addObject("rsmList",rsmList );
 		modelAndView.setViewName("main/main_list");

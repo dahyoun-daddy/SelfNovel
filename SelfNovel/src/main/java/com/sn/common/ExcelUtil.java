@@ -7,10 +7,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.AttributedString;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.WordUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -103,12 +108,7 @@ public class ExcelUtil {
         return changeFileName;
      }
     
-    
-    
-    
-    
-    
-	
+    	
 	/**
 	 * createExcel
 	 * detail: user's resume => Excel. 유저 자기소개서로 엑셀 그리는 메소드
@@ -313,74 +313,156 @@ public class ExcelUtil {
            //cor값 갱신
            corRow++;  	   
        }
-
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-//       HSSFFont cellFont = contentCell.getCellStyle().getFont(workbook);
-//       int fontStyle = java.awt.Font.PLAIN;
-//       if (cellFont.getBold())
-//         fontStyle = java.awt.Font.BOLD;
-//       if (cellFont.getItalic())
-//         fontStyle = java.awt.Font.ITALIC;
-//       java.awt.Font currFont = new java.awt.Font(cellFont.getFontName(), fontStyle,
-//           cellFont.getFontHeightInPoints());
-//       String cellText = contentCell.getStringCellValue();
-//       log.debug("cellText:" + cellText);
-//       
-//       AttributedString attrStr = new AttributedString(cellText);
-//       attrStr.addAttribute(TextAttribute.FONT, currFont);
-//       // Use LineBreakMeasurer to count number of lines needed for the text
-//       //
-//       FontRenderContext frc = new FontRenderContext(null, true, true);
-//       LineBreakMeasurer measurer = new LineBreakMeasurer(attrStr.getIterator(), frc);
-//       int nextPos = 0;
-//       int lineCnt = 1;
-//       float columnWidthInPx = sheet.getColumnWidthInPixels(firstCol);
-//       log.debug("columnWidthInPx:" + columnWidthInPx);
-//       while (measurer.getPosition() < cellText.length()) {
-//         nextPos = measurer.nextOffset(columnWidthInPx);
-//         log.debug("nextPos:" + nextPos);
-//         
-//         lineCnt++;
-//         measurer.setPosition(nextPos);
-//       }
-//       log.debug("lineCnt:" + lineCnt);
-//       if (lineCnt > 1) {
-//         row.setHeightInPoints(
-//             //sheet.getDefaultRowHeightInPoints() * lineCnt * /* fudge factor */ 1f);
-//        		13 * lineCnt * /* fudge factor */ 1f / 6);
-//       }
-
-       /*****************************************************/
-       // 기준단위 = 병합된 셀의 가로길이/폰트크기
-       // row 수 = 전체 텍스트 글자 수/기준단위...면 참 좋겠는데 그런 픽셀단위가 편리하게 나올 리가...
-       /*****************************************************/
-    
-//        
-//       //컬럼사이즈
-//       for(int i=0; i<7; i++){
-//    	   if(i==0){
-//    		   sheet.setColumnWidth(0,700);
-//    	   }else{
-//    		   sheet.autoSizeColumn((short)i);
-//    		   sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+512 );  // 윗줄만으로는 컬럼의 width 가 부족하여 더 늘려야 함.
-//    	   }
-//       }
-//       
        
        return workbook;
    }
     
+	
+	
+	/**
+	 * writeExcelGeneral
+	 * 
+	 * @param filePath
+	 * @param excelFileName
+	 * @param header
+	 * @param align
+	 * @param data
+	 * @throws IOException
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 */   
+	public String writeExcelGeneral(String filePath,String excelFileName,
+			String sheetName, String[] header, List<?> data,Class clazz,List<String> param)
+			throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, 
+			NoSuchMethodException, SecurityException{
+		this.filePath = filePath;
+		this.excelFileName =excelFileName;
+		FileOutputStream out = setFile(this.filePath,this.excelFileName);
+	    
+		// create a new workbook
+		HSSFWorkbook  wb =  createExcelGeneral(sheetName,header,data,clazz,param);
+		try{
+			wb.write(out);
+		}finally{
+			out.close();
+			wb.close();
+		}
+		
+		return changFileName;
+	}	
+	
+	/**
+	 * createExcelGeneral
+	 * detail: 일반화 엑셀 함수
+	 * param: 
+	 *  1. sheetName : 시트이름
+	 * 	2. data: 출력할 리스트 데이터
+	 *  3. clazz: 리스트의 클래스
+	 *  4. param: 검색조건 리스트
+	 * 
+	 * @param data
+	 * @return HSSFWorkbook
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 */
+	//헤더랑 ali조절이랑 넓이조절이랑 
+	public HSSFWorkbook createExcelGeneral(String sheetName,String[] header, List<?> data,Class clazz,
+			List<String> param) 
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, 
+			NoSuchMethodException, SecurityException{
+	   int corRow = this.firstRow;
+	   int corCol = this.firstCol+1;
+	   workbook = new HSSFWorkbook();
+	   HSSFSheet sheet = workbook.createSheet(sheetName);
+	   
+       // 가로열 생성
+       HSSFRow row = sheet.createRow((short)corRow);      
+       //param 넣기
+       HSSFCell paramCell = row.createCell((short)firstCol+1);
+       paramCell.setCellValue("검색어: ");
+       paramCell = row.createCell((short)firstCol+2);
+       paramCell.setCellValue(param.toString());
+       corRow+=2;
+       
+       /*************************************************************/
+       //일반화 헤더 테스트
+       //1. 갖고온 헤더 장착
+       row = sheet.createRow((short)corRow);
+	   for(int i=0;i<header.length;i++) {
+	       HSSFCell cell = row.createCell((short)i+corCol);
+	       cell.setCellValue(header[i]);
+	       //cell.setCellStyle(titleStyle);  
+	        
+	       log.debug("in ExcelUtil: "+header[i]);
+	   }    
+	   //일반화 테스트_end
+       /*************************************************************/       
+       
+       //  ObjectList 가 비어있으면 제목만 출력 후 종료
+       if(data == null) 
+    	   return workbook;
+        
+       //  ObjectList 엑셀에 출력
+       for(int i = 0; i < data.size(); i++){
+           // 1번째 행은 제목이니 건너 뜀
+           row = sheet.createRow((short)corRow+(i+1));
+
+         //1.먼저 data리스트 아이템 하나를 Object로 불러온다.
+           Object dto = data.get(i);      
+           
+           /*************************************************************/
+           //일반화 테스트           
+           for(int j=0;j<header.length;j++) {
+        	   //get+첫글자 대문자로 만든 필드변수명을 붙여 getter 메소드를 가져온다
+        	   //*********************************************//
+        	   /*
+        	    * getDeclaredMethod와 getMethod차이
+        	    * getDeclaredMethod: 하나의 클래스에 한정됨
+        	    * getMethod		   : 없으면 super것도 찾아서 갖고오긴 하는데 public만 가져옴
+        	    */
+        	   //Method mtd = clazz.getDeclaredMethod("get"+UpperFirst(fields[j].getName()));
+        	   Method mtd = clazz.getMethod("get"+UpperFirst(header[j]));
+        	   log.debug("in ExcelUtil: name: "+"get"+UpperFirst(header[j]));
+        	   
+        	   //셀 하나 만들고 거기에 값 넣어줌
+        	   HSSFCell cell = row.createCell((short)j+corCol);
+        	   if(mtd.invoke(dto)!=null) {
+        		   cell.setCellValue(mtd.invoke(dto).toString());
+        		   log.debug("in ExcelUtil: dto: "+mtd.invoke(dto).toString());
+        	   }else {
+        		   cell.setCellValue("null");
+        	   }
+           }
+           //일반화 테스트_end
+           /*************************************************************/
+       }
+       
+       //컬럼사이즈
+       for(int i=0; i<7; i++){
+    	   if(i==0){
+    		   sheet.setColumnWidth(0,700);
+    	   }else{
+    		   sheet.autoSizeColumn((short)i);
+    		   sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+512 );  // 윗줄만으로는 컬럼의 width 가 부족하여 더 늘려야 함.
+    	   }
+       }
+       
+       
+       return workbook;
+   }
+	
+	/**
+	 * 첫글자만 대문자로
+	 * @param word
+	 * @return
+	 */
+	public static String UpperFirst(String word) {
+		return WordUtils.capitalize(word);
+	}
 }
