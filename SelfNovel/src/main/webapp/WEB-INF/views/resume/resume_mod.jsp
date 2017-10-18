@@ -233,7 +233,7 @@
 	<hr/>
 	<div align="center">
 		<!-- 전체 form -->
-		<form action="#" id="editForm" name="editForm">
+		<form action="#" id="editForm" name="editForm" method="post">
 			<!-- 자소서 id값 -->
 			<input type="hidden" id="rsm_id" name="rsm_id" value="${resume.rsm_id }">
 			<input type="hidden" id="u_id" name="u_id" value="${resume.u_id }">

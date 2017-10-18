@@ -55,7 +55,7 @@ public class TransactionAdvice implements MethodInterceptor {
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 		InetAddress ip = InetAddress.getLocalHost();
 		Object ret 	 = null;
-		Method mtd 	 = null;
+		String mtd 	 = null;
 		Object[] arg = null;
 		String param = "";
 		long startTime = 0;
@@ -69,9 +69,9 @@ public class TransactionAdvice implements MethodInterceptor {
 			startTime = System.currentTimeMillis();			
 			
 			log.debug("******************in transaction******************");
-			ret = invocation.proceed();
-			mtd = invocation.getMethod();
+			mtd = StringUtil.nvl(invocation.getMethod().toString(), "isNull");
 			arg = invocation.getArguments();
+			ret = invocation.proceed();
 			this.transactionManager.commit(status);
 			log.debug("ret: "+ret.toString());
 			log.debug("mtd: "+mtd.toString());
@@ -84,7 +84,7 @@ public class TransactionAdvice implements MethodInterceptor {
 			endTime = System.currentTimeMillis();
 			time 	= (endTime-startTime);
 			log.debug("성능측정 - 소요시간: "+time+"ms");
-			setLog(new LogVO(mtd.toString(), "", param, ip.getHostAddress(), "",time));
+			setLog(new LogVO(mtd, "", param, ip.getHostAddress(), "",time));
 			
 			return ret;
 		}catch(RuntimeException e) {
@@ -93,7 +93,7 @@ public class TransactionAdvice implements MethodInterceptor {
 			endTime = System.currentTimeMillis();
 			time 	= (endTime-startTime);
 			log.debug("성능측정 - 소요시간: "+(endTime-startTime)+"ms");
-			setErrorLog(new LogVO(mtd.toString(), "", arg.toString(), ip.getHostAddress(), e.getMessage(),time));
+			logSvc.error(new LogVO(mtd, "", param, ip.getHostAddress(), e.getMessage(),time));
 			
 			throw e;
 		}
