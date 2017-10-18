@@ -21,4 +21,5 @@ public interface ExpertSvc {
 	DTO do_chkNaver(DTO dto);
 	int do_saveOrder(DTO dto);
 	DTO do_nextSeq();
+	int do_updateTrade(DTO dto);
 }

@@ -212,5 +212,11 @@
 				 ORDER BY exp_trade DESC, u_reg_dt DESC
 		      )
 		 WHERE RNUM BETWEEN 1 AND 3
-	</select>    
+	</select>
+	
+	<update id="do_updateTrade" parameterType="ExpertVO">
+		UPDATE expert
+		   SET exp_trade = (SELECT exp_trade FROM expert WHERE exp_id = '${exp_id}') + 1
+		 WHERE exp_id = '${exp_id}'
+	</update>
 </mapper>

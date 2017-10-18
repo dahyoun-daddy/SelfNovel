@@ -359,4 +359,15 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		}
 	}
 	
+	@RequestMapping(value="expert/do_updateTrade.do")
+	public void do_updateTrade(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		ExpertVO expertVO = new ExpertVO();
+		expertVO.setExp_id(req.getParameter("exp_id"));
+		
+		if(expertSvc.do_updateTrade(expertVO) > 0) {
+			res.getWriter().write("success");
+		} else {
+			res.getWriter().write("fail");
+		}
+	}
 }

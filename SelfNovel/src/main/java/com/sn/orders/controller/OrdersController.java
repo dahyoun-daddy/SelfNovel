@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.sn.common.StringUtil;
+import com.sn.expert.domain.ExpertVO;
+import com.sn.expert.service.ExpertSvc;
 import com.sn.orders.domain.OrdersVO;
 import com.sn.orders.service.OrdersSvc;
 import com.sn.resume.domain.ItmVO;
@@ -238,14 +240,12 @@ public class OrdersController {
 		unityItmVO.setRsm_id(req.getParameter("rsm_id"));
 		
 		List<UnityItmVO> itmList = (List<UnityItmVO>) orderSvc.do_searchRev(unityItmVO);
-		System.out.println("cccc: "+itmList.toString());
 		if(itmList.size() == 0 || itmList == null) {
 			res.getWriter().write("fail");
 		} else {
 			for(int i=0; i<itmList.size(); i++) {
 				unityItmVO.setItm_form_id(itmList.get(i).getItm_form_id());
 				unityItmVO.setItm_use_yn(2);
-				System.out.println("bbbb: "+unityItmVO.toString());
 				orderSvc.do_updateUseYN(unityItmVO);
 			}
 		}

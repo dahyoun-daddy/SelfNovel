@@ -125,12 +125,12 @@
 	    window.open(url,'revisionPopup','left='+popupX+', width=500, height=800, status=no');
 	}
 	
-	function do_complete(rsm_id){
+	function do_complete(rsm_id, exp_id){
 		if (confirm("첨삭을 완료하시겠습니까?") == true){
 			$.ajax({
 	            url: "do_updateUseYN",
 	            data: {rsm_id: rsm_id,
-	            	   exp_id: '<%=session.getAttribute("exp_id")%>'
+	            	   exp_id: exp_id
 	            	  },
 	            type: 'POST',
 	            success: function(result){
@@ -150,7 +150,19 @@
 	
 	function do_compl(rsm_id, exp_id){
 		if (confirm("확정하시겠습니까?") == true){
-			do_submit(rsm_id,'do_nextState', exp_id);
+			$.ajax({
+	            url: "/controller/expert/do_updateTrade.do",
+	            data: {exp_id: exp_id},
+	            type: 'POST',
+	            success: function(result){
+	            	if(result == "fail"){
+	            		alert("확정 실패");
+	            		return;
+	            	} else{
+	            		do_submit(rsm_id,'do_nextState', exp_id);
+	            	}
+	            }
+	        });
 		}
 	}
 	
@@ -388,7 +400,7 @@
 													</button>
 												</c:when>
 												<c:when test="${orders.ord_state eq 30}">
-													<button style="width: 100%;" type="button" id="revisionBtn" class="btn btn-labeled btn-warning" onclick="do_complete(${orders.rsm_id})">
+													<button style="width: 100%;" type="button" id="revisionBtn" class="btn btn-labeled btn-warning" onclick="do_complete('${orders.rsm_id}','${orders.exp_id }')">
 														<span class="btn-label">
 											          		<i class="glyphicon glyphicon-ok"></i>
 											           	</span>

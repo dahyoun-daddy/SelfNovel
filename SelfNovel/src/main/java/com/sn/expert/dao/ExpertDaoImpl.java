@@ -176,5 +176,13 @@ public class ExpertDaoImpl implements ExpertDao {
 		log.debug("=================================");
 		return sqlSession.selectOne(namespace+".do_nextSeq");
 	}
+
+	@Override
+	public int do_updateTrade(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_updateTrade");
+		log.debug("=================================");
+		return sqlSession.update(namespace+".do_updateTrade", (ExpertVO) dto);
+	}
 	
 }

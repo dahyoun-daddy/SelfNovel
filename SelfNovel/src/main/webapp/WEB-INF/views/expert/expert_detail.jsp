@@ -131,7 +131,7 @@
 					$("#itm_content"+i).val(temp_content);
 					break;
 				}
-			}	
+			}
 		}
 	}
 	
@@ -147,7 +147,7 @@
 					$("#itm_content"+seq).val(temp_content);
 					break;
 				}
-			}	
+			}
 		}
 	}
 	

@@ -76,10 +76,10 @@
 			</div>
 		</div>
 		<br/>
-		<input class="form-control" style="width:30%;" id="login_id" type="text" /><br>
-		<input class="form-control" style="width:30%;" id="login_pwd" type="password" /><br>
+		<input class="form-control" style="width:30%;" id="login_id" type="text" onkeydown="if(event.keyCode == 13) document.getElementById('loginBtn').click()" /><br>
+		<input class="form-control" style="width:30%;" id="login_pwd" type="password" onkeydown="if(event.keyCode == 13) document.getElementById('loginBtn').click()" /><br>
 		<form id="loginFrm" action="/controller/main/main.do" method="POST" >
-			<input class="btn btn-warning" style="width:30%;" type="button" value="일반 로그인" onclick="n_login()"/><br><br> 
+			<input class="btn btn-warning" style="width:30%;" id="loginBtn" type="button" value="일반 로그인" onclick="n_login()"/><br><br> 
 		</form>
 		<form id="naverFrm" action="register_user.do">
 			<a href="<%=apiURL%>"><img height="50" src="<c:url value='/resources/img/naverid_login_button.png' />"/></a>

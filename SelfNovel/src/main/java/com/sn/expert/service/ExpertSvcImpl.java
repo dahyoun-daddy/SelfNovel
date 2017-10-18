@@ -117,4 +117,12 @@ public class ExpertSvcImpl implements ExpertSvc{
 		log.debug("2=======================");	
 		return expertDao.do_nextSeq();
 	}
+
+	@Override
+	public int do_updateTrade(DTO dto) {
+		log.debug("2=======================");
+		log.debug(dto.toString());
+		log.debug("2=======================");	
+		return expertDao.do_updateTrade(dto);
+	}
 }
