@@ -129,6 +129,7 @@ public class ManagerController {
 		
 		UserVO userVO = new UserVO();
 		userVO.setU_id(u_id);
+		userVO.setU_naver("");
 		userVO.setU_password(u_password);
 		userVO.setU_name(u_name);
 		userVO.setU_level(0);

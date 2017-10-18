@@ -136,7 +136,9 @@
 		/********************************************************/
 		/* do_save */
 		/********************************************************/
-		$('#do_save').on('click', function() {			
+		$('#do_save').on('click', function() {	
+			alert('!');
+			
 			var saveFrm = document.saveFrm;	
 			saveFrm.submit();
 		});
@@ -299,7 +301,7 @@
 	        <h4 class="modal-title" id="myModalLabel" align="center"> :: 관리자 등록 :: </h4>
 	      </div>
 	      <div class="modal-body" align="center">
-		      <form class="form-horizontal">
+		      <form action="do_save.do" name="saveFrm" method="POST" class="form-horizontal">
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">아이디</label>
 				    <div class="col-sm-8">
