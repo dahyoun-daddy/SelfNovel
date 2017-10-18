@@ -215,10 +215,7 @@
 		</div>
 		<table class="table table-bordered table-hover table-condensed" border="1px" 
 			   cellpadding="2" cellspacing="2" align="center" width="600px;">
-			<thead>
-				<tr>
-					<th colspan="7">..........</th>
-				</tr>
+			<thead>				
 				<tr>
 					<th class="table-head-rows">글번호</th>
 					<th class="table-head-rows">카테고리</th>

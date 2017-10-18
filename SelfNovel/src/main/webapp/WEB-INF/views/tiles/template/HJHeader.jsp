@@ -85,6 +85,11 @@
 			   				<label>관리자로 로그인 하였습니다.</label>&nbsp;
 			   			</td>
 			   			<td>
+			   				<form action="/controller/mypage/manager/manager_report_list.do" method="GET">
+			  					<input class="btn btn-success"type="submit" value="신고 목록">
+							</form>
+			   			</td>
+			   			<td>
 			   				<form action="/controller/mypage/manager/manager_user_list.do" method="GET">
 			  					<input class="btn btn-success"type="submit" value="관리자 페이지">
 							</form>

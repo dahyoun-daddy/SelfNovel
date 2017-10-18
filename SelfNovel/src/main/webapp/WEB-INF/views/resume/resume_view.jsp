@@ -12,7 +12,13 @@
 <%
   //contextPath
   String firstContextPath = request.getContextPath();
-  String contextPath = "http://localhost:8080/"+firstContextPath;  
+  String contextPath = "http://localhost:8080/"+firstContextPath;
+%>
+
+<%
+	//jstl 개행문자 처리
+	pageContext.setAttribute("crcn", "\r\n"); //Space, Enter
+	pageContext.setAttribute("br", "<br/>"); //br 태그
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -29,6 +35,7 @@
 
 <!-- bootpag -->
 <script src="${pageContext.request.contextPath}/resources/js/jquery.bootpag.js"></script>
+
 
 <!-- BootStrap CDN -->
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -345,8 +352,7 @@
 			+ "</tr>"
 		+"</table>"	
 		return item_table;
-	}
-	
+	}	
 </script>
 <title>Insert title here</title>
 <style type="text/css">
@@ -410,7 +416,7 @@
 		</c:if>										
 		<!-- 세션아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 다른 경우에만 신고하기 버튼을 보여준다. -->
 		<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne rsmVO.u_id}">
-			<button type="button" id="btnReport" value="신고하기" class="btn btn-labeled btn-info">
+			<button type="button" id="btnReport" value="신고하기" class="btn btn-labeled btn-danger">
 				<span class="btn-label" style="height: 34px;">
 					<i class="glyphicon glyphicon-list"></i>			
 				</span>
@@ -509,9 +515,10 @@
 									</tr>
 									<tr>
 										<td style="border: hidden;">
-											<div id="itm_content" style="background-color: #FAFAFA; border: 1px solid #E6E6E6;">												
-												${item.itm_content}
-											</div>
+											<div id="itm_content" style="background-color: #FAFAFA; border: 1px solid #E6E6E6;">
+												<c:set value="${item.itm_content}" var="content"></c:set>												
+												${fn:replace(content, crcn, br)}																											
+											</div>											
 										</td>
 									</tr>
 									<tr>
@@ -638,7 +645,12 @@
                 </button>				
 			</div>			
 			<div align="right">
-				<input type="button" id="btnBackToList" value="목록으로" class="btn btn-default">
+				<button type="button" id="btnBackToList" value="목록으로" class="btn btn-labeled btn-info">
+					<span class="btn-label" style="height: 34px;">
+						<i class="glyphicon glyphicon-list"></i>				
+					</span>			
+					목록
+				</button>
 			</div>
 		</div>
 	</form>

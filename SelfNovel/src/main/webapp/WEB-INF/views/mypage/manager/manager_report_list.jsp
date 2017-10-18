@@ -60,6 +60,10 @@
 <title> 신고 내역</title>
 
 <style type="text/css">
+	button {
+		width : 150px;
+	}
+
 	.table-head-rows {
 		text-align: center;
 		background-color: #4f81bd;
@@ -72,7 +76,7 @@
 		margin: auto;				
 	}
 	
-	.btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+	.btn-label {position: relative;left: -12px; display: inline-block; padding: 6px 12px;background: rgba(0,0,0,0.15); border-radius: 3px 0 0 3px;}
 	.btn-labeled {padding-top: 0;padding-bottom: 0;}	
 </style>
 
@@ -166,6 +170,14 @@
 				});
 			}
 		});
+		/********************************************************/
+		/* 게시물 보기 버튼
+		/********************************************************/
+		$("#reportTable").on("click", "#btnShowRsm", function(){
+			var u_id = $(this).parent().find("#rsm_id").val();
+			var url = "../../resume/do_searchOne.do?rsm_id=" + u_id
+			window.open(url, 'popup', 'width=800, height=600');	
+		});
 		
 	});
 	//--ready
@@ -201,7 +213,7 @@
 						<th class="table-head-rows text-center"><input type="checkbox"  id="allCheck"></th>						
 						<th class="table-head-rows"><label>메시지ID</label></th>
 						<th class="table-head-rows"><label>발신자ID</label></th>
-						<th class="table-head-rows"><label>게시물 ID</label></th>
+						<th class="table-head-rows"><label>게시물</label></th>
 						<th class="table-head-rows"><label>게시물 작성자</label></th>
 						<th class="table-head-rows"><label>메시지내용</label></th>
 						<th class="table-head-rows"><label>작성일</label></th>						
@@ -225,9 +237,7 @@
 			                		</td>
 			                		<td><!-- 신고받은 게시물 -->
 			                			<input type="hidden" id="rsm_id" name="rsm_id" value="${msgVO.rsm_id }">
-			                			<a href="#" onClick="javascript:window.open('../../resume/do_searchOne.do?rsm_id=${msgVO.rsm_id }', 'popup', 'width=800, height=600')">
-			                				${msgVO.rsm_id }
-			                			</a>
+			                			<button type="button" id="btnShowRsm" class="btn btn-default">게시물 보기</button>			                			
 			                			<c:choose>
 				                			<c:when test="${msgVO.rsm_use_yn eq 1 }">
 				                				<button type="button" class="btn btn-danger" id="btnDeleteRsm">게시물 삭제</button>
@@ -241,12 +251,11 @@
 			                			<input type="hidden" id="msg_notify" name="msg_notify" value="${msgVO.msg_notify }">
 			                			<%-- <a href="#" onClick="searchUser('${msgVO.msg_notify}')"></a> --%>
 			                			<c:choose>
-			                				<c:when test="${msgVO.msg_notify ne null && msgVO.u_id_use_yn ne 0}">
-				                				${msgVO.msg_notify }
-				                				<button type="button" class="btn btn-danger" id="btnBanUser">유저 강퇴</button>
+			                				<c:when test="${msgVO.msg_notify ne null && msgVO.u_id_use_yn ne 0}">				                				
+				                				<button type="button" class="btn btn-danger" id="btnBanUser">${msgVO.msg_notify } 삭제</button>
 			                				</c:when>
 			                				<c:otherwise>
-			                					<label>탈퇴된 회원</label>
+			                					<button type="button" class="btn btn-success" disabled="disabled">탈퇴된 회원</button>			                					
 			                				</c:otherwise>
 			                			</c:choose>			                			
 			                						                			

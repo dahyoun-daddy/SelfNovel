@@ -3,17 +3,13 @@ package com.sn.resume.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +33,10 @@ import com.sn.common.FileSaveVO;
 import com.sn.common.StringUtil;
 import com.sn.img.domain.ImgVO;
 import com.sn.img.service.ImgSvc;
-import com.sn.resume.dao.RsmDao;
 import com.sn.resume.domain.ItmVO;
 import com.sn.resume.domain.RsmVO;
 import com.sn.resume.service.ItmSvc;
 import com.sn.resume.service.RsmSvc;
-import com.sn.resume.service.RsmSvcImpl;
 
 
 /**
