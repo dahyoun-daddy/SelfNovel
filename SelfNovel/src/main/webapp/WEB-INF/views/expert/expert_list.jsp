@@ -90,10 +90,25 @@
 	}
 	
 	function do_search_page(url, PAGE_NUM) {
-		var testfrm = document.searchFrm;
-		testfrm.page_num.value = PAGE_NUM;
-		testfrm.action = url;
-		testfrm.submit();
+		var searchCategory = "";
+		var searchCategoryNum = "|";
+		
+		$('input:checkbox[id="searchCategory_1"]').each(function() {
+		      if(this.checked){
+		            searchCategory += "exp_ctg = " + this.value + " OR ";
+		            searchCategoryNum += this.value + "|";
+		      }
+		 });
+		if(searchCategory != ""){
+			searchCategory = "AND (" + searchCategory.substr(0,searchCategory.length-4) + ")";
+		}
+		
+		$("#searchDiv").val($("#searchDiv_1").val());
+		$("#searchWord").val($("#searchWord_1").val());
+		$("#searchCategory").val(searchCategory);
+		$("#searchCategoryNum").val(searchCategoryNum);
+		$("#page_num").val(PAGE_NUM);
+		searchFrm.submit();
 	}
 </script>
 <title>:::전문가 조회:::</title>

@@ -179,7 +179,7 @@
 		  FROM(SELECT A.*,
 		              B.*,
 		              C.dtl_cd_nm,
-		              ROW_NUMBER() OVER(ORDER BY u_reg_dt DESC) as RNUM,
+		              ROW_NUMBER() OVER(ORDER BY ${SEARCH_DIV} DESC) as RNUM,
 		              COUNT(*) OVER () AS TOTAL_CNT
 			     FROM users A , expert B,
 		              (SELECT * FROM codes WHERE mst_cd_id = 'C002') C
