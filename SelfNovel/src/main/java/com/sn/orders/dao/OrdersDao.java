@@ -1,5 +1,7 @@
 package com.sn.orders.dao;
 
+import java.util.List;
+
 import com.sn.common.DTO;
 import com.sn.common.WorkDiv;
 
@@ -30,4 +32,15 @@ public interface OrdersDao extends WorkDiv {
 	 * @return
 	 */
 	public int do_reject(DTO dto);
+	
+	/**
+	 * 의뢰하기 및 첨삭하기 관련 메소드
+	 * @param dto
+	 * @return
+	 */
+	public List<?> do_searchOriginal(DTO dto);
+	public List<?> do_searchRev(DTO dto);
+	public int do_saveFirstTime(DTO dto);
+	public int do_updateItem(DTO dto);
+	public int do_updateUseYN(DTO dto);
 }

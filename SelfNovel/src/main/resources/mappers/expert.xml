@@ -12,6 +12,8 @@
 		INSERT ALL
 		    INTO resume (rsm_id, img_id, rsm_title, rsm_content, u_id, rsm_reg_dt, rsm_count, rsm_recommend, rsm_use_yn, rsm_ord_yn, rsm_div)
 		    VALUES (resume_seq.nextval, img_id, rsm_title, rsm_content, u_id, SYSDATE, rsm_count, rsm_recommend, rsm_use_yn, rsm_ord_yn, rsm_div)
+		    INTO orders (rsm_id, exp_id, u_id, ord_state, ord_reg_dt, ord_use_yn)
+			VALUES (resume_seq.currval, exp_id, u_id, 20, SYSDATE, 1)
 		    ${itm_inserts}
 		SELECT *
 		FROM
@@ -25,7 +27,8 @@
 		           0 rsm_recommend,
 		           1 rsm_use_yn,
 		           0 rsm_ord_yn,
-		           7 rsm_div,
+		           '${rsm_div}' rsm_div,
+		           '${exp_id}' exp_id,
 		           ${itm_contents}
 		    FROM dual
 		)

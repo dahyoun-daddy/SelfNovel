@@ -163,7 +163,6 @@
 				itm_contents += $("#itm_content"+i).val() + "\\";
 			}
 		}
-		alert("itm_titles: " + itm_titles);
 		sessionStorage.setItem("itemSeq",1);
 		
 		$.ajax({
@@ -173,7 +172,8 @@
             	   itm_titles: itm_titles,
             	   itm_contents: itm_contents,
             	   u_id: u_id,
-            	   exp_id: exp_id
+            	   exp_id: exp_id,
+            	   rsm_div: $("#searchCategory_1").val()
             	  },
             type: 'POST',
             success: function(result){
@@ -211,7 +211,9 @@
     </div>
   </div>
   <div align="right">
-  	<input class="btn btn-success" type="button" value="의뢰하기" onclick="open_order()"/>
+  	<% if(session.getAttribute("u_id") != null){ %>
+  		<input class="btn btn-success" type="button" value="의뢰하기" onclick="open_order()"/>
+  	<% } %>
   </div>
 </section>
 
@@ -285,12 +287,19 @@
 						<table style="width: 100%;" align="center">
 							<tr>
 								<td style="color: black; width: 80%;">
-									<input style="width: 100%;" type="text" id="rsm_title" />
+									<div align="left"><input class="form-control" style="width: 80%;" type="text" id="rsm_title" /></div>
+								</td>
+								<td style="color: black; width: 20%;">
+									<select name="searchCategory_1" id="searchCategory_1" style="width:150px;" class="form-control">
+									      <c:forEach var="codeVo" items="${codesList}">
+									         <option value="${codeVo.dtl_cd_id}">${codeVo.dtl_cd_nm}</option>
+									      </c:forEach>
+							   		</select>
 								</td>
 							</tr>
 							<tr>
-								<td style="color: black;">
-									<textarea style="resize:none; width:100%; height: 300px;" id="rsm_content"></textarea>
+								<td style="color: black;" colspan="2">
+									<textarea class="form-control" style="resize:none; width:100%; height: 300px;" id="rsm_content"></textarea>
 								</td>
 							</tr>
 						</table>
@@ -307,7 +316,7 @@
 								<table style="width: 100%;" align="center">
 									<tr>
 										<td style="color: black; width: 80%;">
-											<input style="width: 100%;" type="text" id="itm_title1" />
+											<input class="form-control" style="width: 100%;" type="text" id="itm_title1" />
 										</td>
 										<td rowspan="2" style="color: black; width: 20%;">
 											<div align="center">
@@ -317,7 +326,7 @@
 									</tr>
 									<tr>
 										<td style="color: black;">
-											<textarea style="resize:none; width:100%; height: 300px;" id="itm_content1"></textarea>
+											<textarea class="form-control" style="resize:none; width:100%; height: 300px;" id="itm_content1"></textarea>
 										</td>
 									</tr>
 								</table>

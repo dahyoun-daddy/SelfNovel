@@ -161,6 +161,7 @@ public class ExpertDaoImpl implements ExpertDao {
 		searchParam.put("rsm_title", param.getRsm_title());
 		searchParam.put("rsm_content", param.getRsm_content());
 		searchParam.put("u_id", param.getU_id());
+		searchParam.put("exp_id", param.getParam().get("exp_id"));
 		searchParam.put("itm_inserts", param.getParam().get("itm_inserts"));
 		searchParam.put("itm_contents", param.getParam().get("itm_contents"));
 		

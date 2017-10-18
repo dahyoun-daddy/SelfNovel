@@ -75,4 +75,29 @@ public class OrdersSvcImpl implements OrdersSvc {
 	public int do_reject(DTO dto) {
 		return ordersDao.do_reject(dto);
 	}
+	
+	/**
+	 * 의뢰하기 및 첨삭하기 관련 메소드
+	 */
+	@Override
+	public List<?> do_searchOriginal(DTO dto) {
+		return ordersDao.do_searchOriginal(dto);
+	}
+	@Override
+	public List<?> do_searchRev(DTO dto) {
+		return ordersDao.do_searchRev(dto);
+	}
+	@Override
+	public int do_saveFirstTime(DTO dto) {
+		return ordersDao.do_saveFirstTime(dto);
+	}
+	@Override
+	public int do_updateItem(DTO dto) {
+		return ordersDao.do_updateItem(dto);
+	}
+	
+	@Override
+	public int do_updateUseYN(DTO dto) {
+		return ordersDao.do_updateUseYN(dto);
+	}
 }
