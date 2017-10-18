@@ -32,6 +32,7 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/timeline.css">
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script type="text/javascript">
 	//paiging 이동
 	function do_search_page(url, PAGE_NUM) {
@@ -125,24 +126,47 @@
 	}
 	
 	function do_complete(rsm_id){
-		$.ajax({
-            url: "do_updateUseYN",
-            data: {rsm_id: rsm_id,
-            	   exp_id: '<%=session.getAttribute("exp_id")%>'
-            	  },
-            type: 'POST',
-            success: function(result){
-            	if(result == "fail"){
-            		alert("첨삭하지 않으면 완료할 수 없습니다.");
-            		return;
-            	} else{
-            		$("#WORK_DIV").val("do_nextState");
-            		$("#EXP_ID").val('<%=session.getAttribute("u_id")%>');
-        			$("#RSM_ID").val(rsm_id);
-        			testFrm.submit();
-            	}
-            }
-        });
+		if (confirm("첨삭을 완료하시겠습니까?") == true){
+			$.ajax({
+	            url: "do_updateUseYN",
+	            data: {rsm_id: rsm_id,
+	            	   exp_id: '<%=session.getAttribute("exp_id")%>'
+	            	  },
+	            type: 'POST',
+	            success: function(result){
+	            	if(result == "fail"){
+	            		alert("첨삭하지 않으면 완료할 수 없습니다.");
+	            		return;
+	            	} else{
+	            		$("#WORK_DIV").val("do_nextState");
+	            		$("#EXP_ID").val('<%=session.getAttribute("u_id")%>');
+	        			$("#RSM_ID").val(rsm_id);
+	        			testFrm.submit();
+	            	}
+	            }
+	        });
+		}
+	}
+	
+	function do_compl(rsm_id, exp_id){
+		if (confirm("확정하시겠습니까?") == true){
+			do_submit(rsm_id,'do_nextState', exp_id);
+		}
+	}
+	
+	function do_accept(rsm_id){
+		do_submit(rsm_id,'do_nextState', '<%=session.getAttribute("u_id")%>');
+	}
+	
+	function do_deny(rsm_id){
+		do_submit(rsm_id,'do_reject', '<%=session.getAttribute("u_id")%>');
+	}
+
+	function do_submit(rsm_id, work_div, exp_id){
+		$("#WORK_DIV").val(work_div);
+		$("#EXP_ID").val(exp_id);
+		$("#RSM_ID").val(rsm_id);
+		testFrm.submit();
 	}
 </script>
 </head>
@@ -158,18 +182,17 @@
 	<c:choose>
 		<c:when test="${u_level eq '1'}">
 		<!-- 일반 회원인 경우 -->
-			<table id="userTable"
-				class="table table-bordered table-hover table-condensed" style="color: black;">
+			<table id="userTable" class="w3-table-all w3-card-4" style="color: black;">
 				<thead>
-					<tr>
-						<th class="text-center"><input id="allCheck" type="checkbox" /></th>
-						<th class="text-center">번호</th>
-						<th class="text-center">제목</th>
-						<th class="text-center">전문가</th>
-						<th class="text-center">작성일</th>
-						<th class="text-center">원본</th>
-						<th class="text-center">첨삭</th>
-						<th class="text-center">상태</th>
+					<tr class="w3-Indigo">
+						<td style="width: 5%;"><div align="center"><input id="allCheck" type="checkbox" /></div></td>
+						<td style="width: 5%;"><div align="center">번호</div></td>
+						<td style="width: 30%;"><div align="center">제목</div></td>
+						<td style="width: 20%;"><div align="center">전문가</div></td>
+						<td style="width: 20%;"><div align="center">작성일</div></td>
+						<td style="width: 5%;"><div align="center">원본</div></td>
+						<td style="width: 5%;"><div align="center">첨삭</div></td>
+						<td style="width: 10%;"><div align="center">상태</div></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -179,40 +202,60 @@
 								<tr id="ordersInfoTr">
 									<input type="hidden" name="rsm_id" value="${orders.rsm_id}" />
 									<input type="hidden" name="exp_id" value="${orders.exp_id}" />
-									<td class="text-center"><input type="checkbox" name="chkList" /></td>
-									<td class="text-center"><c:out value="${orders.no}" /></td>
-									<td class="text-right"><c:out value="${orders.rsm_title}" /></td>
-									<td class="text-right"><c:out value="${orders.exp_id}" /></td>
-									<td class="text-center"><c:out value="${orders.ord_reg_dt}" /></td>
-									<td class="text-right">
-										<input type="button" id="searchOriginBtn" value="원본조회" onclick="do_searchOriginal(${orders.rsm_id})">
+									<td><div align="center"><input type="checkbox" name="chkList" /></div></td>
+									<td><div align="center"><c:out value="${orders.no}" /></div></td>
+									<td><div align="center"><c:out value="${orders.rsm_title}" /></div></td>
+									<td><div align="center"><c:out value="${orders.exp_id}" /></div></td>
+									<td><div align="center"><c:out value="${orders.ord_reg_dt}" /></div></td>
+									<td>
+										<button style="width: 100%;" type="button" class="btn btn-labeled btn-success" onclick="do_searchOriginal(${orders.rsm_id})">
+											<span class="btn-label">
+								          		<i class="glyphicon glyphicon-text-size"></i>
+								           	</span>
+								           	원본조회
+										</button>
 									</td>
 									<td class="text-right">
 										<c:choose>
 											<c:when test="${orders.ord_state eq 40 || orders.ord_state eq 50 }">
-												<input type="button" name="doSearchEdit" value="첨삭조회" onclick="do_searchRevision(${orders.rsm_id})">
+												<button style="width: 100%;" type="button" class="btn btn-labeled btn-primary" onclick="do_searchRevision(${orders.rsm_id})">
+													<span class="btn-label">
+										          		<i class="glyphicon glyphicon-ok"></i>
+										           	</span>
+										           	첨삭조회
+												</button>
 											</c:when>
-											<c:otherwise>
-												<input type="button" name="doSearchEdit" value="첨삭조회" disabled='disabled'>
-											</c:otherwise>
+											<c:when test="${orders.ord_state eq 30 }">
+												<button style="width: 100%;" type="button" class="btn btn-labeled btn-info" disabled>
+													<span class="btn-label">
+										          		<i class="glyphicon glyphicon-pencil"></i>
+										           	</span>
+										           	첨삭중..
+												</button>
+											</c:when>
 										</c:choose>
 									</td>
 									<td class="text-right">
 										<c:choose>
 												<c:when test="${orders.ord_state eq 10}">
-													<input type='button' value='거절' disabled='disabled' />
+													<div align="right"><label style="color: red;">거절됨</label></div>
 												</c:when>
 												<c:when test="${orders.ord_state eq 20}">
-													<label style="color: #0054FF;">수락 대기중..</label>
+													<div align="right"><label style="color: #0054FF;">수락 대기중..</label></div>
 												</c:when>
 												<c:when test="${orders.ord_state eq 30}">
-													<input type='button' value='첨삭 대기중' disabled='disabled' />
+													<div align="right"><label style="color: #0054FF;">첨삭 대기중..</label></div>
 												</c:when>
 												<c:when test="${orders.ord_state eq 40}">
-													<input type='button' name='signTest' value='확정'/>
+														<button style="width: 100%;" type="button" name="signTest" class="btn btn-labeled btn-danger" onclick="do_compl('${orders.rsm_id}','${orders.exp_id }')">
+															<span class="btn-label">
+													          	<i class="glyphicon glyphicon-thumbs-up"></i>
+													        </span>
+													          확정하기
+														</button>
 												</c:when>
 												<c:when test="${orders.ord_state eq 50}">
-													<label style="color: #22741C;">의뢰 완료</label>
+													<div align="right"><label style="color: #22741C;">의뢰 완료</label></div>
 												</c:when>
 											</c:choose>
 										</td>
@@ -225,8 +268,13 @@
 					</c:choose>
 				</tbody>
 			</table>
-			<input type='button' id='doDeleteList' value='선택 삭제' />	 
-			 
+			<br/>
+				<button type="button" class="btn btn-labeled btn-danger pull-left" id="doDeleteList">
+					<span class="btn-label">
+				      		<i class="glyphicon glyphicon-remove"></i>
+				       	</span>
+				       	선택 삭제
+				</button>
 			<div class="form-inline text-center ">
 				<%=StringUtil.renderPaging(totalCnt, oPage_num, oPage_size, bottomCount, "pagelist.do", "do_search_page")%>
 			</div>		
@@ -260,17 +308,17 @@
 		</c:when>
 		<c:when test="${u_level eq '2'}">
 		<!-- 전문가 회원인 경우 -->
-			<table id="userTable"
-				class="table table-bordered table-hover table-condensed" style="color: black;">
+			<table id="userTable" class="w3-table-all w3-card-4" style="color: black;">
 				<thead>
-					<tr>
-						<th class="text-center"><input id="allCheck" type="checkbox" /></th>
-						<th class="text-center">번호</th>
-						<th class="text-center">제목</th>
-						<th class="text-center">의뢰인</th>
-						<th class="text-center">작성일</th>
-						<th class="text-center">첨삭</th>
-						<th class="text-center">상태</th>
+					<tr class="w3-Indigo">
+						<td style="width: 5%;"><div align="center"><input id="allCheck" type="checkbox" /></div></td>
+						<td style="width: 5%;"><div align="center">번호</div></td>
+						<td style="width: 30%;"><div align="center">제목</div></td>
+						<td style="width: 20%;"><div align="center">의뢰자</div></td>
+						<td style="width: 20%;"><div align="center">작성일</div></td>
+						<td style="width: 5%;"><div align="center">원본</div></td>
+						<td style="width: 5%;"><div align="center">첨삭</div></td>
+						<td style="width: 10%;"><div align="center">상태</div></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -280,41 +328,81 @@
 								<tr id="ordersInfoTr">
 									<input type="hidden" name="rsm_id" value="${orders.rsm_id}" />
 									<input type="hidden" name="exp_id" value="${orders.exp_id}" />
-									<td class="text-center"><input type="checkbox" name="chkList" /></td>
-									<td class="text-center"><c:out value="${orders.no}" /></td>
-									<td class="text-right"><c:out value="${orders.rsm_title}" /></td>
-									<td class="text-center"><c:out value="${orders.u_id}" /></td>
-									<td class="text-right"><c:out value="${orders.ord_reg_dt}" /></td>
-									<td class="text-right">
-										<c:if test="${orders.ord_state ne 10 }">
-											<input type="button" id="searchOriginBtn" value="원본조회" onclick="do_searchOriginal(${orders.rsm_id})">
+									<td><div align="center"><input type="checkbox" name="chkList" /></div></td>
+									<td><div align="center"><c:out value="${orders.no}" /></div></td>
+									<td><div align="center"><c:out value="${orders.rsm_title}" /></div></td>
+									<td><div align="center"><c:out value="${orders.u_id}" /></div></td>
+									<td><div align="center"><c:out value="${orders.ord_reg_dt}" /></div></td>
+									<td>
+										<div align="center">
+											<c:if test="${orders.ord_state ne 10 }">
+												<button style="width: 100%;" type="button" class="btn btn-labeled btn-success" onclick="do_searchOriginal(${orders.rsm_id})">
+													<span class="btn-label">
+										          		<i class="glyphicon glyphicon-text-size"></i>
+										           	</span>
+										           	원본조회
+												</button>
+											</c:if>
+										</div>
+									</td>
+									<td>
+										<div align="center">
+											<c:if test="${orders.ord_state eq 20 }">
+												<button style="width: 100%;" type="button" name="signTest" class="w3-button w3-green" onclick="do_accept(${orders.rsm_id})">
+													<span class="btn-label">
+											          	<i class="glyphicon glyphicon-ok"></i>
+											        </span>
+											           수락하기
+												</button>
+											</c:if>
 											<c:if test="${orders.ord_state eq 40 || orders.ord_state eq 50 }">
-												<input type="button" id="revisionBtn" value="첨삭조회" onclick="do_searchRevision(${orders.rsm_id})">
+												<button style="width: 100%;" type="button" id="revisionBtn" class="btn btn-labeled btn-primary" onclick="do_searchRevision(${orders.rsm_id})">
+													<span class="btn-label">
+										          		<i class="glyphicon glyphicon-ok"></i>
+										           	</span>
+										           	첨삭조회
+												</button>
 											</c:if>
 											<c:if test="${orders.ord_state eq 30 }">
-												<input type="button" id="revisionBtn" value="첨삭하기" onclick="do_searchRevision(${orders.rsm_id})">
+												<button style="width: 100%;" type="button" id="revisionBtn" class="btn btn-labeled btn-info" onclick="do_searchRevision(${orders.rsm_id})">
+													<span class="btn-label">
+										          		<i class="glyphicon glyphicon-pencil"></i>
+										           	</span>
+										           	첨삭하기
+												</button>
 											</c:if>
-										</c:if>
+										</div>
 									</td>
 									<td class="text-right">
-										<c:choose>
+										<div align="right">
+											<c:choose>
 												<c:when test="${orders.ord_state eq 10}">
-													<label style="color: red;">의뢰 거절</label>
+													<label style="color: red; font-weight: bold;">거절함</label>
 												</c:when>
 												<c:when test="${orders.ord_state eq 20}">
-													<input type='button' name="signTest" value='수락' />
-													<input type='button' name="signTest" value='거절' />
+													<button style="width: 100%;" type="button" id="rejectTest" name="rejectTest" class="w3-button w3-red" onclick="do_deny(${orders.rsm_id})">
+														<span class="btn-label">
+											          		<i class="glyphicon glyphicon-remove"></i>
+											           	</span>
+											           	거절하기
+													</button>
 												</c:when>
 												<c:when test="${orders.ord_state eq 30}">
-													<input type='button' value='첨삭 완료' onclick="do_complete(${orders.rsm_id})" />
+													<button style="width: 100%;" type="button" id="revisionBtn" class="btn btn-labeled btn-warning" onclick="do_complete(${orders.rsm_id})">
+														<span class="btn-label">
+											          		<i class="glyphicon glyphicon-ok"></i>
+											           	</span>
+											           	첨삭 완료
+													</button>
 												</c:when>
 												<c:when test="${orders.ord_state eq 40}">
-													<label style="color: #FFBB00;">확정 대기중..</label>
+													<label style="color: #FFBB00; font-weight: bold;">확정 대기중..</label>
 												</c:when>
 												<c:when test="${orders.ord_state eq 50}">
-													<label style="color: #22741C;">의뢰 완료</label>
+													<label style="color: #22741C; font-weight: bold;">의뢰 완료</label>
 												</c:when>
 											</c:choose>
+											</div>
 										</td>
 								</tr>
 							</c:forEach>
@@ -325,8 +413,13 @@
 					</c:choose>
 				</tbody>
 			</table>
-			<input type='button' id='doDeleteList' value='선택 삭제' />	 
-			 
+			<br/>
+			<button type="button" class="btn btn-labeled btn-danger pull-left" id="doDeleteList">
+					<span class="btn-label">
+				      		<i class="glyphicon glyphicon-remove"></i>
+				       	</span>
+				       	선택 삭제
+				</button>
 			<div class="form-inline text-center ">
 				<%=StringUtil.renderPaging(totalCnt, oPage_num, oPage_size, bottomCount, "pagelist.do", "do_search_page")%>
 			</div>				

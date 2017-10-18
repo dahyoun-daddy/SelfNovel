@@ -209,7 +209,7 @@
 		              (SELECT * FROM codes WHERE mst_cd_id = 'C002') C
 		         WHERE u_id = exp_id
 		           AND dtl_cd_id = exp_ctg
-				 ORDER BY u_reg_dt DESC
+				 ORDER BY exp_trade DESC, u_reg_dt DESC
 		      )
 		 WHERE RNUM BETWEEN 1 AND 3
 	</select>    

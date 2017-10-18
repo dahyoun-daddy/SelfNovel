@@ -158,6 +158,7 @@ public class ExpertDaoImpl implements ExpertDao {
 		RsmVO param=(RsmVO)dto;		
 		Hashtable<String, String> searchParam = param.getParam();
 		
+		searchParam.put("rsm_div", param.getRsm_div());
 		searchParam.put("rsm_title", param.getRsm_title());
 		searchParam.put("rsm_content", param.getRsm_content());
 		searchParam.put("u_id", param.getU_id());

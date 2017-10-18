@@ -88,6 +88,13 @@
 		$("#searchCategoryNum").val(searchCategoryNum);
 		searchFrm.submit();
 	}
+	
+	function do_search_page(url, PAGE_NUM) {
+		var testfrm = document.searchFrm;
+		testfrm.page_num.value = PAGE_NUM;
+		testfrm.action = url;
+		testfrm.submit();
+	}
 </script>
 <title>:::전문가 조회:::</title>
 </head>
@@ -95,6 +102,7 @@
 	<h2>전문가 조회</h2>
 	<hr/>
 	<form action="do_search.do" id="searchFrm" name="searchFrm" method="post" class="form-inline">
+		<input type="hidden" id="page_num" name="page_num" value="">
 		<input type="hidden" id="searchDiv" name="searchDiv" value="">
 		<input type="hidden" id="searchWord" name="searchWord" value="">
 		<input type="hidden" id="searchCategory" name="searchCategory" value="">
@@ -138,7 +146,7 @@
 										<tr>
 											<td style="text-align: center;">제목</td>
 											<td>
-												<c:out value="${expertVO.exp_title}"/>
+												<div align="center"><c:out value="${expertVO.exp_title}"/></div>
 											</td>
 										</tr>
 										<tr>
