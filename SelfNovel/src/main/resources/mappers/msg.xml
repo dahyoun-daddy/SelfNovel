@@ -76,28 +76,41 @@
 	<select id="do_searchReport" parameterType="String" 
 								 resultType="com.sn.msg.domain.MsgVO">
 	SELECT
-		  msg_id,
-		  msg_sender,
-		  msg_receiver,
-		  msg_content,
-		  msg_sep,
-		  msg_reg_dt,
-		  rsm_id,
-		  msg_notify,
-    	  msg_read_yn,
-     	  msg_use_yn,   
-		  no,
-		  totalNo
+		  T1.msg_id,
+		  T1.msg_sender,
+		  T1.msg_receiver,
+		  T1.msg_content,
+		  T1.msg_sep,
+		  T1.msg_reg_dt,
+		  T1.rsm_id,
+		  T1.msg_notify,
+    	  T1.msg_read_yn,
+     	  T1.msg_use_yn,   
+		  T1.no,
+		  T1.rsm_use_yn,
+		  T1.totalNo,
+          nvl(T2.CNT, 0) AS u_id_use_yn
 		FROM (
-	      SELECT A.*,
+	      SELECT A.*,	      		              
+	      		 R.RSM_USE_YN,	      		 
 	             ROW_NUMBER() OVER (ORDER BY A.msg_reg_dt DESC) AS no,
-	             COUNT(*) OVER() AS totalNo
-	      FROM MESSAGE A
-	      WHERE msg_sep = 0 
+	             COUNT(*) OVER() AS totalNo                 
+           FROM MESSAGE A, RESUME R
+	      WHERE A.RSM_ID = R.RSM_ID
+	        AND msg_sep = 0 
 	        AND msg_use_yn = 1	      	 
 	      ORDER BY A.msg_reg_dt 
-	    )
-		WHERE no BETWEEN (#{page_size}*(#{page_num}-1)+1) AND (#{page_size}*(#{page_num}))
+	    ) T1,
+        (
+	      SELECT A.msg_id,
+	             COUNT(*) OVER() AS cnt
+           FROM MESSAGE A, USERS U
+	      WHERE RTRIM(A.MSG_NOTIFY, ' ') = U.U_ID
+	        AND msg_sep = 0 
+	        AND msg_use_yn = 1	      	 	      
+	    ) T2
+        WHERE T1.MSG_ID = T2.MSG_ID(+)
+		  AND T1.no BETWEEN (#{page_size}*(#{page_num}-1)+1) AND (#{page_size}*(#{page_num}))
 	</select>
 	
 	<!-- do_delete -->

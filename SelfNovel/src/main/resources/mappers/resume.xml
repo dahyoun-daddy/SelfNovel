@@ -110,6 +110,7 @@
 		               COUNT(*) OVER() AS TOTALNO
 		          FROM RESUME A, USERS B
 		         WHERE A.U_ID = B.U_ID
+		           AND A.RSM_ORD_YN = '1'
 		           AND A.RSM_USE_YN = '1'
 		        <choose>				
 					<when test="search_cat.size != 0">

@@ -374,10 +374,10 @@ public class RsmController {
 	@RequestMapping(value="resume/do_delete.do")
 	@ResponseBody
 	public int do_delete(HttpServletRequest req) {
-		log.debug("===== RsmDaocontroller.do_delete =====");
-		log.debug("req : " + req.toString());		
-		log.debug("rsm_id : " + req.getParameter("rsm_id"));
-		log.debug("======================================");
+		log.info("===== RsmDaocontroller.do_delete =====");
+		log.info("req : " + req.toString());		
+		log.info("rsm_id : " + req.getParameter("rsm_id"));
+		log.info("======================================");
 		
 		String rsm_id = req.getParameter("rsm_id");
 		

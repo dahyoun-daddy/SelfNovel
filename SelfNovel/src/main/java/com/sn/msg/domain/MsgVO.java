@@ -24,6 +24,9 @@ public class MsgVO extends DTO {
 	
 	private int    msg_read_yn			;//읽음여부
 	private int    msg_use_yn			;//읽음여부
+	
+	private String rsm_use_yn		;//게시물 삭제여부
+	private String u_id_use_yn		;//유저 탈퇴 여부
 
 	
 	/***********************************************/
@@ -32,9 +35,10 @@ public class MsgVO extends DTO {
 	public MsgVO() {
 		super();
 	}
-	
+
 	public MsgVO(String msg_id, String msg_sender, String msg_receiver, String msg_content, int msg_sep,
-			String msg_reg_dt, int rsm_id, String msg_notify, int msg_read_yn, int msg_use_yn) {
+			String msg_reg_dt, int rsm_id, String msg_notify, int msg_read_yn, int msg_use_yn, String rsm_use_yn,
+			String u_id_use_yn) {
 		super();
 		this.msg_id = msg_id;
 		this.msg_sender = msg_sender;
@@ -46,8 +50,10 @@ public class MsgVO extends DTO {
 		this.msg_notify = msg_notify;
 		this.msg_read_yn = msg_read_yn;
 		this.msg_use_yn = msg_use_yn;
+		this.rsm_use_yn = rsm_use_yn;
+		this.u_id_use_yn = u_id_use_yn;
 	}
-
+	
 	/***********************************************/
 	//getter and setter
 	/***********************************************/
@@ -112,18 +118,33 @@ public class MsgVO extends DTO {
 	public void setMsg_use_yn(int msg_use_yn) {
 		this.msg_use_yn = msg_use_yn;
 	}
+	
+	public String getRsm_use_yn() {
+		return rsm_use_yn;
+	}
 
+	public void setRsm_use_yn(String rsm_use_yn) {
+		this.rsm_use_yn = rsm_use_yn;
+	}	
 
+	public String getU_id_use_yn() {
+		return u_id_use_yn;
+	}
+
+	public void setU_id_use_yn(String u_id_use_yn) {
+		this.u_id_use_yn = u_id_use_yn;
+	}
 
 	/***********************************************/
 	//method
 	/***********************************************/
+
 	@Override
 	public String toString() {
 		return "MsgVO [msg_id=" + msg_id + ", msg_sender=" + msg_sender + ", msg_receiver=" + msg_receiver
 				+ ", msg_content=" + msg_content + ", msg_sep=" + msg_sep + ", msg_reg_dt=" + msg_reg_dt + ", rsm_id="
 				+ rsm_id + ", msg_notify=" + msg_notify + ", msg_read_yn=" + msg_read_yn + ", msg_use_yn=" + msg_use_yn
-				+ "]";
+				+ ", rsm_use_yn=" + rsm_use_yn + ", u_id_use_yn=" + u_id_use_yn + "]";
 	}
 	
 	

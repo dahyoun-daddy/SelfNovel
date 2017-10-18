@@ -56,7 +56,15 @@
 			//var msg_content = $("msg_content").val();
 			var msg_content = $("input:radio[name=msg_content]:checked").val();
 			var rsm_id = $("#rsm_id").val();
-			var msg_notify = $("#msg_notify").val();
+			var msg_notify = $("#msg_notify").val();			
+			
+			if(msg_content == null || msg_content == ''){
+				alert("내용을 선택해주세요.");
+				return;
+			}
+			else if(msg_content == '직접'){
+				msg_content = $("#msg_content_detail").val();
+			}
 			
 			$.ajax({
 				type : "POST",
@@ -101,7 +109,7 @@
 </head>
 <body>
 	<!-- 전체 DIV -->
-	<div style="width:100%; padding:20px;">	
+	<div style="width:100%; padding:20px;" align="center">	
 		<h2>신고하기</h2>
 		<hr/>			
 		<form id="reportForm" name="reportForm">
@@ -109,13 +117,13 @@
 			<input type="hidden" id="msg_sender" value="${msg_sender}"><!-- 작성자 ID -->				
 			<input type="hidden" id="rsm_id" value="${rsm_id} "><!-- 글 아이디 --> <!-- 넘겨 받을 것 -->
 			<input type="hidden" id="msg_notify" value="${msg_notify} "><!-- 신고대상 --> <!-- 넘겨 받을 것 -->
-			<div id="row1" style="padding: 10px;">		
+			<div id="row1" style="padding: 10px; text-align: left;">		
 				<label>
 					신고 대상 :
 				</label>
 				${rsm_title} - ${u_name}
 			</div>			
-			<div id="row2" style="padding: 10px;">
+			<div id="row2" style="padding: 10px; text-align: left;">
 			<label>
 				신고 사유 :
 			</label>

@@ -270,7 +270,7 @@
 			var frm = document.frm;
 			frm.setAttribute("current_id", "current_id", "${sessionScope.u_id}")	
 						
-			window.open("", pop_title, "width=500, height=300, scrollbars=no");		
+			window.open("", pop_title, "width=500, height=600, scrollbars=no");		
 	        
 	        frm.target = pop_title;
 	        frm.action = "../message/reportForm.do";	         

@@ -26,7 +26,7 @@ public class RsmVO extends DTO {
 	private String rsm_use_yn    ;//공개 여부
 	private String rsm_ord_yn    ;//신청 여부
 	private String u_name		 ;//작성자 닉네임
-	private String rsm_div		 ;//카테고리
+	private String rsm_div		 ;//카테고리	
 	
 	/***********************************************/
 	//constructor

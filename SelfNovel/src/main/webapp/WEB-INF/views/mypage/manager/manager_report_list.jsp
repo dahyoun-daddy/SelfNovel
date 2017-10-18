@@ -119,6 +119,54 @@
 				});//ajax
 			}//if confirm					
 		})//btn_delete_on_click
+		
+		/********************************************************/
+		/* 게시물 삭제 버튼
+		/********************************************************/
+		$("#reportTable").on("click", "#btnDeleteRsm",function(){
+			var rsm_id = $(this).parent().find("#rsm_id").val();			
+			alert(rsm_id);
+			
+			if(confirm("게시물을 삭제하시겠습니까?") == true){
+				$.ajax({
+					type : "POST",
+					url : "/controller/resume/do_delete.do",
+					dataType : "html",
+					data : {"rsm_id" : rsm_id},
+					success : function(data){
+						alert(data + " 삭제 성공!");
+						location.reload();
+					}
+				});
+			}
+		});
+		
+		/********************************************************/
+		/* 유저 강퇴 버튼
+		/********************************************************/
+		$("#reportTable").on("click", "#btnBanUser", function(){
+			var userArray = new Array();
+			var u_id = $(this).parent().find("#msg_notify").val();			
+			
+			var userVO = new Object();
+			userVO.u_id = u_id;
+			userArray.push(userVO);
+			var userInfo = JSON.stringify(userArray);			
+			
+			if(confirm(u_id + "를 강퇴시키시겠습니까?") == true){
+				$.ajax({
+					type : "POST",
+					url : "do_delete.do",
+					dataType : "JSON",
+					data : {"data" : userInfo},
+					success : function(data){
+						alert(data + "삭제 성공!");
+						location.reload();
+					}
+				});
+			}
+		});
+		
 	});
 	//--ready
 	
@@ -129,10 +177,6 @@
 		searchFrm.page_num.value = page_num;
 		searchFrm.action = url;
 		searchFrm.submit();
-	}
-	
-	function searchUser(data){
-		alert(data);
 	}
 
 </script>
@@ -150,7 +194,7 @@
 			<input type="hidden" name="totalCnt" value="<%=totalCnt%>"/>		
 			<!-- reportTable -->			
 			<table id="reportTable" class="table table-bordered table-hover table-condensed" border="1px" 
-			   cellpadding="2" cellspacing="2" align="center" width="600px;" >
+			   cellpadding="2" cellspacing="2" align="center" width="600px;" style="text-align: center; vertical-align: middle;" >
 				<!-- thead -->
 				<thead>
 					<tr>
@@ -160,8 +204,7 @@
 						<th class="table-head-rows"><label>게시물 ID</label></th>
 						<th class="table-head-rows"><label>게시물 작성자</label></th>
 						<th class="table-head-rows"><label>메시지내용</label></th>
-						<th class="table-head-rows"><label>작성일</label></th>
-						
+						<th class="table-head-rows"><label>작성일</label></th>						
 					</tr>					
 				</thead>
 				<!-- //thead -->
@@ -180,15 +223,34 @@
 			                		<td><!-- 발신자 ID -->
 			                			${msgVO.msg_sender }
 			                		</td>
-			                		<td><!-- 신고받은 게시물 -->			                		
-			                		<a href="#" onClick="javascript:window.open('../../resume/do_searchOne.do?rsm_id=${msgVO.rsm_id }', 'popup', 'width=800, height=600')">
+			                		<td><!-- 신고받은 게시물 -->
+			                			<input type="hidden" id="rsm_id" name="rsm_id" value="${msgVO.rsm_id }">
+			                			<a href="#" onClick="javascript:window.open('../../resume/do_searchOne.do?rsm_id=${msgVO.rsm_id }', 'popup', 'width=800, height=600')">
 			                				${msgVO.rsm_id }
 			                			</a>
-			                		</td>
+			                			<c:choose>
+				                			<c:when test="${msgVO.rsm_use_yn eq 1 }">
+				                				<button type="button" class="btn btn-danger" id="btnDeleteRsm">게시물 삭제</button>
+				                			</c:when>
+				                			<c:otherwise>
+				                				<button type="button" class="btn btn-success" id="btnDeleteRsm" disabled="disabled">삭제완료</button>
+				                			</c:otherwise>
+			                			</c:choose>			                			
+			                		</td>			                		
 			                		<td><!-- 신고게시물 작성자 -->
-			                			<a href="#" onClick="searchUser('${msgVO.msg_notify}')">
-			                				${msgVO.msg_notify }
-			                			</a>
+			                			<input type="hidden" id="msg_notify" name="msg_notify" value="${msgVO.msg_notify }">
+			                			<%-- <a href="#" onClick="searchUser('${msgVO.msg_notify}')"></a> --%>
+			                			<c:choose>
+			                				<c:when test="${msgVO.msg_notify ne null && msgVO.u_id_use_yn ne 0}">
+				                				${msgVO.msg_notify }
+				                				<button type="button" class="btn btn-danger" id="btnBanUser">유저 강퇴</button>
+			                				</c:when>
+			                				<c:otherwise>
+			                					<label>탈퇴된 회원</label>
+			                				</c:otherwise>
+			                			</c:choose>			                			
+			                						                			
+			                			
 			                		</td>
 			                		<td><!-- 메시지내용 -->
 			                			${msgVO.msg_content }
@@ -224,6 +286,6 @@
 		</div>
 		<!-- //reportform -->
 	</div>
-	<!-- //전체 div -->
+	<!-- //전체 div -->		
 </body>
 </html>

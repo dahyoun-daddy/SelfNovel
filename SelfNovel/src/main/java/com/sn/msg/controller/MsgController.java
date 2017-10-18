@@ -69,25 +69,16 @@ public class MsgController {
 		
 		//request에서 msg관련 파라미터들을 불러와서 vo에 set한다.
 		inMsgVO.setMsg_sender(req.getParameter("msg_sender"));//보내는 사람
-		log.info("보내는 사람 set 성공");
-		
-		inMsgVO.setMsg_receiver(req.getParameter("msg_receiver"));//받는 사람
-		log.info("받는 사람 set 성공");
-		
+		inMsgVO.setMsg_receiver(req.getParameter("msg_receiver"));//받는 사람		
 		inMsgVO.setMsg_content(req.getParameter("msg_content"));//내용
-		log.info("내용 set 성공");
-		
-		inMsgVO.setMsg_sep(Integer.parseInt(req.getParameter("msg_sep")));//구분
-		log.info("구분 set 성공");
+		inMsgVO.setMsg_sep(Integer.parseInt(req.getParameter("msg_sep")));//구분		
 		
 		//메시지 구분이 0인 경우, 신고메시지 이므로 신고에 관련되 파라미터들을 추가로 set 한다.
 		if(Integer.parseInt(req.getParameter("msg_sep")) == 0) {
-			inMsgVO.setMsg_notify(req.getParameter("msg_notify"));//신고 대상
-			log.info("신고대상 set 성공");
+			inMsgVO.setMsg_notify(req.getParameter("msg_notify").trim());//신고 대상			
 			
 			String rsm_id = req.getParameter("rsm_id").trim();			
-			inMsgVO.setRsm_id(Integer.parseInt(rsm_id));//신고 받는 글 ID
-			log.info("신고대상글 set 성공");
+			inMsgVO.setRsm_id(Integer.parseInt(rsm_id));//신고 받는 글 ID			
 		}		
 		
 		//msgSvc를 호출한다.
