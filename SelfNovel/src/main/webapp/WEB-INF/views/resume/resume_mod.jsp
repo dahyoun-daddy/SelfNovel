@@ -52,37 +52,51 @@
 			작성 완료 버튼
 		**********************/
 		$("#btnSubmit").on("click", function(){
-			//이 함수를 빠져나가야 함
+			
+			//rsm_title 공백검사
+			if($("#rsm_title").val().trim() == ""){
+	    		alert("제목을 입력해주세요.");
+	    		$("#rsm_title").focus();
+	    		return;	    	
+	    	}
+			//rsm_content 공백검사
+			else if($("#rsm_content").val().trim() == ""){
+	    		alert("내용을 입력해주세요.");
+	    		$("#rsm_content").focus();
+	    		return;
+	    	}
 			
 			var flag = true;
 			
-			//제목 공백 검사
+			//Item 제목 공백 검사
 			$("input[name=itm_title]").each(function() {
 				var itm_title = $(this).val();
 				if(itm_title == ""){
-					alert("제목을 입력해주세요!");					
+					alert("항목 제목을 입력해주세요!");
+					$(this).focus();
 					flag = false;
 					return;
 				}
-			})
+			});
 			
-			if(flag == false){
+			if(flag == false){				
 				return;
 			}
 			
 			flag = true;
 			 
-			//내용 공백 검사
+			//Item 내용 공백 검사
 			$("textarea[name=itm_content").each(function() {
-				var itm_title = $(this).val();
-				if(itm_title == ""){
-					alert("내용을 입력해주세요!");
+				var itm_content = $(this).val();
+				if(itm_content == ""){
+					alert("항목 내용을 입력해주세요!");
+					$(this).focus();									
 					flag = false;
 					return;
 				}
 			})
 			
-			if(flag == false){
+			if(flag == false){				
 				return;
 			}
 			
@@ -112,48 +126,59 @@
 	    $("#addTable").on("click","#itemAdd",function(){	      
 	        
 	        var contents = '';
-	        contents+= '<tr id="testTr">                                                                                                                     ';
-	        contents+= '	<td colspan="2" style="">			                                                                                             ';
-	        contents+= '		<div class="container">			  							                                                                 ';
-	        contents+= '						<div style="width:100%; display:inline-block;">                                                              ';
-	        contents+= '				<table class="table table-bordered table-condensed" border="1px" align="center" style="width:100%; border:hidden;">	';		
-	        contents+= '					<tr>                                                                                                             ';
-	        contents+= '						<td style="width:98%;">                                                                                      ';
-	        contents+= '							<input type="hidden" id="itm_form_id" name="itm_form_id" >                    ';
-	        contents+= '							<input type="text" id="itm_title" name="itm_title" style="width:100%;" placeholder="제목" />';										 
-	        contents+= '						</td>                                                                                                        ';
-	        contents+= '						<td style="width:2%;">                                                                                       ';
-	        contents+= '							<input type="button" name="delRow" class="delRow" value="x" />                                           ';
-	        contents+= '						</td>														                                                 ';
-	        contents+= '					</tr>                                                                                                            ';
-	        contents+= '					<tr height="150px;">                                                                                             ';
-	        contents+= '						<td colspan="2">                                                                                             ';
-	        contents+= '							<textarea id="itm_content" name="itm_content"  rows="10" cols="100" placeholder="내용을 입력해주세요."></textarea>     ';
-	        contents+= '						</td>                                                                                                        ';
-	        contents+= '					</tr>							                                                                                 ';
-	        contents+= '					<tr>                                                                                                             ';
-	        contents+= '						<td colspan="2" align="right">글자수 :                                                                         ';
-	        contents+= '							<span id="counter" name="counter">                                                                       ';
-	        contents+= '								0                                                                     ';
-	        contents+= '								                                                                                                    ';
-	        contents+= '							</span>                                                                                                  ';
-	        contents+= '						</td>                                                                                                        ';
-	        contents+= '					</tr>                                                                                                            ';
-	        contents+= '										<tr height="100px;">                                                                         ';
-	        contents+= '						<td align="right">                                                                                           ';
-	        contents+= '							<input type="button" value="+" id="itemAdd" />                                                           ';
-	        contents+= '							<input type="button" name="delRow" class="delRow" value="-" />                                           ';
-	        contents+= '						</td>                                                                                                        ';
-	        contents+= '					</tr>                                                                                                       ';
-	        contents+= '	   			</table>								                                                     ';
-	        contents+= '			</div> <!-- span1 -->                                                                                                    ';
-	        contents+= '			<div style="margine:0 auto;">                                                                                            ';
-	        contents+= '				<input type="button" id="moveDown" value="▼" style="width: 50%; float:right;"/>                                      ';
-	        contents+= '				<input type="button" id="moveUp" value="▲" style="width: 50%; float:left;"/>                                         ';
-	        contents+= '			</div><!-- span2 -->									                                                                 ';
-	        contents+= '		</div><!-- 컨테이너 -->                                                                                                         ';
-	        contents+= '	</td>                                                                                                                            ';
-	        contents+= '</tr>                                                                                                               ';
+	        contents+= '<tr id="testTr">                                                                                                                                                 ';
+	        contents+= '	<td colspan="2" style="">			                                                                                                                         ';
+	        contents+= '		<div class="container">			  							                                                                                             ';
+	        contents+= '			<div style="width:100%; display:inline-block;">                                                                                             ';
+	        contents+= '				<table class="table table-bordered table-condensed" border="1px" align="center" style="width:100%; border:hidden;">					             ';
+	        contents+= '					<tr>                                                                                                                                         ';
+	        contents+= '						<td>                                                                                                                                     ';
+	        contents+= '							<div style="width: 95%; float:left;">                                                                                                ';
+	        contents+= '							<input type="hidden" id="itm_form_id" name="itm_form_id">																			 ';
+	        contents+= '								<input type="text" id="itm_title" name="itm_title" style="width:100%; height:30px;"                           placeholder="제목"/>';
+	        contents+= '							</div>                                                                                                                               ';
+	        contents+= '							<div style="width: 5%; float:right;">                                                                                                ';
+	        contents+= '								<button type="button" name="delRow" class="delRow btn-danger" style="width:100%;height:30px;">                                   ';
+	        contents+= '									<span>                                                                                                                       ';
+	        contents+= '										<i class="glyphicon glyphicon-trash"></i>                                                                                ';
+	        contents+= '									</span>                                                                                                                      ';
+	        contents+= '								</button>                                                                                                                        ';
+	        contents+= '								<!-- <input type="button" name="delRow" class="delRow" value="x" /> -->															 ';
+	        contents+= '							</div>                                                                                                                               ';
+	        contents+= '						</td>														                                                                             ';
+	        contents+= '					</tr>                                                                                                                                        ';
+	        contents+= '					<tr height="150px;">                                                                                                                         ';
+	        contents+= '						<td>                                                                                                                                     ';
+	        contents+= '							<textarea id="itm_content" name="itm_content"  rows="10" cols="100" placeholder="내용을 입력해주세요."></textarea>                         ';
+	        contents+= '						</td>                                                                                                                                    ';
+	        contents+= '					</tr>							                                                                                                             ';
+	        contents+= '					<tr>                                                                                                                                         ';
+	        contents+= '						<td>                                                                                                                                     ';
+	        contents+= '							<div class="btn-group" role="group" style="float:left;">                                                                             ';
+	        contents+= '								<button type="button" class="btn btn-default" id="moveDown">                                                                     ';
+	        contents+= '									<span>                                                                                                                       ';
+	        contents+= '										<i class="glyphicon glyphicon-arrow-down"></i>                                                                           ';
+	        contents+= '									</span>                                                                                                                      ';
+	        contents+= '								</button>                                                                                                                        ';
+	        contents+= '								<button type="button" class="btn btn-default" id="moveUp">                                                                       ';
+	        contents+= '									<span>                                                                                                                       ';
+	        contents+= '										<i class="glyphicon glyphicon-arrow-up"></i>                                                                             ';
+	        contents+= '									</span>                                                                                                                      ';
+	        contents+= '								</button>                                                                                                                        ';
+	        contents+= '							</div>                                                                                                                               ';
+	        contents+= '							<div style="float:right;">                                                                                                           ';
+	        contents+= '								글자수 :                                                                                                                           ';
+	        contents+= '								<span id="counter" name="counter">                                                                                               ';
+	        contents+= '									0자                                                                                                                           ';
+	        contents+= '								</span>                                                                                                                          ';
+	        contents+= '							</div>                                                                                                                               ';
+	        contents+= '						</td>                                                                                                                                    ';
+	        contents+= '					</tr>                                                                                                                                        ';
+	        contents+= '	   			</table><!-- 내용테이블 -->										                                                                                 ';
+	        contents+= '			</div> <!-- span1 -->									                                                                                             ';
+	        contents+= '		</div><!-- 컨테이너 -->                                                                                                                                     ';
+	        contents+= '	</td>                                                                                                                                                        ';
+	        contents+= '</tr><!-- testTr -->                                                                                                                                             ';
 	        
 	        $("#AddOption").append(contents); // 추가기능	       
 	    })
@@ -174,12 +199,14 @@
 	    	*/
 	    //*********************************************************************//
 	    $("#addTable").on("click","#moveUp",function(){	    	
-	    	var $tr = $(this).parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
+	    	/* var $tr = $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소 */
+	    	var $tr = $(this).closest("#testTr");
 	    	$tr.prev().before($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
 	    })
 
 	    $("#addTable").on("click","#moveDown",function(){	    	
-	    	var $tr = $(this).parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
+	    	/* var $tr = $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소 */
+	    	var $tr = $(this).closest("#testTr");
 	    	$tr.next().after($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
 	    })
 		//순서변경을 위한 함수 end	    
@@ -199,6 +226,13 @@
 	 	    window.open(url, title,status); //window.open(url,title,status); window.open 함수에 url을 앞에와 같이 
 	  	});
 	});//close ready
+	
+	function moveScroll(param){
+		//이동할 좌표 불러와서
+		var offset = param.offset();
+		//이동
+		$('html, body').animate({scrollTop : offset.top}, 400);		
+	}
 	
 	/**
 	 * 중복서브밋 방지
@@ -299,39 +333,51 @@
 					   						<div style="width:100%; display:inline-block;">
 												<table class="table table-bordered table-condensed" border="1px" align="center" style="width:100%; border:hidden;">					
 													<tr>
-														<td style="width:98%;">
-															<input type="hidden" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">
-															<input type="text" id="itm_title" name="itm_title" style="width:100%;" value="${item.itm_title}" placeholder="제목"/>														 
-														</td>
-														<td style="width:2%;">
-															<input type="button" name="delRow" class="delRow" value="x" />
+														<td>
+															<div style="width: 95%; float:left;">
+																<input type="hidden" id="itm_form_id" name="itm_form_id" value="${item.itm_form_id}">
+																<input type="text" id="itm_title" name="itm_title" style="width:100%; height:30px;" value="${item.itm_title}" placeholder="제목"/>
+															</div>
+															<div style="width: 5%; float:right;">
+																<button type="button" name="delRow" class="delRow btn-danger" style="width:100%;height:30px;">
+																	<span>
+																		<i class="glyphicon glyphicon-trash"></i>
+																	</span>
+																</button>
+																<!-- <input type="button" name="delRow" class="delRow" value="x" /> -->																
+															</div>
 														</td>														
 													</tr>
 													<tr height="150px;">
-														<td colspan="2">
+														<td>
 															<textarea id="itm_content" name="itm_content"  rows="10" cols="100" placeholder="내용을 입력해주세요.">${item.itm_content }</textarea>
 														</td>
 													</tr>							
 													<tr>
-														<td colspan="2" align="right">글자수 :
-															<span id="counter" name="counter">
-																${fn:length(item.itm_content) }
-																자
-															</span>
+														<td>
+															<div class="btn-group" role="group" style="float:left;">
+																<button type="button" class="btn btn-default" id="moveDown">
+																	<span>
+																		<i class="glyphicon glyphicon-arrow-down"></i>
+																	</span>
+																</button>
+																<button type="button" class="btn btn-default" id="moveUp">
+																	<span>
+																		<i class="glyphicon glyphicon-arrow-up"></i>
+																	</span>
+																</button>
+															</div>
+															<div style="float:right;">
+																글자수 :
+																<span id="counter" name="counter">
+																	${fn:length(item.itm_content) }
+																	자
+																</span>
+															</div>
 														</td>
 													</tr>
-<!--  													<tr height="100px;">
-														<td align="right">
-															<input type="button" value="+" id="itemAdd" />
-															<input type="button" name="delRow" class="delRow" value="-" />
-														</td>
-													</tr> -->
 									   			</table><!-- 내용테이블 -->										
-											</div> <!-- span1 -->
-											<div style="margine:0 auto;">
-												<input type="button" id="moveDown" value="▼" style="width: 50%; float:right;"/>
-												<input type="button" id="moveUp" value="▲" style="width: 50%; float:left;"/>
-											</div><!-- span2 -->									
+											</div> <!-- span1 -->									
 										</div><!-- 컨테이너 -->
 									</td>
 								</tr><!-- testTr -->
@@ -339,9 +385,10 @@
 						</c:forEach>
 					</tbody>
 					<tfoot>
-						<tr>
-							<td align="center">								 
-								<input type="button" value="+" id="itemAdd" />
+						<tr>							
+							<td align="center">
+								<a id="itemAdd"><img src="<c:url value='/resources/img/plus-button.png' />" width=50 height=50/></a>								 
+								<!-- <input type="button" value="+" id="itemAdd" /> -->
 							</td>
 						</tr>
 						<tr>							

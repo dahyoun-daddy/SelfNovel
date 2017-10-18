@@ -106,7 +106,25 @@
 		  FROM (
 		        SELECT A.*,
 		               B.U_NAME,
-		               ROW_NUMBER() OVER(ORDER BY A.RSM_REG_DT DESC) AS RNUM,
+		               ROW_NUMBER() OVER(
+		               				<choose>
+										<!-- 최신순 -->
+										<when test="search_div == 10"> 
+											ORDER BY A.RSM_REG_DT DESC	
+										</when>
+										<!-- 조회순 -->
+										<when test="search_div == 20">
+											ORDER BY A.RSM_COUNT DESC
+										</when>
+										<!-- 추천순 -->
+										<when test="search_div == 30">
+											ORDER BY A.RSM_RECOMMEND DESC
+										</when>
+										<otherwise>
+											ORDER BY A.RSM_REG_DT DESC
+										</otherwise>
+									</choose>		               				
+		               				) AS RNUM,
 		               COUNT(*) OVER() AS TOTALNO
 		          FROM RESUME A, USERS B
 		         WHERE A.U_ID = B.U_ID

@@ -143,7 +143,7 @@
 		$("form[name=frm]").on("click", "#btnModResume", function(){
 			var selected = $(this).parent().parent().parent();	   //현재 선택된 항목
 			var sel_title = selected.find("#itm_title").val();	   //선택된 항목의 제목
-			var sel_content = selected.find("#itm_content").html();//첨삭 선택된 항목의 내용			
+			var sel_content = selected.find("#itm_content_origin").val();//첨삭 선택된 항목의 내용			
 			var sel_id = selected.find("#itm_form_id").val();	   //첨삭 선택된 항목의 id
 			
 			var sel_contentR = sel_content.trim();
@@ -515,6 +515,7 @@
 									</tr>
 									<tr>
 										<td style="border: hidden;">
+											<input type="hidden" id="itm_content_origin" value="${item.itm_content }">											
 											<div id="itm_content" style="background-color: #FAFAFA; border: 1px solid #E6E6E6;">
 												<c:set value="${item.itm_content}" var="content"></c:set>												
 												${fn:replace(content, crcn, br)}																											
@@ -653,14 +654,13 @@
 				</button>
 			</div>
 		</div>
-	</form>
-	
+	</form>	
 	
 	<!-- 수정하기 Modal Window -->
 	<div id="modModal" class="modal fade" role="dialog">
 		<form name="modModalFrm">
 		<!-- modal-dialog -->
-  		<div class="modal-dialog">
+  		<div class="modal-dialog modal-lg">
     		<!-- Modal content-->    		
 	    	<div class="modal-content">
 	    		<!-- modal-header -->
@@ -681,7 +681,7 @@
 						</tr>
 						<tr>
 							<td>
-								<textarea id="modContent" style="width:100%; border: 0px;"></textarea>
+								<textarea id="modContent" style="width:100%; border: 0px; height: 300px;"></textarea>
 							</td>
 						</tr>
 					</table>	
