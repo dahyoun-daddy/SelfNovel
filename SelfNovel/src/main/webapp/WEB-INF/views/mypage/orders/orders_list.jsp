@@ -48,36 +48,6 @@
 		testfrm.action = "do_search.do";
 		testfrm.submit();
 	}
-	
-	function do_detail(rsm_id, u_id){
-		$.ajax({
-            url: "/controller/expert/do_detail.do",
-            data: {u_id: u_id,
-            	   rsm_id: rsm_id
-            	  },
-            type: 'POST',
-            dataType: "json",
-            success: function(results){
-            	var html = "<br><table style='width: 100%;'><tr><td style='color: black; background-color: #D8572A; text-align:center;'><h1>원본 내용</h1></td></tr></table>";
-            	var flag = 0;
-            	for(var i in results){
-            		if(results[i].itm_prd_id == null){
-            			html += "<br><table style='width: 100%;'><tr><td style='color: black; width: 100%;'><input style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea readonly style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
-            		} else {
-            			if(flag == 0){
-            				html += "</table><br><table style='width: 100%;'><tr><td style='color: black; width: 100%; background-color: #F7B538; text-align: center;'><h1>첨삭 내용</h1></td></tr><table>";
-            				flag++;
-            			}
-            			html += "<br><table style='width: 100%; background-color:#F7B538;'><tr><td style='color: black; width: 100%;'><input style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea readonly style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
-            		}
-            	}
-            	$("#detailModalBody").append(html);
-            	$('#detailModal').modal({backdrop: 'static', keyboard: false});	
-            }
-        });
-	}
 
 	function cancelBtn(){
 		$("#detailModalBody").html('');
@@ -140,31 +110,44 @@
 		$('#allCheck').on('change', function() {
 			$("input[name='chkList']").prop('checked', this.checked);
 		});
-		
-		/********************************************************/
-		/* 첨삭 이벤트 */
-		/********************************************************/
-		//원본조회//일반회원
-		$('input[name=doSearchOrigin]').on('click', function() {
-			var record = $(this).parents("#ordersInfoTr");
-			var exp_id = $(record).find('input[name=exp_id]').val();		
-			var rsm_id = $(record).find('input[name=rsm_id]').val();
-			
-			do_detail(rsm_id,exp_id);
-		});
-		
-		//첨삭조회//일반회원
-		$('#doSearchEdit').on('click', function() {
-		});
-		
-		//첨삭하기//전문가
-		$('#doEdit').on('click', function() {
-		});
 	});
+	
+	function do_searchOriginal(rsm_id){
+	    var url = 'do_detailOriginal?rsm_id='+rsm_id;
+	    var popupX = ((window.screen.width / 2) - (200 / 2)) / 2;
+	    window.open(url,'originalPopup','left='+popupX+', width=500, height=800, status=no');
+	}
+	
+	function do_searchRevision(rsm_id){
+	    var url = 'do_detailRevision?rsm_id='+rsm_id;
+	    var popupX = ((window.screen.width / 2) + (2000 / 2)) / 2;
+	    window.open(url,'revisionPopup','left='+popupX+', width=500, height=800, status=no');
+	}
+	
+	function do_complete(rsm_id){
+		$.ajax({
+            url: "do_updateUseYN",
+            data: {rsm_id: rsm_id,
+            	   exp_id: '<%=session.getAttribute("exp_id")%>'
+            	  },
+            type: 'POST',
+            success: function(result){
+            	if(result == "fail"){
+            		alert("첨삭하지 않으면 완료할 수 없습니다.");
+            		return;
+            	} else{
+            		$("#WORK_DIV").val("do_nextState");
+            		$("#EXP_ID").val('<%=session.getAttribute("u_id")%>');
+        			$("#RSM_ID").val(rsm_id);
+        			testFrm.submit();
+            	}
+            }
+        });
+	}
 </script>
 </head>
 <body>
-	<form action="workdiv.do" method="get" name="testfrm">
+	<form action="workdiv.do" method="get" name="testfrm" id="testFrm">
 		<input type="hidden" id="WORK_DIV" name="WORK_DIV" />
 		<input type="hidden" id="EXP_ID" name="EXP_ID" />
 		<input type="hidden" id="RSM_ID" name="RSM_ID" />
@@ -172,12 +155,11 @@
 		<input type="hidden" name="file_nm" id="file_nm">
 	</form>
 
-
 	<c:choose>
 		<c:when test="${u_level eq '1'}">
 		<!-- 일반 회원인 경우 -->
 			<table id="userTable"
-				class="table table-bordered table-hover table-condensed">
+				class="table table-bordered table-hover table-condensed" style="color: black;">
 				<thead>
 					<tr>
 						<th class="text-center"><input id="allCheck" type="checkbox" /></th>
@@ -202,11 +184,13 @@
 									<td class="text-right"><c:out value="${orders.rsm_title}" /></td>
 									<td class="text-right"><c:out value="${orders.exp_id}" /></td>
 									<td class="text-center"><c:out value="${orders.ord_reg_dt}" /></td>
-									<td class="text-right"><input type="button" name="doSearchOrigin" value="원본조회"></td>
+									<td class="text-right">
+										<input type="button" id="searchOriginBtn" value="원본조회" onclick="do_searchOriginal(${orders.rsm_id})">
+									</td>
 									<td class="text-right">
 										<c:choose>
 											<c:when test="${orders.ord_state eq 40 || orders.ord_state eq 50 }">
-												<input type="button" name="doSearchEdit" value="첨삭조회">
+												<input type="button" name="doSearchEdit" value="첨삭조회" onclick="do_searchRevision(${orders.rsm_id})">
 											</c:when>
 											<c:otherwise>
 												<input type="button" name="doSearchEdit" value="첨삭조회" disabled='disabled'>
@@ -219,7 +203,7 @@
 													<input type='button' value='거절' disabled='disabled' />
 												</c:when>
 												<c:when test="${orders.ord_state eq 20}">
-													<input type='button' value='수락 대기중' disabled='disabled' />
+													<label style="color: #0054FF;">수락 대기중..</label>
 												</c:when>
 												<c:when test="${orders.ord_state eq 30}">
 													<input type='button' value='첨삭 대기중' disabled='disabled' />
@@ -228,7 +212,7 @@
 													<input type='button' name='signTest' value='확정'/>
 												</c:when>
 												<c:when test="${orders.ord_state eq 50}">
-													<input type='button' value='의뢰 완료' disabled='disabled' />
+													<label style="color: #22741C;">의뢰 완료</label>
 												</c:when>
 											</c:choose>
 										</td>
@@ -277,7 +261,7 @@
 		<c:when test="${u_level eq '2'}">
 		<!-- 전문가 회원인 경우 -->
 			<table id="userTable"
-				class="table table-bordered table-hover table-condensed">
+				class="table table-bordered table-hover table-condensed" style="color: black;">
 				<thead>
 					<tr>
 						<th class="text-center"><input id="allCheck" type="checkbox" /></th>
@@ -301,24 +285,34 @@
 									<td class="text-right"><c:out value="${orders.rsm_title}" /></td>
 									<td class="text-center"><c:out value="${orders.u_id}" /></td>
 									<td class="text-right"><c:out value="${orders.ord_reg_dt}" /></td>
-									<td class="text-right"><input type="button" id="doEdit" value="첨삭하기"></td>
+									<td class="text-right">
+										<c:if test="${orders.ord_state ne 10 }">
+											<input type="button" id="searchOriginBtn" value="원본조회" onclick="do_searchOriginal(${orders.rsm_id})">
+											<c:if test="${orders.ord_state eq 40 || orders.ord_state eq 50 }">
+												<input type="button" id="revisionBtn" value="첨삭조회" onclick="do_searchRevision(${orders.rsm_id})">
+											</c:if>
+											<c:if test="${orders.ord_state eq 30 }">
+												<input type="button" id="revisionBtn" value="첨삭하기" onclick="do_searchRevision(${orders.rsm_id})">
+											</c:if>
+										</c:if>
+									</td>
 									<td class="text-right">
 										<c:choose>
 												<c:when test="${orders.ord_state eq 10}">
-													<input type='button' name='rejectTest' value='거절' disabled='disabled' />
+													<label style="color: red;">의뢰 거절</label>
 												</c:when>
 												<c:when test="${orders.ord_state eq 20}">
-													<input type='button' name='signTest' value='수락' />
-													<input type='button' name='rejectTest' value='거절' />
+													<input type='button' name="signTest" value='수락' />
+													<input type='button' name="signTest" value='거절' />
 												</c:when>
 												<c:when test="${orders.ord_state eq 30}">
-													<input type='button' name='signTest' value='첨삭 완료' />
+													<input type='button' value='첨삭 완료' onclick="do_complete(${orders.rsm_id})" />
 												</c:when>
 												<c:when test="${orders.ord_state eq 40}">
-													<input type='button' name='signTest' value='첨삭 완료' disabled='disabled' />
+													<label style="color: #FFBB00;">확정 대기중..</label>
 												</c:when>
 												<c:when test="${orders.ord_state eq 50}">
-													<input type='button' name='signTest' value='의뢰 완료' disabled='disabled' />
+													<label style="color: #22741C;">의뢰 완료</label>
 												</c:when>
 											</c:choose>
 										</td>

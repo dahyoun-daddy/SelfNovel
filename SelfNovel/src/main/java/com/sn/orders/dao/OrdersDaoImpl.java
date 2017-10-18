@@ -12,7 +12,10 @@ import org.springframework.stereotype.Repository;
 import com.sn.codes.domain.CodesVO;
 import com.sn.common.DTO;
 import com.sn.common.StringUtil;
+import com.sn.expert.domain.ExpertVO;
 import com.sn.orders.domain.OrdersVO;
+import com.sn.resume.domain.ItmVO;
+import com.sn.resume.domain.UnityItmVO;
 
 /**
  * OrdersDaoImpl 
@@ -192,5 +195,52 @@ public class OrdersDaoImpl implements OrdersDao {
 		
 		OrdersVO inUserVO = (OrdersVO)dto;
 		return sqlSession.update(statement, inUserVO);		
+	}
+
+	@Override
+	public List<?> do_searchOriginal(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_searchRsm");
+		log.debug("=================================");
+		return sqlSession.selectList(namespace+".do_searchOriginal", (UnityItmVO) dto);
+	}
+
+	@Override
+	public List<?> do_searchRev(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_searchRev");
+		log.debug("=================================");
+		return sqlSession.selectList(namespace+".do_searchRev", (UnityItmVO) dto);
+	}
+
+	@Override
+	public int do_saveFirstTime(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_saveFirstTime");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		int flag = sqlSession.update(namespace+".do_saveFirstTime", (UnityItmVO) dto);
+		
+		return flag;
+	}
+
+	@Override
+	public int do_updateItem(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_updateItem");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		
+		return sqlSession.update(namespace+".do_updateItem", (UnityItmVO) dto);
+	}
+	
+	@Override
+	public int do_updateUseYN(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_updateItem");
+		log.debug("dto.toString(): " + dto.toString());
+		log.debug("=================================");
+		
+		return sqlSession.update(namespace+".do_updateUseYN", (UnityItmVO) dto);
 	}
 }

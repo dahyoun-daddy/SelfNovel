@@ -57,7 +57,6 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		
 		String[] itm_title_arr = req.getParameter("itm_titles").split("\\\\");
 		String[] itm_content_arr = req.getParameter("itm_contents").split("\\\\");
-		System.out.println("asdf33: " + itm_title_arr.toString());
 		String itm_inserts ="";
 		String itm_contents = "";
 		
@@ -71,16 +70,16 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 					itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + ",\n";
 				}
 				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
-				itm_inserts += "VALUES (resume_seq.currval, item_seq.nextval, resume_seq.currval, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
+				itm_inserts += "VALUES (resume_seq.currval, item_seq.nextval, null, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
 			}else if(i == itm_title_arr.length-1) {	// 마지막 경우
 				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
-				itm_inserts += "VALUES (resume_seq.currval, item_seq.currval+" + i + ", resume_seq.currval, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
+				itm_inserts += "VALUES (resume_seq.currval, item_seq.currval+" + i + ", null, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
 				itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
 				itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + "\n";
 				break;
 			}else {	// 이외
 				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
-				itm_inserts += "VALUES (resume_seq.currval, item_seq.currval+" + i + ", resume_seq.currval, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
+				itm_inserts += "VALUES (resume_seq.currval, item_seq.currval+" + i + ", null, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
 				itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
 				itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + ",\n";
 			}
@@ -88,8 +87,10 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		
 		param.put("itm_inserts", itm_inserts);
 		param.put("itm_contents", itm_contents);
+		param.put("exp_id", req.getParameter("exp_id"));
 		rsmVO.setParam(param);
 		rsmVO.setU_id(req.getParameter("u_id"));
+		rsmVO.setRsm_div(req.getParameter("rsm_div"));
 		rsmVO.setRsm_title(req.getParameter("rsm_title"));
 		rsmVO.setRsm_content(req.getParameter("rsm_content"));
 		
@@ -111,6 +112,9 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		
 		List<ItmVO> itmVO = (List<ItmVO>) expertSvc.do_searchDetail_itm(expertVO);
 		List<RsmVO> rsmList = new ArrayList<RsmVO>();
+		CodesVO codesVO = new CodesVO();
+		codesVO.setMst_cd_id("C002");
+		List<CodesVO> codesList = (List<CodesVO>) codesDao.do_search(codesVO);
 		String temp = "";
 		
 		for(int i=0; i<itmVO.size(); i++) {
@@ -124,6 +128,7 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("RsmList", rsmList);
+		modelAndView.addObject("codesList", codesList);
 		modelAndView.addObject("u_name", expertVO.getU_name());
 		modelAndView.addObject("exp_id", expertVO.getU_id());
 		modelAndView.addObject("exp_title", expertVO.getExp_title());

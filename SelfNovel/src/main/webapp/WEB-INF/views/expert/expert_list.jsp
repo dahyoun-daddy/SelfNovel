@@ -45,17 +45,6 @@
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-	/**************************
-	* 페이지네이션 담당 함수                     *
-	***************************/
-	function do_search_page(url, page_num){
-	    console.log(url +"\t"+ page_num);
-	    var frm = document.searchFrm;
-	    frm.page_num.value = page_num;
-	    frm.action = url;
-	    frm.submit();
-	}
-
 	$(document).ready(function() {
 		var searchCategoryNum_t = '${searchCategoryNum}';
 		var searchWord = '<%=request.getAttribute("searchWord")%>'+'';
@@ -106,7 +95,6 @@
 	<h2>전문가 조회</h2>
 	<hr/>
 	<form action="do_search.do" id="searchFrm" name="searchFrm" method="post" class="form-inline">
-		<input type="hidden" name="page_num" id="page_num" value="<%=page_num %>">
 		<input type="hidden" id="searchDiv" name="searchDiv" value="">
 		<input type="hidden" id="searchWord" name="searchWord" value="">
 		<input type="hidden" id="searchCategory" name="searchCategory" value="">
@@ -232,7 +220,6 @@
 														<c:when test="${e eq 'http://'}">
 															<img style="position:relative; top:0; left:0;" src="${expertVO.exp_profile}" width="200px" height="200px">	
 														</c:when>
-														
 														<c:otherwise>
 															<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">															
 														</c:otherwise>
@@ -266,10 +253,9 @@
 				</td>
 			</tr>
 		</table>
-
+	</form>
 	<div class="form-inline text-center ">
 		<%=StringUtil.renderPaging(totalNo, oPage_num, oPage_size, 10, "do_search.do", "do_search_page") %>
-	</div>		
-	</form>
+	</div>
 </body>
 </html>

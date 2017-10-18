@@ -1,9 +1,11 @@
 package com.sn.orders.controller;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.sn.common.StringUtil;
 import com.sn.orders.domain.OrdersVO;
 import com.sn.orders.service.OrdersSvc;
+import com.sn.resume.domain.ItmVO;
+import com.sn.resume.domain.UnityItmVO;
 
 /**
  * OrdersController 
@@ -148,4 +153,101 @@ public class OrdersController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/mypage/orders/do_save.do")
+	public void do_save(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		UnityItmVO unityItmVO = new UnityItmVO();
+		int flag=1;
+		String[] itm_title_arr = req.getParameter("itm_titles").split("\\\\");
+		String[] itm_content_arr = req.getParameter("itm_contents").split("\\\\");
+		String[] itm_form_id_arr = req.getParameter("itm_form_ids").split("\\\\");
+		
+		unityItmVO.setRsm_id(req.getParameter("rsm_id"));
+		unityItmVO.setU_id(req.getParameter("u_id"));
+		List<UnityItmVO> list = (List<UnityItmVO>) orderSvc.do_searchRev(unityItmVO);
+		List<UnityItmVO> getPrd = (List<UnityItmVO>) orderSvc.do_searchOriginal(unityItmVO);
+		
+		System.out.println(list.toString());
+		System.out.println(getPrd.toString());
+		
+		if(list != null && list.size() > 0 ) {
+			System.out.println("uuuu: 처음 아닌 경우");
+			for(int i=0; i<list.size(); i++) {
+				unityItmVO.setItm_title(itm_title_arr[i]);
+				unityItmVO.setItm_content(itm_content_arr[i]);
+				unityItmVO.setItm_form_id(Integer.parseInt(itm_form_id_arr[i]));
+				unityItmVO.setRsm_id(req.getParameter("rsm_id"));
+				flag *= orderSvc.do_updateItem(unityItmVO);
+				
+			}
+		} else {	// 처음 작성인 경우
+			System.out.println("uuuu: 처음인 경우");
+			for(int i=0; i<getPrd.size(); i++) {
+				unityItmVO.setItm_title(itm_title_arr[i]);
+				unityItmVO.setItm_content(itm_content_arr[i]);
+				unityItmVO.setItm_form_id(Integer.parseInt(itm_form_id_arr[i]));
+				unityItmVO.setRsm_id(req.getParameter("rsm_id"));
+				unityItmVO.setItm_prd_id((String.valueOf(getPrd.get(i).getItm_form_id())));
+				flag *= orderSvc.do_saveFirstTime(unityItmVO);
+			}
+		}
+		
+		if(flag > 0) {
+			res.getWriter().write("success");
+		} else {
+			res.getWriter().write("fail");
+		}
+	}
+	
+	@RequestMapping(value="/mypage/orders/do_detailOriginal", method = RequestMethod.GET)
+	public ModelAndView do_detailOriginal(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		UnityItmVO unityItmVO = new UnityItmVO();
+		unityItmVO.setRsm_id(req.getParameter("rsm_id"));
+		
+		List<UnityItmVO> itmList = (List<UnityItmVO>) orderSvc.do_searchOriginal(unityItmVO);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("list",itmList);
+		modelAndView.setViewName("mypage/orders/order_detail");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/mypage/orders/do_detailRevision")
+	public ModelAndView do_detailRevision(HttpServletRequest req) {
+		UnityItmVO unityItmVO = new UnityItmVO();
+		ModelAndView modelAndView = new ModelAndView();
+		unityItmVO.setRsm_id(req.getParameter("rsm_id"));
+		
+		List<UnityItmVO> itmList = (List<UnityItmVO>) orderSvc.do_searchRev(unityItmVO);
+		if((itmList != null && itmList.size() > 0) && itmList.get(0).getItm_use_yn() == 1) {	// 최초 작성 시..
+			modelAndView.addObject("isRev","true");
+			modelAndView.addObject("list",itmList);
+		} else if((itmList != null && itmList.size() > 0) && itmList.get(0).getItm_use_yn() == 2) {	// 중간 저장한 이후라면..
+			modelAndView.addObject("isRev","false");
+			modelAndView.addObject("list",itmList);
+		} else {
+			modelAndView.addObject("isRev","true");
+			modelAndView.addObject("list",(List<UnityItmVO>) orderSvc.do_searchOriginal(unityItmVO));
+		}
+		modelAndView.setViewName("mypage/orders/order_detail");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/mypage/orders/do_updateUseYN")
+	public void do_updateUseYN(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		UnityItmVO unityItmVO = new UnityItmVO();
+		unityItmVO.setRsm_id(req.getParameter("rsm_id"));
+		
+		List<UnityItmVO> itmList = (List<UnityItmVO>) orderSvc.do_searchRev(unityItmVO);
+		System.out.println("cccc: "+itmList.toString());
+		if(itmList.size() == 0 || itmList == null) {
+			res.getWriter().write("fail");
+		} else {
+			for(int i=0; i<itmList.size(); i++) {
+				unityItmVO.setItm_form_id(itmList.get(i).getItm_form_id());
+				unityItmVO.setItm_use_yn(2);
+				System.out.println("bbbb: "+unityItmVO.toString());
+				orderSvc.do_updateUseYN(unityItmVO);
+			}
+		}
+	}
 }

@@ -3,7 +3,41 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sn.orders.repository.mappers.orders">
-
+	<select id="do_searchOriginal" parameterType="com.sn.resume.domain.UnityItmVO" resultType="com.sn.resume.domain.UnityItmVO">
+		SELECT *
+		  FROM resume a, item b
+		 WHERE a.rsm_id = b.rsm_id
+		   AND a.rsm_id = '${rsm_id}'
+		   AND b.itm_prd_id IS NULL
+	</select>
+	
+	<select id="do_searchRev" parameterType="com.sn.resume.domain.UnityItmVO" resultType="com.sn.resume.domain.UnityItmVO">
+		SELECT *
+		FROM item
+		WHERE rsm_id = '${rsm_id}'
+		  AND itm_prd_id IS NOT NULL
+	</select>
+	
+	<update id="do_saveFirstTime" parameterType="com.sn.resume.domain.UnityItmVO">
+		INSERT INTO item(rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)
+		VALUES('${rsm_id}', item_seq.nextval, ${itm_prd_id}, '${itm_title}', '${itm_content}', '${u_id}', SYSDATE, item_seq.currval, 1)
+	</update>
+	
+	<update id="do_updateItem" parameterType="com.sn.resume.domain.UnityItmVO">
+		UPDATE item
+		SET itm_title = '${itm_title}',
+		    itm_content = '${itm_content}'
+		WHERE rsm_id = '${rsm_id}'
+		  AND itm_form_id = '${itm_form_id}'
+	</update>
+	
+	<update id="do_updateUseYN" parameterType="com.sn.resume.domain.UnityItmVO">
+		UPDATE item
+		SET itm_use_yn = ${itm_use_yn}
+		WHERE rsm_id = '${rsm_id}'
+		 AND itm_form_id = '${itm_form_id}'
+	</update>
+	
 	<!-- do_save -->
 	<insert id="do_save" parameterType="OrdersVO">
 		INSERT
@@ -90,11 +124,11 @@
 	<!-- 
 		ORD_NEXT_STAT: 코드테이블을 이용하여 다음 단계의 값을 반환하는 함수.	
 	 -->
-	<update id="do_nextState">
+	<update id="do_nextState" parameterType="OrdersVO">
 		UPDATE ORDERS
 		SET ord_state = ORD_NEXT_STAT(ord_state)
-		WHERE rsm_id   = #{rsm_id}
-		  AND exp_id   = #{exp_id}
+		WHERE rsm_id   = ${rsm_id}
+		  AND exp_id   = '${exp_id}'
 	</update>
 	
 	<update id="do_reject">
