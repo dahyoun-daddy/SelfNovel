@@ -158,6 +158,7 @@ public class ExpertDaoImpl implements ExpertDao {
 		RsmVO param=(RsmVO)dto;		
 		Hashtable<String, String> searchParam = param.getParam();
 		
+		searchParam.put("rsm_div", param.getRsm_div());
 		searchParam.put("rsm_title", param.getRsm_title());
 		searchParam.put("rsm_content", param.getRsm_content());
 		searchParam.put("u_id", param.getU_id());
@@ -174,6 +175,14 @@ public class ExpertDaoImpl implements ExpertDao {
 		log.debug(".do_nextSeq");
 		log.debug("=================================");
 		return sqlSession.selectOne(namespace+".do_nextSeq");
+	}
+
+	@Override
+	public int do_updateTrade(DTO dto) {
+		log.debug("=================================");
+		log.debug(".do_updateTrade");
+		log.debug("=================================");
+		return sqlSession.update(namespace+".do_updateTrade", (ExpertVO) dto);
 	}
 	
 }

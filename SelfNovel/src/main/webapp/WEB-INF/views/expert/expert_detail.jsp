@@ -55,14 +55,14 @@
             	for(var i in results){
             		if(results[i].itm_prd_id == null){
             			html += "<br><table style='width: 100%;'><tr><td style='color: black; width: 100%;'><input style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea readonly style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
+            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea readonly class='form-control' style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
             		} else {
             			if(flag == 0){
             				html += "</table><br><table style='width: 100%;'><tr><td style='color: black; width: 100%; background-color: #F7B538; text-align: center;'><h1>첨삭 내용</h1></td></tr><table>";
             				flag++;
             			}
-            			html += "<br><table style='width: 100%; background-color:#F7B538;'><tr><td style='color: black; width: 100%;'><input style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea readonly style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
+            			html += "<br><table style='width: 100%; background-color:#F7B538;'><tr><td style='color: black; width: 100%;'><input class='form-control' style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
+            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea class='form-control' readonly style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
             		}
             	}
             	$("#detailModalBody").append(html);
@@ -95,7 +95,7 @@
 			html +=	"	<table style='width: 100%;' align='center'>                                                	   ";
 			html +=	"	<tr>                                                                                           ";
 			html +=	"		<td style='color: black; width: 80%;'>                                                     ";
-			html +=	"			<input type='text' style='width:100%;' id='itm_title"+ sessionStorage.getItem("itemSeq") +"'/>";
+			html +=	"			<input class='form-control' type='text' style='width:100%; background-color: #FFFFF0;' id='itm_title"+ sessionStorage.getItem("itemSeq") +"' placeholder='항목 제목 입력'/>";
 			html +=	"		</td>                                                                                      ";
 			html +=	"		<td rowspan='2' style='color: black; width: 20%;'>                                         ";
 			html +=	"			<div align='center'>                                                                   ";
@@ -107,7 +107,7 @@
 			html +=	"	</tr>                                                                                          ";
 			html +=	"	<tr>                                                                                           ";
 			html +=	"		<td style='color: black;'>                                                                 ";
-			html +=	"			<textarea style='resize:none; width:100%; height: 300px;' id='itm_content"+ sessionStorage.getItem("itemSeq") +"'></textarea>";
+			html +=	"			<textarea class='form-control' style='resize:none; width:100%; height: 300px; background-color: #FFFFF0;' id='itm_content"+ sessionStorage.getItem("itemSeq") +"' placeholder='항목 내용 입력'></textarea>";
 			html +=	"		</td>                                                                                      ";
 			html +=	"	</tr>                                                                                          ";
 			html +=	"	</table>                                                                                          ";
@@ -131,7 +131,7 @@
 					$("#itm_content"+i).val(temp_content);
 					break;
 				}
-			}	
+			}
 		}
 	}
 	
@@ -147,7 +147,7 @@
 					$("#itm_content"+seq).val(temp_content);
 					break;
 				}
-			}	
+			}
 		}
 	}
 	
@@ -212,7 +212,12 @@
   </div>
   <div align="right">
   	<% if(session.getAttribute("u_id") != null){ %>
-  		<input class="btn btn-success" type="button" value="의뢰하기" onclick="open_order()"/>
+  		<button type="button"class="btn btn-labeled btn-primary" onclick="open_order()">
+			<span class="btn-label">
+          		<i class="glyphicon glyphicon-check"></i>
+           	</span>
+           	의뢰하기
+		</button>
   	<% } %>
   </div>
 </section>
@@ -279,7 +284,7 @@
 						<table style='width: 100%;'>
 							<tr>
 								<td style='color: black; background-color: #D8572A; text-align:center;'>
-									<h1>요구사항 입력</h1>
+									<h2>요구사항 입력</h2>
 								</td>
 							</tr>
 						</table>
@@ -287,7 +292,7 @@
 						<table style="width: 100%;" align="center">
 							<tr>
 								<td style="color: black; width: 80%;">
-									<div align="left"><input class="form-control" style="width: 80%;" type="text" id="rsm_title" /></div>
+									<div align="left"><input style="background-color: #FFFFF0;" class="form-control" style="width: 100%;" type="text" id="rsm_title" placeholder="요구사항 제목 입력"/></div>
 								</td>
 								<td style="color: black; width: 20%;">
 									<select name="searchCategory_1" id="searchCategory_1" style="width:150px;" class="form-control">
@@ -299,15 +304,15 @@
 							</tr>
 							<tr>
 								<td style="color: black;" colspan="2">
-									<textarea class="form-control" style="resize:none; width:100%; height: 300px;" id="rsm_content"></textarea>
+									<textarea class="form-control" style="resize:none; width:100%; height: 300px; background-color: #FFFFF0;" id="rsm_content" placeholder="요구사항 내용 입력"></textarea>
 								</td>
 							</tr>
 						</table>
-					
+					<br/>
 					<table style='width: 100%;'>
 							<tr>
 								<td style='color: black; background-color: #F7B538; text-align:center;'>
-									<h1>자소서 내용 입력</h1>
+									<h2>자소서 내용 입력</h2>
 								</td>
 							</tr>
 						</table>
@@ -316,17 +321,17 @@
 								<table style="width: 100%;" align="center">
 									<tr>
 										<td style="color: black; width: 80%;">
-											<input class="form-control" style="width: 100%;" type="text" id="itm_title1" />
+											<input class="form-control" style="width: 100%; background-color: #FFFFF0;" type="text" id="itm_title1" />
 										</td>
 										<td rowspan="2" style="color: black; width: 20%;">
 											<div align="center">
-												<input style="width: 30%;" type="button" value="&darr;" onclick="moveDown(1)"/><br>
+												<input class="form-control" style="width: 30%;" type="button" value="&darr;" onclick="moveDown(1)" placeholder="항목 제목 입력"/><br>
 											</div>
 										</td>
 									</tr>
 									<tr>
 										<td style="color: black;">
-											<textarea class="form-control" style="resize:none; width:100%; height: 300px;" id="itm_content1"></textarea>
+											<textarea class="form-control" style="resize:none; width:100%; height: 300px; background-color: #FFFFF0;" id="itm_content1" placeholder="항목 내용 입력"></textarea>
 										</td>
 									</tr>
 								</table>

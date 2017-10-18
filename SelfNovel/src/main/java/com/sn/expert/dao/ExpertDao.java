@@ -14,4 +14,5 @@ public interface ExpertDao extends WorkDiv {
 	public DTO do_chkNaver(DTO dto);
 	public int do_saveOrder(DTO dto);
 	public DTO do_nextSeq();
+	public int do_updateTrade(DTO dto);
 }	
