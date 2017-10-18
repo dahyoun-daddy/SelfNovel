@@ -102,7 +102,13 @@
 			<tr>
 				<td>
 					<div align="center">
-						<input class="btn btn-success" type="button" value="저장하기" onclick="do_save(${list[0].rsm_id})"/>
+						<br/>
+						<button type="button"class="btn btn-labeled btn-success" onclick="do_save(${list[0].rsm_id})">
+							<span class="btn-label">
+				          		<i class="glyphicon glyphicon-floppy-saved"></i>
+				           	</span>
+				           	저장하기
+						</button>
 					</div>
 				</td>
 			</tr>
