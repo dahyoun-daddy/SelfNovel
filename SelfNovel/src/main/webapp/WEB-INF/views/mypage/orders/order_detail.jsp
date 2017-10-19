@@ -81,11 +81,9 @@
 	    var codeByte = 0;
 	    for (var idx = 0; idx < el.length; idx++) {
 	        var oneChar = escape(el.charAt(idx));
-	        if ( oneChar.length == 1 ) {
-	            codeByte ++;
-	        } else if (oneChar.indexOf("%u") != -1) {
+	        if(oneChar.indexOf("%u") != -1) {
 	            codeByte += 2;
-	        } else if (oneChar.indexOf("%") != -1) {
+	        } else{
 	            codeByte ++;
 	        }
 	    }

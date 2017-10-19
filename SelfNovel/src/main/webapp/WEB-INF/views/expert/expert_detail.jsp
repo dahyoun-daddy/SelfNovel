@@ -155,11 +155,9 @@
 	    var codeByte = 0;
 	    for (var idx = 0; idx < el.length; idx++) {
 	        var oneChar = escape(el.charAt(idx));
-	        if ( oneChar.length == 1 ) {
-	            codeByte ++;
-	        } else if (oneChar.indexOf("%u") != -1) {
+	        if(oneChar.indexOf("%u") != -1) {
 	            codeByte += 2;
-	        } else if (oneChar.indexOf("%") != -1) {
+	        } else{
 	            codeByte ++;
 	        }
 	    }
@@ -182,7 +180,7 @@
 			return;
 		} else if(byteCheck($("#rsm_title").val().trim()) > 50){
 			alert("요구사항 제목이 너무 깁니다.");
-			$("#rsm_content").focus();
+			$("#rsm_title").focus();
 			return;
 		}
 		
