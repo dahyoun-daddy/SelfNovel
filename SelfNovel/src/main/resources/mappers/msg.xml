@@ -99,7 +99,7 @@
 	      WHERE A.RSM_ID = R.RSM_ID
 	        AND msg_sep = 0 
 	        AND msg_use_yn = 1	      	 
-	      ORDER BY A.msg_reg_dt 
+	      ORDER BY A.msg_reg_dt desc
 	    ) T1,
         (
 	      SELECT A.msg_id,
@@ -107,7 +107,8 @@
            FROM MESSAGE A, USERS U
 	      WHERE RTRIM(A.MSG_NOTIFY, ' ') = U.U_ID
 	        AND msg_sep = 0 
-	        AND msg_use_yn = 1	      	 	      
+	        AND msg_use_yn = 1
+	      ORDER BY msg_reg_dt desc	      	 	      
 	    ) T2
         WHERE T1.MSG_ID = T2.MSG_ID(+)
 		  AND T1.no BETWEEN (#{page_size}*(#{page_num}-1)+1) AND (#{page_size}*(#{page_num}))

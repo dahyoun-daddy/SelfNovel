@@ -59,10 +59,7 @@
 
 <title> 신고 내역</title>
 
-<style type="text/css">
-	button {
-		width : 150px;
-	}
+<style type="text/css">	
 
 	.table-head-rows {
 		text-align: center;

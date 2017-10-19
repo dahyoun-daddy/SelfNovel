@@ -7,6 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+
 <jsp:useBean id="toDay" class="java.util.Date" />
 
 <%
@@ -400,12 +401,41 @@
 	}
 	
 	/**************************
+	* 글자 수를 구하는 함수
+	***************************/	
+	function getStrLength(str){		
+        var strReplace = str.replace(/<br>/mgi, ' ');
+        var counter = strReplace.length;
+        
+        return counter;
+	}
+	
+	/**************************
+	* 글자용량을 구하는 함수
+	***************************/
+	function getStrBytes(str){
+		var strReplace = str.replace(/<br>/mgi, ' ');
+	    var l= 0;
+	     
+	    for(var idx=0; idx < strReplace.length; idx++) {
+	        var c = escape(strReplace.charAt(idx));
+	         
+	        if( c.length==1 ) l ++;
+	        else if( c.indexOf("%u")!=-1 ) l += 2;
+	        else if( c.indexOf("%")!=-1 ) l += c.length/3;
+	    }	     
+	    return l;	
+	}
+	
+	/**************************
 	* 첨삭영역의 테이블을 그리는 함수
 	***************************/
 	function draw_item_table(item) {
 		
 		//줄바꿈
 		var item_content = item.itm_content.replace(/(\n|\r\n)/g, '<br>');		
+		//공백 제거
+		var item_replaced = item.itm_content.replace(/(\n| )/mgi, '');
 		
 		var u_name;
 		
@@ -452,6 +482,18 @@
 			+ "<div id='eItm_content' style='background-color: #FAFAFA; border: 1px solid #E6E6E6;'>"
 			+ item_content
 		    + "</div>"			
+			+ "</td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td colspan='5'>"
+			+ "<div style='float:right;'>"
+			+ "공백포함 : "
+			+ "<b>" +getStrLength(item_content)+ "</b>"+"&nbsp;자&nbsp;"
+			+ "("+ getStrBytes(item_content) + "&nbsp;Byte)"			
+			+ "&nbsp;공백제외 : "
+			+ "<b>" +getStrLength(item_replaced.replace())+ "</b>"+"&nbsp;자&nbsp;"
+			+ "("+ getStrBytes(item_replaced) + "&nbsp;Byte)"
+			+ "</div>"
 			+ "</td>"
 			+ "</tr>"
 		+"</table>"	
@@ -629,8 +671,13 @@
 									</tr>
 									<tr>
 										<td style="border: hidden;" align="right">
-											글자수 :																							 
-											<b>${fn:length(itm_content_len) } </b>자	
+											<c:set var = "str_origin" value="${item.itm_content }" />
+											<c:set var = "str_trim" value = "${fn:trim(str_origin)}" />
+											<c:set var = "str_replace" value ="${fn:replace(str_trim, ' ', '')}"/>
+											<c:set var = "str_replace" value ="${fn:replace(str_replace, cn, '')}"/>
+											<c:set var = "str_replace" value ="${fn:replace(str_replace, cncr, '')}"/>
+											공백포함 : <b>${fn:length(str_trim) } </b>자 (${fn:length(str_trim.bytes) } Byte)
+											공백제외 : <b>${fn:length(str_replace) } </b>자 (${fn:length(str_replace.bytes) } Byte)											
 										</td>
 									</tr>
 									<tr>																					
