@@ -43,4 +43,5 @@ public interface OrdersDao extends WorkDiv {
 	public int do_saveFirstTime(DTO dto);
 	public int do_updateItem(DTO dto);
 	public int do_updateUseYN(DTO dto);
+	public DTO do_searchOne(DTO dto);
 }

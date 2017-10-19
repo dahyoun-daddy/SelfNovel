@@ -110,14 +110,14 @@
 		UPDATE ORDERS
 		SET ord_use_yn = 0
 		WHERE rsm_id   = #{rsm_id}
-		  AND exp_id   = #{exp_id}
 	</delete>
 	
 	<insert id="do_update" parameterType="OrdersVO">
 	</insert>
 
 	<!-- resume 조회가 생기면 추가해도 될듯 -->
-	<select id="do_searchOne" parameterType="OrdersVO">
+	<select id="do_searchOne" parameterType="OrdersVO" resultType="OrdersVO">
+		SELECT * FROM ORDERS WHERE rsm_id = '${rsm_id}'
 	</select>
 	
 	<!-- do_nextState -->

@@ -107,7 +107,7 @@ public class OrdersDaoImpl implements OrdersDao {
 		log.debug("in do_delete========================");
 		log.debug("statement: "+statement);
 		log.debug("dto: "+dto.toString());
-		log.debug("=======================================");		
+		log.debug("=======================================");
 		
 		OrdersVO inUserVO = (OrdersVO)dto;
 		return sqlSession.delete(statement, inUserVO);

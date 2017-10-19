@@ -100,4 +100,8 @@ public class OrdersSvcImpl implements OrdersSvc {
 	public int do_updateUseYN(DTO dto) {
 		return ordersDao.do_updateUseYN(dto);
 	}
+	@Override
+	public DTO do_searchOne(DTO dto) {
+		return ordersDao.do_searchOne(dto);
+	}
 }

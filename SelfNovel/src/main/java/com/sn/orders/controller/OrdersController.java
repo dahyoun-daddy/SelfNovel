@@ -168,12 +168,12 @@ public class OrdersController {
 		List<UnityItmVO> list = (List<UnityItmVO>) orderSvc.do_searchRev(unityItmVO);
 		List<UnityItmVO> getPrd = (List<UnityItmVO>) orderSvc.do_searchOriginal(unityItmVO);
 		
-		System.out.println(list.toString());
-		System.out.println(getPrd.toString());
-		
 		if(list != null && list.size() > 0 ) {
-			System.out.println("uuuu: 처음 아닌 경우");
 			for(int i=0; i<list.size(); i++) {
+				if(itm_title_arr[i] == null || itm_content_arr[i] == null) {
+					res.getWriter().write("insufficiency");
+					return;
+				}
 				unityItmVO.setItm_title(itm_title_arr[i]);
 				unityItmVO.setItm_content(itm_content_arr[i]);
 				unityItmVO.setItm_form_id(Integer.parseInt(itm_form_id_arr[i]));
@@ -182,7 +182,6 @@ public class OrdersController {
 				
 			}
 		} else {	// 처음 작성인 경우
-			System.out.println("uuuu: 처음인 경우");
 			for(int i=0; i<getPrd.size(); i++) {
 				unityItmVO.setItm_title(itm_title_arr[i]);
 				unityItmVO.setItm_content(itm_content_arr[i]);
@@ -248,6 +247,31 @@ public class OrdersController {
 				unityItmVO.setItm_use_yn(2);
 				orderSvc.do_updateUseYN(unityItmVO);
 			}
+		}
+	}
+	
+	@RequestMapping(value="/mypage/orders/do_deleteAll.do")
+	public void do_deleteAll(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		OrdersVO ordersVO = new OrdersVO();
+		String chkList[] = req.getParameter("chkList").split("\\\\");
+		int flag = 1;
+		
+		for(int i=0; i<chkList.length; i++) {
+			ordersVO.setRsm_id(Integer.parseInt(chkList[i]));
+			OrdersVO temp = (OrdersVO) orderSvc.do_searchOne(ordersVO);
+			if(!temp.getOrd_state().equals("10")) {
+				if(!temp.getOrd_state().equals("50")) {
+					flag = -1;
+					break;
+				}
+			}
+			flag *= orderSvc.do_deleteTx(ordersVO);
+		}
+		
+		if(flag >0) {
+			res.getWriter().write("success");
+		} else {
+			res.getWriter().write("fail");
 		}
 	}
 }

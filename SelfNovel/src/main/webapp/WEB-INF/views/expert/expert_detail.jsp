@@ -54,15 +54,15 @@
             	var flag = 0;
             	for(var i in results){
             		if(results[i].itm_prd_id == null){
-            			html += "<br><table style='width: 100%;'><tr><td style='color: black; width: 100%;'><input style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea readonly class='form-control' style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
+            			html += "<br><table style='width: 100%;'><tr><td style='color: black; width: 100%;'><input class='form-control' style='width: 100%; background-color: #FFFFC6;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
+            			html += "<tr><td style='color: black; width: 100%;'><textarea readonly class='form-control' style='height: 300px; width: 100%; resize: none; background-color: #E6FFFF;'>"+results[i].itm_content+"</textarea></td></tr></table>";
             		} else {
             			if(flag == 0){
             				html += "</table><br><table style='width: 100%;'><tr><td style='color: black; width: 100%; background-color: #F7B538; text-align: center;'><h1>첨삭 내용</h1></td></tr><table>";
             				flag++;
             			}
-            			html += "<br><table style='width: 100%; background-color:#F7B538;'><tr><td style='color: black; width: 100%;'><input class='form-control' style='width: 100%;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%; height: 10%;'><textarea class='form-control' readonly style='width: 100%; resize: none;'>"+results[i].itm_content+"</textarea></td></tr></table>";
+            			html += "<br><table style='width: 100%; background-color:#F7B538;'><tr><td style='color: black; width: 100%;'><input class='form-control' style='width: 100%; background-color: #FFFFC6;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
+            			html += "<tr><td style='color: black; width: 100%;'><textarea class='form-control' readonly style='height: 300px; width: 100%; resize: none; background-color: #FFFFC6;'>"+results[i].itm_content+"</textarea></td></tr></table>";
             		}
             	}
             	$("#detailModalBody").append(html);
@@ -157,8 +157,28 @@
 		var itm_titles="";
 		var itm_contents="";
 		
+		if($("#rsm_title").val() == '' || $("#rsm_title").val() == null){
+			alert("요구사항 제목을 입력해 주세요.");
+			$("#rsm_title").focus();
+			return;
+		} else if($("#rsm_content").val() == '' || $("#rsm_content").val() == null) {
+			alert("요구사항 내용을 입력해 주세요.");
+			$("#rsm_content").focus();
+			return;
+		}
+		
 		for(var i=1; i<sessionStorage.getItem("itemSeq")+1; i++){
-			if($("#itm_title"+i).val() != null){
+			if($("#item"+i).html() != null && $("#item"+i).html() != ''){
+				if($("#itm_title"+i).val() == null || $("#itm_title"+i).val() == ''){
+					alert("항목 제목을 입력해 주세요.");
+					$("#itm_title"+i).focus();
+					return;
+				} else if($("#itm_content"+i).val() == null || $("#itm_content"+i).val() == ''){
+					alert("항목 내용을 입력해 주세요.");
+					$("#itm_content"+i).focus();
+					return;
+				}
+				
 				itm_titles += $("#itm_title"+i).val() + "\\";
 				itm_contents += $("#itm_content"+i).val() + "\\";
 			}
@@ -177,9 +197,13 @@
             	  },
             type: 'POST',
             success: function(result){
-            	if(result == "fail"){
-            		alert("의뢰하기 실패");
-            	} else{
+            	if(result == "insufficiency"){
+            		alert("모든 항목을 입력해 주세요.");
+            		return;
+            	} else if(result == "fail"){
+            		alert("의뢰하기 실패.");
+            		return;
+            	} else {
             		orderFrm.submit();
             	}
             }
@@ -321,11 +345,11 @@
 								<table style="width: 100%;" align="center">
 									<tr>
 										<td style="color: black; width: 80%;">
-											<input class="form-control" style="width: 100%; background-color: #FFFFF0;" type="text" id="itm_title1" />
+											<input class="form-control" style="width: 100%; background-color: #FFFFF0;" type="text" placeholder="항목 제목 입력" id="itm_title1" />
 										</td>
 										<td rowspan="2" style="color: black; width: 20%;">
 											<div align="center">
-												<input class="form-control" style="width: 30%;" type="button" value="&darr;" onclick="moveDown(1)" placeholder="항목 제목 입력"/><br>
+												<input style="width: 30%;" type="button" value="&darr;" onclick="moveDown(1)" placeholder="항목 제목 입력"/><br>
 											</div>
 										</td>
 									</tr>
