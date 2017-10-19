@@ -193,6 +193,8 @@
 			
 			var sel_contentR = sel_content.trim();//첨삭 선택된 항목의 내용
 			
+			sel_contentR = sel_contentR.replace(/<br>/mgi, '\r\n');
+			
 			$("#modalTitleOrigin").val(sel_title);
 			$("#modalContentOrigin").val(sel_contentR);
 			$("#modalTitleNew").val(sel_title);
@@ -627,7 +629,8 @@
 									</tr>
 									<tr>
 										<td style="border: hidden;" align="right">
-											글자수 : <b>${fn:length(item.itm_content) } </b>자
+											글자수 :																							 
+											<b>${fn:length(itm_content_len) } </b>자	
 										</td>
 									</tr>
 									<tr>																					
@@ -871,7 +874,8 @@
 					<button type="button" class="btn btn-labeled btn-default" data-dismiss="modal">
 						<span class="btn-label" style="height:35px;">
 							<i class="glyphicon glyphicon-remove"></i>
-						</span>						
+						</span>
+						작성취소						
 					</button>
 				</div>
 				<!-- //modal-footer -->	
