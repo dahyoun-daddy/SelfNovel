@@ -264,6 +264,12 @@
 	}	
 </script>
 
+<style type="text/css">
+	.btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+	.btn-labeled {padding-top: 0;padding-bottom: 0;}	
+	
+</style>
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>수정하기</title>
@@ -317,11 +323,21 @@
 						<c:choose>
 							<c:when test="${resume.img_id eq null}">
 								<input type="hidden" name="img_id" id="img_id">
-								<input type="button" id="popupTest" value="파일첨부"/>파일을 첨부해주세요.
+								<button type="button" id="popupTest" class="btn btn-default btn-labeled">
+									<span class="btn-label" style="height: 35px;">
+										<i class="glyphicon glyphicon-upload"></i>
+									</span>
+									파일첨부									
+								</button>
 							</c:when>
 							<c:otherwise>
 								<input type="hidden" name="img_id" id="img_id" value="${resume.img_id}">
-								<input type="button" id="popupTest" value="다른 파일첨부"/> 기존에 첨부한 파일이 있습니다.
+								<button type="button" id="popupTest" class="btn btn-danger btn-warning">
+									<span class="btn-label" style="height: 35px;">
+										<i class="glyphicon glyphicon-upload"></i>
+									</span>
+									다른 파일 첨부
+								</button> 기존에 첨부한 파일이 있습니다.
 							</c:otherwise>
 						</c:choose> 
 						<!-- for ppt end -->
@@ -400,16 +416,26 @@
 					</tbody>
 					<tfoot>
 						<tr>							
-							<td align="center">
+							<td align="center" style="border : hidden;">
 								<a id="itemAdd"><img src="<c:url value='/resources/img/plus-button.png' />" width=50 height=50/></a>								 
 								<!-- <input type="button" value="+" id="itemAdd" /> -->
 							</td>
 						</tr>
 						<tr>							
 							<td colspan="2">							
-							<div align="center">
-								<input type="button" id="btnCancel" value="작성취소">
-								<input type="button" id="btnSubmit" value="작성완료">
+							<div align="center" style="border: hidden;">
+								<button type="button" id="btnCancel" class="btn btn-default btn-labeled">
+									<span class="btn-label" style="height: 35px;">
+										<i class="glyphicon glyphicon-remove"></i>
+									</span>
+									수정 취소
+								</button>
+								<button type="button" id="btnSubmit" class="btn btn-warning btn-labeled">
+									<span class="btn-label" style="height: 35px;">
+										<i class="glyphicon glyphicon-ok"></i>
+									</span>
+									수정 완료
+								</button>
 							</div>	
 							</td>
 						</tr>		

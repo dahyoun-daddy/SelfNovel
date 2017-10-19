@@ -127,6 +127,26 @@ public class RsmController {
 	}	
 	
 	/**
+	 * do_delete_item
+	 * detail : 아이템 삭제
+	 * @param req
+	 * return String(1: success other : fail
+	 */
+	@RequestMapping(value="resume/do_delete_item")
+	@ResponseBody
+	public String do_delte_item(HttpServletRequest req) {
+		log.debug("===== RsmDaocontroller.do_delete_item =======");
+		log.debug("req : " + req.toString());
+		log.debug("=============================================");
+		
+		ItmVO inItmVO = new ItmVO();
+		inItmVO.setItm_form_id(req.getParameter("itm_form_id"));
+		
+		return itmSvc.do_delete(inItmVO)+"";
+	}
+	
+	
+	/**
 	 * resumeModify
 	 * detail : 수정폼으로 이동
 	 * @param req

@@ -57,27 +57,22 @@
 		$("form[name=frm]").on("click", "#doShowEdit", function(){
 			
 			//버튼 모양 변경
-/* 			if($(this).val() == "첨삭보기"){
-				$(this).val("첨삭접기");
-			}else if($(this).val() == "첨삭접기"){
-				$(this).val("첨삭보기");
-			} */
-			
 			if($("#toggleFlag").val() == "false"){				
 				$("#toggleFlag").val("true");
 				$(this).html(btn_hide);
-				
 			}else{
 				$("#toggleFlag").val("false");				
-				$(this).html(btn_show);
-			}
+				$(this).html(btn_show);				
+			}			
 			
 			var parent = $(this).parent();					//현재 선택된 Item
-			var editDiv = $(parent).find(".editDiv");		//첨삭영역
+			var editDiv = $(parent).find(".editDiv");		//첨삭영역			
 			var content = $(parent).find("#content");		//내용영역
+			var btnArea = $(parent).find("#modBtnArea");
 			var page = $(parent).find("#page-selection");	//Page
 			var itm_prd_id = $(parent).parent().parent().find("#itm_form_id").val();
-			var itm_childs = $(parent).parent().parent().find("#itm_childs").val();
+			var itm_childs = $(parent).parent().parent().find("#itm_childs").val();					
+		
 			
 			$.ajax({				
 				type : "POST",
@@ -89,7 +84,9 @@
 					var item_table = draw_item_table(item[0]);
 					
 					content.empty();			//첨삭영역을 비우고
-					content.append(item_table);	//첫 페이지의 Item으로 그린다.					
+					content.append(item_table);	//첫 페이지의 Item으로 그린다.
+					
+					draw_item_edit_buttons(item[0], btnArea);// 항목의 수정/삭제 버튼을 그린다.
 					
 					//페이징
 			        $(page).bootpag({
@@ -98,6 +95,7 @@
 			        	var item_tableN = draw_item_table(item[num-1]);			        	
 			        	content.empty();			        	
 			        	content.append(item_tableN);
+			        	draw_item_edit_buttons(item[num-1]);
 			        });
 				},
 				error : function(){
@@ -161,6 +159,11 @@
 			var itm_form_id = $("#modItmId").val();
 			var itm_title = $("#modTitle").val();
 			var itm_content = $("#modContent").val();
+			
+			if(itm_title.length > 60){
+				alert("제목의 길이가 너무 깁니다.(공백포함 최대 60글자)");
+				return;
+			}
 			
 			$.ajax({
 				type : "POST",
@@ -291,31 +294,116 @@
 		});
 		
 		/*****************************
-		* '첨삭항목 수정' 버튼 클릭시 이벤트
-		*
+		* '첨삭항목 수정' 버튼 클릭시 이벤트		
 		*****************************/
-		$("#btnEditItem". on("click"), function(){
-			var itm_title = $("#eItm_title");
-			var itm_content = $("#eItm_content");
-			var itm_form_id = $("#eItm_form_id");
-			var itm_prd_id = $("#eItm_prd");			
+		$("#modBtnArea").on("click", "#btnEditItem",function(){
+			
+			var itm_form_id = $("#eItm_form_id").val();
+			var itm_title = $("#eItm_title").val();			
+			var itm_content = $("#eItm_content").html();
+			itm_content = itm_content.replace(/<br>/mgi, '\r\n');			
+			
+			$("#eModTitle").val(itm_title);
+			$("#eModContent").val(itm_content);
+			$("#eModItmId").val(itm_form_id);
+			
+			$("#eModModal").modal();
 		});
 		
-		$("#btnDeleteItem". on("click"), function(){
-			var itm_title = $("#eItm_title");
-			var itm_content = $("#eItm_content");
-			var itm_form_id = $("#eItm_form_id");
-			var itm_prd_id = $("#eItm_prd");
-		});
+		/*****************************
+		* '첨삭항목 수정'모달의 '수정완료' 버튼 클릭시 이벤트		
+		*****************************/
+		$("#btnEModSave").on("click", function(){
+			var itm_form_id = $("#eModItmId").val();
+			var itm_title = $("#eModTitle").val();
+			var itm_content = $("#eModContent").val();
+			
+			if(itm_title.length > 60){
+				alert("제목의 길이가 너무 깁니다.(공백포함 최대 60글자)");
+				return;
+			}
+			
+			$.ajax({
+				type : "POST",
+				url : "do_updateOne.do",
+				dataType : "html",
+				data : {
+					"itm_form_id" : itm_form_id,
+					"itm_title" : itm_title,
+					"itm_content" : itm_content
+				},
+				success : function(data){
+					var flag = ($.trim(data));
+					$(".modal").modal("hide");
+					location.reload();	
+				}
+			});//close ajax
+		})//close btnEditItem
+		
+		/*****************************
+		* '첨삭항목 삭제' 버튼 클릭시 이벤트		
+		*****************************/
+		$("#modBtnArea").on("click", "#btnDeleteItem",function(){
+			if(confirm("정말로 삭제하시겠습니까?") == true){
+				var itm_form_id = $("#eItm_form_id").val();
+				
+				$.ajax({
+					type : "POST",
+					url : "do_delete_item.do",
+					dataType : "html",
+					data : {
+						"itm_form_id" : itm_form_id,					
+					},
+					success : function(data){
+						var flag = ($.trim(data));
+						alert(flag + "삭제 성공");
+						$(".modal").modal("hide");
+						location.reload();	
+					}
+				});//close ajax				
+			}//close if
+		});//close btnDelteItem
 		
 	});//close .ready(function)
+	
+	/**************************
+	* 첨삭영역의 수정/삭제 버튼을 그리는 함수
+	***************************/
+	function draw_item_edit_buttons(item, btnArea){
+		
+		var item_u_id = item.u_id;
+		var session_id = '<%=session.getAttribute("u_id")%>';
+		
+		var buttons =" 	<button type='button' class='btn btn-labeled btn-warning' id='btnEditItem'> "
+		+ " 		<span class='btn-label' style='height: 35px;'>                          "
+		+ " 			<i class='glyphicon glyphicon-edit'></i>                            "
+		+ " 		</span>                                                                 "
+		+ " 		첨삭수정													                "
+		+ " 	</button>                                                                   "
+		+ " 	&nbsp;                                                                      "
+		+ " 	<button type='button' class='btn btn-labeled btn-danger' id='btnDeleteItem'>"
+		+ " 		<span class='btn-label' style='height: 35px;'>                          "
+		+ " 			<i class='glyphicon glyphicon-trash'></i>                           "
+		+ " 		</span>                                                                 "
+		+ " 		첨삭삭제														            "
+		+ " 	</button>														            "			
+		
+		//세션 u_id와 아이템의 작성자가 일치하면 메뉴 드로우
+		if(session_id != null && session_id == item_u_id){
+			btnArea.empty();
+			btnArea.append(buttons);				
+		}	
+		
+		return buttons;
+	}
 	
 	/**************************
 	* 첨삭영역의 테이블을 그리는 함수
 	***************************/
 	function draw_item_table(item) {
 		
-		var item_content = item.itm_content.replace(/(\n|\r\n)/g, '<br>');		//줄바꿈
+		//줄바꿈
+		var item_content = item.itm_content.replace(/(\n|\r\n)/g, '<br>');		
 		
 		var u_name;
 		
@@ -352,14 +440,14 @@
 			+ "</b></h4>"
 			+ "<input type='hidden' id='eU_id' value=" + item.u_id + ">"
 			+ "<input type='hidden' id='eItm_title' value=" + item.itm_title + ">"
-			+ "<input type='hidden' id='eItm_content' value=" + item.itm_content + ">"
+			+ "<input type='hidden' id='eItm_content_origin' value=" + item.itm_content + ">"
 			+ "<input type='hidden' id='eItm_form_id' value=" + item.itm_form_id + ">"
 			+ "<input type='hidden' id='eItm_prd_id' value=" + item.itm_prd_id + ">"			
 			+ "</td>"
 			+ "</tr>"
 			+ "<tr>"
 			+ "<td colspan='5'>"
-			+ "<div style='background-color: #FAFAFA; border: 1px solid #E6E6E6;'>"
+			+ "<div id='eItm_content' style='background-color: #FAFAFA; border: 1px solid #E6E6E6;'>"
 			+ item_content
 		    + "</div>"			
 			+ "</td>"
@@ -582,23 +670,8 @@
 												<!-- 숨겨지는 부분이다. 버튼을 클릭하면 토글된다. -->
 												<div id="editDiv" style="display:none;" class="editDiv">
 													<div id="content"></div>
-													<div id="page-selection"></div>													
-													<div style="float:right;">
-														
-														<button type="button" class="btn btn-labeled btn-warning" id="btnEditItem">
-															<span class="btn-label" style="height: 35px;">
-																<i class="glyphicon glyphicon-edit"></i>
-															</span>
-															첨삭수정													
-														</button>
-														&nbsp;
-														<button type="button" class="btn btn-labeled btn-danger" id="btnDeleteItem">
-															<span class="btn-label" style="height: 35px;">
-																<i class="glyphicon glyphicon-trash"></i>
-															</span>
-															첨삭삭제														
-														</button>														
-													</div>																					
+													<div id="modBtnArea" style="display: block; text-align: right;"></div>
+													<div id="page-selection" style="display: block;"></div>																																							
 												</div>																								
 											<!-- end_editDiv -->
 											</td>
@@ -717,9 +790,19 @@
 					</table>	
 			    </div>
 			    <!-- //modal-body -->
-				<div class="modal-footer">
-					<button id="btnModSave" type="button" class="btn btn-primary">수정완료</button>
-					<button id="btnModClose" type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				<div class="modal-footer">				
+					<button id="btnModSave" type="button" class="btn btn-labeled btn-success">
+						<span class="btn-label" style="height:35px;">
+							<i class="glyphicon glyphicon-ok"></i>
+						</span>
+						수정완료
+					</button>
+					<button id="btnModClose" type="button" class="btn btn-labeled btn-danger" data-dismiss="modal">
+						<span class="btn-label" style="height:35px;">
+							<i class="glyphicon glyphicon-remove"></i>
+						</span>						
+						닫기
+					</button>					
 				</div>
 				<!-- //modal-footer -->	
 			</div>	
@@ -778,9 +861,18 @@
 					<br>					
 			    </div>
 			    <!-- //modal-body -->
-				<div class="modal-footer">
-					<button id="btnItmSave" type="button" class="btn btn-default">작성완료</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				<div class="modal-footer">												
+					<button id="btnItmSave" type="button" class="btn btn-labeled btn-default">
+						<span class="btn-label" style="height:35px;">
+							<i class="glyphicon glyphicon-ok"></i>
+						</span>
+						작성완료
+					</button>
+					<button type="button" class="btn btn-labeled btn-default" data-dismiss="modal">
+						<span class="btn-label" style="height:35px;">
+							<i class="glyphicon glyphicon-remove"></i>
+						</span>						
+					</button>
 				</div>
 				<!-- //modal-footer -->	
 			</div>	
@@ -791,7 +883,7 @@
 	</div>	
 	<!-- //Modal -->
 	
-		<!-- 수정하기 Modal Window -->
+	<!-- 첨삭 수정하기 Modal Window -->
 	<div id="eModModal" class="modal fade" role="dialog">
 		<form name="eModModalFrm">
 		<!-- modal-dialog -->
@@ -801,7 +893,7 @@
 	    		<!-- modal-header -->
 				<div class="modal-header">
 	        		<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
-	        		<h3 class="modal-title">수정하기</h3>
+	        		<h3 class="modal-title">첨삭 수정</h3>
 	      		</div>
 	      		<!-- //modal-header -->
 	      		<!-- modal-body -->
@@ -823,8 +915,18 @@
 			    </div>
 			    <!-- //modal-body -->
 				<div class="modal-footer">
-					<button id="btnEModSave" type="button" class="btn btn-primary">수정완료</button>
-					<button id="btnEModClose" type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+					<button id="btnEModSave" type="button" class="btn btn-labeled btn-success">
+						<span class="btn-label" style="height:35px;">
+							<i class="glyphicon glyphicon-ok"></i>
+						</span>
+						수정완료
+					</button>
+					<button id="btnEModClose" type="button" class="btn btn-labeled btn-danger" data-dismiss="modal">
+						<span class="btn-label" style="height:35px;">
+							<i class="glyphicon glyphicon-remove"></i>
+						</span>						
+						닫기
+					</button>
 				</div>
 				<!-- //modal-footer -->	
 			</div>	

@@ -108,11 +108,6 @@ MERGE INTO item i
 		 where rsm_id = #{rsm_id}
   		   and itm_prd_id is null  
 	</update>
-	<!-- root만 조회(do_searchRoot -->
-	<select id="do_searchRoot" parameterType="com.sn.resume.domain.ItmVO"
-									resultType="com.sn.resume.domain.ItmVO">
-	
-	</select>
 	
 	<!-- 조회(Search) -->
 	<select id="do_search" parameterType="com.sn.resume.domain.ItmVO"
@@ -149,6 +144,7 @@ SELECT a1.*,
                                 LEVEL AS lvl
                            FROM item                
                           WHERE rsm_id = #{rsm_id}
+                            AND itm_use_yn = 1
                         CONNECT BY itm_prd_id = PRIOR itm_form_id                     
                        )
                  WHERE lvl BETWEEN 1 AND 2                 
