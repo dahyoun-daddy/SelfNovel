@@ -276,8 +276,10 @@
 
 									  <div class="col-md-6 col-lg-3">
 									    <div class="thumbnail" style='position:relative; height:400px;'>
+										    <c:set var="d" value="${expertVO.exp_profile }"/>
+											<c:set var="e" value="${fn:substring(d,0,7) }"/>
 											<c:choose>
-												<c:when test="${e eq 'http://'}">
+												<c:when test="${e eq 'https:/'}">
 													<img style="position:relative; top:0; left:0;" src="${expertVO.exp_profile}" width="200px" height="200px">	
 												</c:when>
 												<c:otherwise>
