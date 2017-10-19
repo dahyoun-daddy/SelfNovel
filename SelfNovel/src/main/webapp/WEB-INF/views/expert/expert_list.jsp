@@ -231,8 +231,11 @@
 					<div>
 						<c:choose>
             				<c:when test="${list.size()>0}" >
+            					<div class="container-fluid">
+            					<div class="row">
                 				<c:forEach var="expertVO" items="${list}">
-									<table class="table table-bordered table-hover table-condensed" style="width:25%;" border="1px" 
+                				<!-- 
+								<table class="table table-bordered table-hover table-condensed" style="width:25%;" border="1px" 
 						   				   cellpadding="2" cellspacing="2" align="left">
 										<tr>
 											<td colspan="2" align="center">
@@ -269,7 +272,35 @@
 											</td>
 										</tr>
 									</table>
+									 -->
+
+									  <div class="col-md-6 col-lg-3">
+									    <div class="thumbnail" style='position:relative; height:400px;'>
+											<c:choose>
+												<c:when test="${e eq 'http://'}">
+													<img style="position:relative; top:0; left:0;" src="${expertVO.exp_profile}" width="200px" height="200px">	
+												</c:when>
+												<c:otherwise>
+													<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${expertVO.exp_profile}" width="200px" height="200px">															
+												</c:otherwise>
+											</c:choose>
+									      <div class="caption">
+									        <h3><c:out value="${expertVO.exp_title}"/></h3>
+									       	<p><c:out value="${expertVO.dtl_cd_nm}"/></p>							       	
+
+									       	
+									       	<div style="position:absolute; right:10px; bottom:50px;">	
+									       		<p>₩ <fmt:formatNumber value="${expertVO.exp_price}" pattern="#,###"/></p>
+									       	</div>
+									        <div style="position:absolute; right:10px; bottom:0px;">
+									        	<p><a href="do_detail_list.do?exp_id=${expertVO.exp_id }" class="btn btn-primary" role="button"> 첨삭 조회 </a></p>
+									      	</div>
+									      </div>
+									    </div>
+									  </div>	
 						</c:forEach>
+						</div>
+						</div>
 						</c:when>
 						</c:choose>
 					</div>
