@@ -13,6 +13,7 @@
 	}
 %>
 <link href="<c:url value='/resources/css/layout.css' />" rel="stylesheet"></link>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script type="text/javascript">
 	function logout(){
 		$.ajax({
@@ -34,10 +35,10 @@
 				<table align="left">
 	   				<tr>
 	   					<td>
-	   						<input type="text" name="SEARCH_WORD_MAIN"/>
+	   						<input class="w3-input" type="text" name="SEARCH_WORD_MAIN"/>
 	   					</td>
 	   					<td>
-	   						<input type="submit" value="검색" />
+	   						<input class="w3-button w3-Pink" type="submit" value="검색" />
 	   					</td>
 		   			</tr>
 				</table>
