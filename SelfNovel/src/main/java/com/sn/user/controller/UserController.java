@@ -49,6 +49,8 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.sn.codes.dao.CodesDao;
 import com.sn.codes.domain.CodesVO;
 import com.sn.common.DTO;
+import com.sn.expert.domain.ExpertVO;
+import com.sn.expert.service.ExpertSvc;
 import com.sn.user.domain.SMTPAuthenticator;
 import com.sn.user.domain.UserVO;
 import com.sn.user.naverlogin.NaverLoginBO;
@@ -61,6 +63,9 @@ public class UserController {
 	
 	@Autowired
 	private UserSvc userSvc;
+	
+	@Autowired
+	private ExpertSvc expertSvc;
 	
 	@Autowired
 	private CodesDao codesDao;
@@ -94,8 +99,6 @@ public class UserController {
     public ModelAndView login(HttpSession session) {
         /* 네아로 인증 URL을 생성하기 위하여 getAuthorizationUrl을 호출 */
         String naverAuthUrl = naverLoginBO.getAuthorizationUrl(session);
-        
-        log.debug("asdf: " + naverAuthUrl);
         
         /* 생성한 인증 URL을 View로 전달 */
         return new ModelAndView(naverAuthUrl);
@@ -131,6 +134,7 @@ public class UserController {
         	session.setAttribute("u_id", userVO.getU_id());
         	session.setAttribute("u_name", userVO.getU_name());
         	session.setAttribute("u_level", userVO.getU_level());
+        	modelAndView.addObject("rank_list", (List<ExpertVO>) expertSvc.do_searchRank() );
         	modelAndView.setViewName("main/main_view");
         	return modelAndView;
         }
