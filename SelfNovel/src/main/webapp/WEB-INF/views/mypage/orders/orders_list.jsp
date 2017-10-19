@@ -72,7 +72,7 @@
 			var testfrm = document.testfrm;
 			testfrm.submit();
 		}
-
+		
 		//수락의 경우
 		$("input[name=signTest]").click(function() {
 			$("#WORK_DIV").val("do_nextState");
@@ -180,6 +180,31 @@
 		$("#RSM_ID").val(rsm_id);
 		testFrm.submit();
 	}
+	
+	function do_deleteAll(){
+		if (confirm("삭제하시겠습니까?") == true){
+			var chkList = "";
+			$('input:checkbox[name="chkList"]').each(function() {
+			      if(this.checked){
+			    	  chkList += this.value + "\\";
+			      }
+			 });
+			
+			$.ajax({
+	            url: "do_deleteAll.do",
+	            data: {chkList: chkList},
+	            type: 'POST',
+	            success: function(result){
+	            	if(result == "fail"){
+	            		alert("거래중인 항목은 삭제할 수 없습니다.");
+	            		return;
+	            	} else{
+	            		location.reload();
+	            	}
+	            }
+	        });
+		}
+	}
 </script>
 </head>
 <body>
@@ -214,7 +239,7 @@
 								<tr id="ordersInfoTr">
 									<input type="hidden" name="rsm_id" value="${orders.rsm_id}" />
 									<input type="hidden" name="exp_id" value="${orders.exp_id}" />
-									<td><div align="center"><input type="checkbox" name="chkList" /></div></td>
+									<td><div align="center"><input type="checkbox" id="chkList" name="chkList" value="${orders.rsm_id }"/></div></td>
 									<td><div align="center"><c:out value="${orders.no}" /></div></td>
 									<td><div align="center"><c:out value="${orders.rsm_title}" /></div></td>
 									<td><div align="center"><c:out value="${orders.exp_id}" /></div></td>
@@ -281,7 +306,7 @@
 				</tbody>
 			</table>
 			<br/>
-				<button type="button" class="btn btn-labeled btn-danger pull-left" id="doDeleteList">
+				<button type="button" class="btn btn-labeled btn-danger pull-left" id="doDeleteList" onclick="do_deleteAll()">
 					<span class="btn-label">
 				      		<i class="glyphicon glyphicon-remove"></i>
 				       	</span>
@@ -340,7 +365,7 @@
 								<tr id="ordersInfoTr">
 									<input type="hidden" name="rsm_id" value="${orders.rsm_id}" />
 									<input type="hidden" name="exp_id" value="${orders.exp_id}" />
-									<td><div align="center"><input type="checkbox" name="chkList" /></div></td>
+									<td><div align="center"><input type="checkbox" name="chkList" id="chkList" value="${orders.rsm_id }"/></div></td>
 									<td><div align="center"><c:out value="${orders.no}" /></div></td>
 									<td><div align="center"><c:out value="${orders.rsm_title}" /></div></td>
 									<td><div align="center"><c:out value="${orders.u_id}" /></div></td>
@@ -426,7 +451,7 @@
 				</tbody>
 			</table>
 			<br/>
-			<button type="button" class="btn btn-labeled btn-danger pull-left" id="doDeleteList">
+			<button type="button" class="btn btn-labeled btn-danger pull-left" onclick="do_deleteAll()">
 					<span class="btn-label">
 				      		<i class="glyphicon glyphicon-remove"></i>
 				       	</span>

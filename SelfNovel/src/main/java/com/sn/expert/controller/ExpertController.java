@@ -57,6 +57,11 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		
 		String[] itm_title_arr = req.getParameter("itm_titles").split("\\\\");
 		String[] itm_content_arr = req.getParameter("itm_contents").split("\\\\");
+		
+		System.out.println("ssss: " + itm_title_arr.length);
+		System.out.println("ssss: " + itm_content_arr.length);
+		
+		
 		String itm_inserts ="";
 		String itm_contents = "";
 		

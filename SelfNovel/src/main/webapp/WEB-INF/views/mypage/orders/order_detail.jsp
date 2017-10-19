@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<% request.setCharacterEncoding("utf-8"); %>
+<% request.setCharacterEncoding("utf-8"); int i=0; %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,44 +11,6 @@
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<script type="text/javascript">
-	function do_save(rsm_id){
-		var itm_titles = "";
-		var itm_contents = "";
-		var itm_form_ids = "";
-		var i=1;
-		
-		while(true){
-			if($("#itm_title"+i).val() == null){
-				break;
-			} else{
-				itm_titles += $("#itm_title"+i).val() + "\\";
-				itm_contents += $("#itm_content"+i).val() + "\\";
-				itm_form_ids += $("#itm_form_id"+i).val() + "\\";
-				i++;
-			}
-		}
-		
-		$.ajax({
-            url: "do_save.do",
-            data: {itm_titles: itm_titles,
-            	   itm_contents: itm_contents,
-            	   itm_form_ids: itm_form_ids,
-            	   u_id: '<%=session.getAttribute("u_id")%>',
-            	   rsm_id: rsm_id
-            	  },
-            type: 'POST',
-            success: function(result){
-            	if(result == "fail"){
-            		alert("저장하기 실패");
-            	} else{
-            		opener.parent.location.reload();
-            		window.close();
-            	}
-            }
-        });
-	}
-</script>
 <title>:::ORDER DETAIL:::</title>
 </head>
 <body>
@@ -68,7 +30,6 @@
 		</table>
 	</c:if>
 	<table style="width: 100%;">
-		<% int i=0; %>
 		<c:choose>
     	<c:when test="${list.size()>0}" >
     		<c:forEach var="unityItmVO" items="${list}">
@@ -115,4 +76,51 @@
 		</c:if>
 	</table>
 </body>
+<script type="text/javascript">
+	function do_save(rsm_id){
+		var itm_titles = "";
+		var itm_contents = "";
+		var itm_form_ids = "";
+		var max_size = '<%=i%>';
+		
+		for(var i=1; i<=max_size; i++){
+			if($("#itm_title"+i).val() == null || $("#itm_title"+i).val() ==''){
+				alert("항목 제목을 입력해 주세요.");
+				$("#itm_title"+i).focus();
+				return;
+			} else if($("#itm_content"+i).val() == null || $("#itm_content"+i).val() == ''){
+				alert("항목 내용을 입력해 주세요.");
+				$("#itm_content"+i).focus();
+				return;
+			} else{
+				itm_titles += $("#itm_title"+i).val() + "\\";
+				itm_contents += $("#itm_content"+i).val() + "\\";
+				itm_form_ids += $("#itm_form_id"+i).val() + "\\";
+			}
+		}
+		
+		$.ajax({
+            url: "do_save.do",
+            data: {itm_titles: itm_titles,
+            	   itm_contents: itm_contents,
+            	   itm_form_ids: itm_form_ids,
+            	   u_id: '<%=session.getAttribute("u_id")%>',
+            	   rsm_id: rsm_id
+            	  },
+            type: 'POST',
+            success: function(result){
+            	if(result == "insufficiency"){
+            		alert("모든 항목을 입력해 주세요.");
+            		return;
+            	} else if(result == "fail"){
+            		alert("의뢰하기 실패.");
+            		return;
+            	} else {
+            		opener.parent.location.reload();
+            		window.close();
+            	}
+            }
+        });
+	}
+</script>
 </html>
