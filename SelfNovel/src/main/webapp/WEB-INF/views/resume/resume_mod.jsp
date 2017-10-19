@@ -264,26 +264,22 @@
 	}	
 </script>
 
-<style type="text/css">
-	.btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
-	.btn-labeled {padding-top: 0;padding-bottom: 0;}	
-	
-</style>
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>수정하기</title>
+<title>자기소개서 수정</title>
 <style type="text/css">
 	textarea {
 		width : 100%;
 		resize: none;
 		height: 200px;
 	}
-
+	
+	.btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+	.btn-labeled {padding-top: 0;padding-bottom: 0;}
 </style>
 </head>
 <body>	
-	<h2>수정하기</h2>
+	<h2>자기소개서 수정</h2>
 	<hr/>
 	<div align="center">
 		<!-- 전체 form -->
@@ -298,7 +294,7 @@
 						<label>카테고리</label>
 					</td>
 					<td>
-						<select name="selectBox" id="selectBox" style="width:150px;" class="select_02">
+						<select name="selectBox" id="selectBox" style="width:150px;">
 							<c:forEach var="codeVo" items="${codeList}" varStatus="status">
 								<option value="${status.index}">${codeVo.dtl_cd_nm}</option>
 							</c:forEach>
@@ -358,7 +354,7 @@
 						<c:forEach var="item" items="${itemList}" varStatus="status">
 							<c:if test="${item.u_id eq resume.u_id }">
 								<tr id="testTr">
-									<td colspan="2" style="">			
+									<td colspan="2">			
 										<div class="container">			  							
 					   						<div style="width:100%; display:inline-block;">
 												<table class="table table-bordered table-condensed" border="1px" align="center" style="width:100%; border:hidden;">					
@@ -373,8 +369,7 @@
 																	<span>
 																		<i class="glyphicon glyphicon-trash"></i>
 																	</span>
-																</button>
-																<!-- <input type="button" name="delRow" class="delRow" value="x" /> -->																
+																</button>																																
 															</div>
 														</td>														
 													</tr>
@@ -417,26 +412,25 @@
 					<tfoot>
 						<tr>							
 							<td align="center" style="border : hidden;">
-								<a id="itemAdd"><img src="<c:url value='/resources/img/plus-button.png' />" width=50 height=50/></a>								 
-								<!-- <input type="button" value="+" id="itemAdd" /> -->
+								<a id="itemAdd"><img src="<c:url value='/resources/img/plus-button.png' />" width=50 height=50/></a>						 
 							</td>
 						</tr>
 						<tr>							
 							<td colspan="2">							
-							<div align="center" style="border: hidden;">
-								<button type="button" id="btnCancel" class="btn btn-default btn-labeled">
-									<span class="btn-label" style="height: 35px;">
-										<i class="glyphicon glyphicon-remove"></i>
-									</span>
-									수정 취소
-								</button>
-								<button type="button" id="btnSubmit" class="btn btn-warning btn-labeled">
-									<span class="btn-label" style="height: 35px;">
-										<i class="glyphicon glyphicon-ok"></i>
-									</span>
-									수정 완료
-								</button>
-							</div>	
+								<div align="center" style="border: hidden;">
+									<button type="button" id="btnCancel" class="btn btn-default btn-labeled">
+										<span class="btn-label" style="height: 35px;">
+											<i class="glyphicon glyphicon-remove"></i>
+										</span>
+										수정 취소
+									</button>
+									<button type="button" id="btnSubmit" class="btn btn-warning btn-labeled">
+										<span class="btn-label" style="height: 35px;">
+											<i class="glyphicon glyphicon-ok"></i>
+										</span>
+										수정 완료
+									</button>
+								</div>	
 							</td>
 						</tr>		
 					</tfoot>					

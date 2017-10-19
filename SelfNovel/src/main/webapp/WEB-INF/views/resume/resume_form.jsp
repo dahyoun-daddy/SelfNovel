@@ -49,14 +49,11 @@ $(function(){
         var content = $(this).val();
         $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
         $('#counter').html(content.length );
-    });
-    
+    });    
 
     //**********************************************
     //save
-	$("#save").click(function(e){
-	
-		
+	$("#btnSubmit").click(function(e){		
 		//var tfrm = $("#tfrm");
 		var tfrm = document.tfrm;
 		//=========================================================
@@ -64,27 +61,27 @@ $(function(){
 		//rsmVo.setImg_id(img_id);
 		//stitle
 		if($('#stitle').val()==""){
+			$('#stitle').focus();
 			alert("제목을 입력하세요!");
 			return;
 		}
+		
+		//=========================================================
+		//제목 최대길이 검사
+		if($("#stitle").val().length > 50){
+			$("#stitle").focus();
+			alert("제목은 최대 50글자입니다.(공백포함)");		
+			return;
+		}
+		
 		//=========================================================
 		//scontent
 		if($('#scontent').val()==""){
+			$("#scontent").focus();
 			alert("내용을 입력하세요!");
 			return;
 		}
-		//=========================================================
-	    //title
-		if($('#title').val()==""){
-			alert("소제목을 입력하세요!");
-			return;
-		}
-	    //=========================================================
-		//content
-		if($('#content').val()==""){
-			alert("소내용을 입력하세요!");
-			return;
-		}
+
 	    //=========================================================
 	    var isNull = false;	
 	    	
@@ -94,12 +91,20 @@ $(function(){
 			var record = $(this).val();
 			if(record==""){ 
 				isNull = true;
+				$(this).focus();
+				alert("소제목을 입력하세요!");
 				return false;
+			}
+			
+			if(record.length > 60){
+				alert("제목의 길이는 최대 60자입니다.(꽁백포함)");
+				$(this).focus();
+				falg = false;
+				return;
 			}
 	    });
 	    
-	    if(isNull){
-	    	alert("소제목을 입력하세요!");
+	    if(isNull){	    	
 	    	return;
 	    }
 	    
@@ -114,17 +119,19 @@ $(function(){
 		});
 	    
 	    if(isNull){
+	    	$(this).focus();
 	    	alert("소내용을 입력하세요!");
 	    	return;
 	    }
 	
-	    	tfrm.submit(); 
+	    tfrm.submit();
+	    
 	});
 	
 	
 	//=========================================================
 	//- 삭제여부
-	$("#testTable").on("click",".delRow",function(){// 삭제기능			
+	$("#formTable").on("click",".delRow",function(){// 삭제기능			
 		var tfrm = document.tfrm;
 	  	var count=0;
 	    $("input[name=title]").each(function(){
@@ -139,68 +146,74 @@ $(function(){
 	});
 });
 </script>
-<script type="text/javascript">
-
-</script>
 
 <script type="text/javascript">
 
 $(document).ready(function(){
 
     
-    $("#testTable").on("click","#itemAdd",function(){
+    $("#formTable").on("click","#itemAdd",function(){
         //alert("aa");
       
         
         var contents = '';
-        contents += '	<tr id="testTr">                                                                               ';
-        contents += '		<td colspan="2">                                                               ';
-        contents += '                                                                                      ';
-        contents += '<div class="container">                                                               ';
-        contents += '			<div class="row">                                                          ';
-        contents += ' 			<div class="col-md-10">                                                    ';
-        contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
-        contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
-        contents += '		                                                                               ';
-        contents += '				<tr>                                                                   ';
-        contents += '					<td><input type="text" name="title" id="title" placeholder="제목(Not Null)" required/></td>                ';
-        contents += '				</tr>                                                                  ';
-        contents += '				<tr height="150px;">                                                   ';
-        contents += '				<td><textarea  name="content" id="content" rows="10" cols="100" placeholder="내용(Not Null)" required></textarea></td>   ';
-        contents += '				</tr>                                                                  ';
-        contents += '				<tr>                                                                   ';
-        contents += '					<td align="right">글자수 용량:<span name="counter" id="counter">###</span></td>       ';
-        contents += '				</tr>                                                                  ';
-        contents += '				<tr height="100px;">                                                   ';
-        contents += '					<td align="right"><input type="button" value="+" id="itemAdd" />   ';
-        contents += '					<input type="button" name="delRow" class="delRow" value="-" /></td>';
-        contents += '				</tr>                                                                  ';
-        contents += '	   </table><!-- 내용테이블 -->                                                       '; 
-        contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
-        contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
-        contents += '			   				                                                           ';
-        contents += '                                                                                      ';
-        contents += '		</table>                                                                       ';
-        contents += '		                                                                               ';
-        contents += '		                                                                               ';
-        contents += '	</div> <!-- span1 -->                                                              ';
-        contents += '	<div class="col-md-2">                                                             ';
-        contents += '		<table class="table table-bordered table-hover table-condensed" border="1px"   ';
-        contents += '			   cellpadding="2" cellspacing="2" align="center">                         ';
-        contents += '			<input type="button" value="▲" id="moveUp"/><br/>                                     ';
-        contents += '			<input type="button" value="▼" id="moveDown"/>                                          ';
-        contents += '		</table>                                                                       ';
-        contents += '	</div><!-- span2 -->                                                               ';
-        contents += '</div> <!-- row div -->                                                               ';
-        contents += '</div><!-- 컨테이너 -->                                                                 ';
-        contents += '		</td>                                                                          ';
-        contents += '	</tr>                                                                              ';
+        contents+= '<tr id="testTr">                                                                                                                         ';
+        contents+= '	<td colspan="2">			                                                                                                         ';
+        contents+= '		<div class="container">   						                                                                                 ';
+        contents+= '  				<div style="width:100%; display:inline-block;">                                                                          ';
+        contents+= '  					<!-- 내용 테이블 -->                                                                                                    ';
+        contents+= '				<table class="table table-bordered table-condensed" border="1px" align="center">							             ';
+        contents+= '					<tr>                                                                                                                 ';
+        contents+= '						<td>                                                                                                             ';
+        contents+= '							<div style="width: 95%; float:left;">                                                                        ';
+        contents+= '								<input type="text" name="title" id="title" style="height : 30px;" placeholder="제목을 입력해주세요." required> ';
+        contents+= '							</div>                                                                                                       ';
+        contents+= '							<div style="width: 5%; float:right;">                                                                        ';
+        contents+= '								<button type="button" name="delRow" class="delRow btn-danger" style="width:100%;height:30px;">           ';
+        contents+= '									<span>                                                                                               ';
+        contents+= '										<i class="glyphicon glyphicon-trash"></i>                                                        ';
+        contents+= '									</span>                                                                                              ';
+        contents+= '								</button>																								';
+        contents+= '							</div>								 			                                                             ';
+        contents+= '				 		</td>                                                                                                            ';
+        contents+= '					</tr>                                                                                                                ';
+        contents+= '					<tr height="150px;">                                                                                                 ';
+        contents+= '						<td>                                                                                                             ';
+        contents+= '							<textarea name="content" id="content" placeholder="내용을 입력해주세요." required></textarea>                         ';        
+        contents+= '						</td>                                                                                                            ';
+        contents+= '					</tr>							                                                                                     ';
+        contents+= '					<tr>                                                                                                                 ';
+        contents+= '						<td align="right">                                                                                               ';
+        contents+= '							<div class="btn-group" role="group" style="float:left;">                                                     ';
+        contents+= '								<button type="button" class="btn btn-default" id="moveDown">                                             ';
+        contents+= '									<span>                                                                                               ';
+        contents+= '										<i class="glyphicon glyphicon-arrow-down"></i>                                                   ';
+        contents+= '									</span>                                                                                              ';
+        contents+= '								</button>                                                                                                ';
+        contents+= '								<button type="button" class="btn btn-default" id="moveUp">                                               ';
+        contents+= '									<span>                                                                                               ';
+        contents+= '										<i class="glyphicon glyphicon-arrow-up"></i>                                                     ';
+        contents+= '									</span>                                                                                              ';
+        contents+= '								</button>                                                                                                ';
+        contents+= '							</div>                                                                                                       ';
+        contents+= '							<div style="float:right;">                                                                                   ';
+        contents+= '								글자수 :                                                                                                   ';
+        contents+= '								<span id="counter" name="counter"> 0자                                                                    ';
+        contents+= '								</span>                                                                                                  ';
+        contents+= '							</div>                                                                                                       ';
+        contents+= '						</td>                                                                                                            ';
+        contents+= '					</tr>                                                                                                                ';
+        contents+= '				</table><!-- 내용테이블 -->                                                                                                 ';
+        contents+= '			</div> <!-- span1 -->                                                                                                        ';
+        contents+= '		</div><!-- 컨테이너 -->                                                                                                             ';
+        contents+= '	</td>                                                                                                                                ';
+        contents+= '</tr>                                                                                                                                 '; 
         
         $('#AddOption').append(contents); // 추가기능
        
     });
     
-    $("#testTable").on("keyup","textarea[name='content']",function (){
+    $("#formTable").on("keyup","textarea[name='content']",function (){
         var content = $(this).val();        
         $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');
         
@@ -224,13 +237,13 @@ $(document).ready(function(){
  			 //http://ktsmemo.cafe24.com/s/jQueryTip/64
     	*/
     //*********************************************************************//
-    $("#testTable").on("click","#moveUp",function(){
-    	var $tr = $(this).parent().parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
+    $("#formTable").on("click","#moveUp",function(){
+    	var $tr = $(this).closest("#testTr");
     	$tr.prev().before($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
     });
 
-    $("#testTable").on("click","#moveDown",function(){
-    	var $tr = $(this).parent().parent().parent().parent().parent(); // 클릭한 버튼이 속한 tr 요소
+    $("#formTable").on("click","#moveDown",function(){
+    	var $tr = $(this).closest("#testTr");
     	$tr.next().after($tr); // 현재 tr 의 이전 tr 앞에 선택한 tr 넣기    	
     });
   //순서변경을 위한 함수 end
@@ -246,105 +259,172 @@ $(document).ready(function(){
  	    window.open(url, title,status); //window.open(url,title,status); window.open 함수에 url을 앞에와 같이 
   	});
 });
-  </script>
-<title>Insert title here</title>
+</script>
+<style type="text/css">
+	input {
+		width : 100%;
+	}	
+		
+	textarea {
+		width : 100%;
+		resize: none;
+		height: 200px;
+	}
+	
+	.td-head{
+		width:10%; 
+		background-color: D6E6F5;
+		text-align:center;		
+	}
+	.td-content{
+		width:90%;
+	}
+	
+	.btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+	.btn-labeled {padding-top: 0;padding-bottom: 0;}
+</style>
+
+<title>자기소개서 작성</title>
 </head>
 <body>
-	<h2>form</h2>
+	<h2>자기소개서 작성</h2>
 	<hr/>
 
 	<form name="tfrm" action="do_save.do" method="POST">
 	<input type="hidden" name="rsm_ord_yn" value="1" />	
 	<div>
-		<table class="table table-bordered table-hover table-condensed" border="1px" 
-				   cellpadding="2" cellspacing="2" align="center" id="testTable">
-		
-			    <tr>
-					<td>분야</td>
-					<td><select name="rsm_div" id="rsm_div" style="width:150px;" class="select_02">
-						      <c:forEach var="codeVo" items="${codeList}">
-						         <option value="${codeVo.dtl_cd_id}">${codeVo.dtl_cd_nm}</option>
-						      </c:forEach>
-				   		</select>
-					</td>
-
-
-				</tr>
-				<tr>
-					<td>제목</td>
-					<td><input type="text" name="stitle" id="stitle" required/></td>
-				</tr>
-				<tr>
-					<td>ppt첨부</td>
-					<td><input type="button" value="파일첨부" id="popupTest"/> 파일을 첨부해주세요. 
-						<input type="hidden" id="img_id" name="img_id">
-					</td>
-				</tr>
-				<tr>
-					<td>내용</td>
-					<td><input type="text" name="scontent" id="scontent" required/></td>
-				</tr>
-				
-			<!-- end 복붙 -->	
-			<tbody id="AddOption" >	
-			<tr id="testTr">
-					<td colspan="2">
-			
-			<div class="container">
-   			<div class="row">
-	   			<div class="col-md-10">
-					<table class="table table-bordered table-hover table-condensed" border="1px" 
-						   cellpadding="2" cellspacing="2" align="center">
-							
-							<tr>
-								<td><input type="text" name="title" id="title" placeholder="제목(Not Null)" required>
-								 </input> </td>
-							</tr>
-							<tr height="150px;">
-								<td><textarea  name="content" id="content" rows="10" cols="100" placeholder="내용(Not Null)" required></textarea>
-								</td>
-							</tr>
-							
-							<tr>
-								<td align="right">글자수 용량:<span id="counter" name="counter">###</span></td>
-							</tr>
-							<tr height="100px;">
-								<td align="right"><input type="button" value="+" id="itemAdd" />
-								<input type="button" name="delRow" id="delRow" class="delRow" value="-" /></td>
-							</tr>
-				   </table><!-- 내용테이블 -->
-					<table class="table table-bordered table-hover table-condensed" border="1px" 
-						   cellpadding="2" cellspacing="2" align="center">
-						   				   
-	
-					</table>
-					
-					
-				</div> <!-- span1 -->
-				<div class="col-md-2">
-					<table class="table table-bordered table-hover table-condensed" border="1px" 
-						   cellpadding="2" cellspacing="2" align="center">
-						<input type="button" value="▲" id="moveUp"/><br/>
-						<input type="button" value="▼" id="moveDown"/>
-					</table>
-				</div><!-- span2 -->
-			</div> <!-- row div -->
-			</div><!-- 컨테이너 -->
-					</td>  
-				</tr>	 
-			</tbody> 
-			
-			
-			<tr>
-				<td colspan="2">
-				<div align="center">
-					<input type="button" value="작성취소" onclick='javascript()' /> 
-
-					<input type="button" value="작성완료" id="save" />
-				</div>	
+		<table class="table table-bordered table-condensed" border="1px" align="center">		
+		    <tr>
+				<td class="td-head">
+					<label>
+						카테고리
+					</label>
+				</td>
+				<td class="td-content">
+					<select name="rsm_div" id="rsm_div" style="width:150px;">
+						<c:forEach var="codeVo" items="${codeList}">
+							<option value="${codeVo.dtl_cd_id}">${codeVo.dtl_cd_nm}</option>
+						</c:forEach>
+					</select>
 				</td>
 			</tr>
-							
+			<tr>
+				<td class="td-head">
+					<label>
+						제목
+					</label>
+				</td>
+				<td class="td-content">
+					<input type="text" name="stitle" id="stitle" required/>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-head">
+					<label>
+						ppt첨부
+					</label>
+				</td>
+				<td class="td-content">					
+					<button type="button" id="popupTest" class="btn btn-default btn-labeled">
+						<span class="btn-label" style="height: 35px;">
+							<i class="glyphicon glyphicon-upload"></i>
+						</span>
+						파일첨부									
+					</button> 
+					<input type="hidden" id="img_id" name="img_id">
+				</td>
+			</tr>
+			<tr>
+				<td class="td-head">
+					<label>
+						내용
+					</label>
+				</td>
+				<td class="td-content">
+					<textarea id="scontent" name="scontent" required></textarea>					
+				</td>
+			</tr>
+		</table>
+		<!-- formTable -->
+		<table class="table table-bordered table-condensed" border="1px" align="center" id="formTable">
+			<tbody id="AddOption" >	
+			<tr id="testTr">
+				<td colspan="2">			
+					<div class="container">   						
+		   				<div style="width:100%; display:inline-block;">
+		   					<!-- 내용 테이블 -->
+							<table class="table table-bordered table-condensed" border="1px" align="center">							
+								<tr>
+									<td>
+										<div style="width: 95%; float:left;">
+											<input type="text" name="title" id="title" style="height : 30px;" placeholder="제목을 입력해주세요." required>
+										</div>
+										<div style="width: 5%; float:right;">
+											<button type="button" name="delRow" class="delRow btn-danger" style="width:100%;height:30px;">
+												<span>
+													<i class="glyphicon glyphicon-trash"></i>
+												</span>
+											</button>																												
+										</div>								 			
+							 		</td>
+								</tr>
+								<tr height="150px;">
+									<td>
+										<textarea  name="content" id="content" placeholder="내용을 입력해주세요." required></textarea>									
+									</td>
+								</tr>							
+								<tr>
+									<td align="right">
+										<div class="btn-group" role="group" style="float:left;">
+											<button type="button" class="btn btn-default" id="moveDown">
+												<span>
+													<i class="glyphicon glyphicon-arrow-down"></i>
+												</span>
+											</button>
+											<button type="button" class="btn btn-default" id="moveUp">
+												<span>
+													<i class="glyphicon glyphicon-arrow-up"></i>
+												</span>
+											</button>
+										</div>
+										<div style="float:right;">
+											글자수 : 
+											<span id="counter" name="counter"> 0자
+											</span>
+										</div>
+									</td>
+								</tr>
+							</table><!-- 내용테이블 -->
+						</div> <!-- span1 -->
+					</div><!-- 컨테이너 -->
+				</td>
+			</tr>	 
+		</tbody>
+		<tfoot> 
+			<tr>							
+				<td align="center" style="border : hidden;">
+					<a id="itemAdd"><img src="<c:url value='/resources/img/plus-button.png' />" width=50 height=50/></a>								 						
+				</td>
+			</tr>			
+			<tr>							
+				<td colspan="2">							
+					<div align="center" style="border: hidden;">
+						<button type="button" id="btnCancel" class="btn btn-default btn-labeled">
+							<span class="btn-label" style="height: 35px;">
+								<i class="glyphicon glyphicon-remove"></i>
+							</span>
+							작성 취소
+						</button>
+						<button type="button" id="btnSubmit" class="btn btn-success btn-labeled">
+							<span class="btn-label" style="height: 35px;">
+								<i class="glyphicon glyphicon-ok"></i>
+							</span>
+							작성 완료
+						</button>
+					</div>	
+				</td>
+			</tr>
+		</tfoot>							
 		</table><!-- 바깥테이블 -->
 	</div><!-- 바깥테이블 div -->
 	
