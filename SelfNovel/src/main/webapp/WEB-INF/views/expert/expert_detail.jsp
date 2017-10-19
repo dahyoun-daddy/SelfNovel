@@ -55,7 +55,7 @@
             	for(var i in results){
             		if(results[i].itm_prd_id == null){
             			html += "<br><table style='width: 100%;'><tr><td style='color: black; width: 100%;'><input class='form-control' style='width: 100%; background-color: #FFFFC6;' type='text' readonly value='"+results[i].itm_title+"'></td></tr>";
-            			html += "<tr><td style='color: black; width: 100%;'><textarea readonly class='form-control' style='height: 300px; width: 100%; resize: none; background-color: #E6FFFF;'>"+results[i].itm_content+"</textarea></td></tr></table>";
+            			html += "<tr><td style='color: black; width: 100%;'><textarea readonly class='form-control' style='height: 300px; width: 100%; resize: none; background-color: #FFFFC6;'>"+results[i].itm_content+"</textarea></td></tr></table>";
             		} else {
             			if(flag == 0){
             				html += "</table><br><table style='width: 100%;'><tr><td style='color: black; width: 100%; background-color: #F7B538; text-align: center;'><h1>첨삭 내용</h1></td></tr><table>";
