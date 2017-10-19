@@ -7,6 +7,5 @@
 <title>Insert title here</title>
 </head>
 <body>
-	오른쪽여백
 </body>
 </html>

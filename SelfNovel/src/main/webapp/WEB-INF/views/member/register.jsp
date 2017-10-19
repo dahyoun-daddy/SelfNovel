@@ -188,8 +188,6 @@
 		if($(":input:radio[name=userSep]:checked").val() == '1'){ userSep = "user"; }
 		else { userSep = "expert"; }
 		
-		alert(userSep);
-		
 		$.ajax({
             url: "<%=contextPath %>/"+userSep+"/do_save.do",
             processData: false,
