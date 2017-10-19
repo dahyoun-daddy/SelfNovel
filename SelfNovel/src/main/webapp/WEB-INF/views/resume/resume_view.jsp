@@ -16,8 +16,8 @@
 %>
 
 <%
-	//jstl 개행문자 처리
-	pageContext.setAttribute("crcn", "\r\n"); //Space, Enter
+	//jstl 개행문자 처리	
+	pageContext.setAttribute("cn", "\n"); //Space, Enter
 	pageContext.setAttribute("br", "<br/>"); //br 태그
 %>
 
@@ -45,14 +45,13 @@
 		
 	$(function() {
 		
-		var btn_show = "<span class='btn-label'>"
-						+ "<i class='glyphicon glyphicon-menu-down'></i>"
-						+ "</span>"
-						+ "첨삭 보기";
-		var btn_hide = "<span class='btn-label'>"
-		  				+ "<i class='glyphicon glyphicon-menu-up'></i>"
-						+ "</span>"
-						+ "첨삭 접기";					   
+		var btn_show = "첨삭 보기" 
+						+ "<br/>"
+						+ "<i class='glyphicon glyphicon-menu-down'></i>";						
+						
+		var btn_hide = "첨삭 접기"
+						+ "<br/>"
+		  				+ "<i class='glyphicon glyphicon-menu-up'></i>";
 		
 		//첨삭부분의 히든속성을 토글시켜주는 메소드
 		$("form[name=frm]").on("click", "#doShowEdit", function(){
@@ -149,7 +148,7 @@
 			var sel_contentR = sel_content.trim();
 			
 			$("#modTitle").val(sel_title);
-			$("#modContent").val(sel_contentR);			
+			$("#modContent").val(sel_content);			
 			$("#modItmId").val(sel_id);
 			$("#modModal").modal();
 		});//close btnAddResume_click
@@ -209,8 +208,6 @@
 			var itm_content = $("#modalContentNew").val();
 			var itm_prd_id = $("#modalItmId").val();			
 			var u_id = "${sessionScope.u_id }";
-			
-			alert(u_id);
 			
 			$.ajax({
 				type : "POST",
@@ -286,14 +283,29 @@
 		});//close btn_report_on_click
 		
 		/**************************
-		* '자소서Down'버튼 클릭시 이벤트
-		* detail : TODO
+		* '자소서Down'버튼 클릭시 이벤트		
 		***************************/
 		$("#btnResumeDown").on("click", function(){
-			console.log('g');
-			
 			var frm = document.doExcelDown;
 			frm.submit();			
+		});
+		
+		/*****************************
+		* '첨삭항목 수정' 버튼 클릭시 이벤트
+		*
+		*****************************/
+		$("#btnEditItem". on("click"), function(){
+			var itm_title = $("#eItm_title");
+			var itm_content = $("#eItm_content");
+			var itm_form_id = $("#eItm_form_id");
+			var itm_prd_id = $("#eItm_prd");			
+		});
+		
+		$("#btnDeleteItem". on("click"), function(){
+			var itm_title = $("#eItm_title");
+			var itm_content = $("#eItm_content");
+			var itm_form_id = $("#eItm_form_id");
+			var itm_prd_id = $("#eItm_prd");
 		});
 		
 	});//close .ready(function)
@@ -303,6 +315,8 @@
 	***************************/
 	function draw_item_table(item) {
 		
+		var item_content = item.itm_content.replace(/(\n|\r\n)/g, '<br>');		//줄바꿈
+		
 		var u_name;
 		
 		if(item.u_name == undefined){
@@ -310,7 +324,6 @@
 		}else{
 			u_name = item.u_name;
 		}
-		
 		
 		var item_table = "<table class='table table-bordered table-condensed' border='1px'" 
 		   	+ "cellpadding='2' cellspacing='2' align='center' width='550px;'>"
@@ -337,22 +350,24 @@
 			+ "<h4><b>"
 			+ "RE:" + item.itm_title
 			+ "</b></h4>"
-			+ "<input type='hidden' id='u_id' value=" + item.u_id + ">"
-			+ "<input type='hidden' id='itm_title' value=" + item.itm_title + ">"
-			+ "<input type='hidden' id='itm_form_id' value=" + item.itm_form_id + ">"
-			+ "<input type='hidden' id='itm_prd_id' value=" + item.itm_prd_id + ">"
+			+ "<input type='hidden' id='eU_id' value=" + item.u_id + ">"
+			+ "<input type='hidden' id='eItm_title' value=" + item.itm_title + ">"
+			+ "<input type='hidden' id='eItm_content' value=" + item.itm_content + ">"
+			+ "<input type='hidden' id='eItm_form_id' value=" + item.itm_form_id + ">"
+			+ "<input type='hidden' id='eItm_prd_id' value=" + item.itm_prd_id + ">"			
 			+ "</td>"
 			+ "</tr>"
 			+ "<tr>"
 			+ "<td colspan='5'>"
-			+ "<div style='background-color: #FAFAFA; border: 1px solid #E6E6E6;'>"												
-			+ item.itm_content
+			+ "<div style='background-color: #FAFAFA; border: 1px solid #E6E6E6;'>"
+			+ item_content
 		    + "</div>"			
 			+ "</td>"
 			+ "</tr>"
 		+"</table>"	
 		return item_table;
 	}	
+	
 </script>
 <title>Insert title here</title>
 <style type="text/css">
@@ -399,14 +414,14 @@
 		
 		<!-- 세션에 아이디가 존재하고, 세션의 유저아이디와 작성자 아이디가 일치하는 경우에만 수정하기 버튼을 보여준다. -->
 		<c:if test="${sessionScope.u_id ne null && sessionScope.u_id eq rsmVO.u_id}">
-			<button type="button" id="btnDelete" value="삭제하기 " class="btn btn-labeled btn-info" >			
+			<button type="button" id="btnDelete" value="삭제하기 " class="btn btn-labeled btn-danger" >			
 				<span class="btn-label" style="height: 34px;">  
 					<i class="glyphicon glyphicon-erase" ></i>																											
 				</span>
 				삭제			
 			</button>						
 			&nbsp;
-			<button type="button" id="btnModify" value="수정하기" class="btn btn-labeled btn-info">
+			<button type="button" id="btnModify" value="수정하기" class="btn btn-labeled btn-warning">
 				<span class="btn-label" style="height: 34px;">
 					<i class="glyphicon glyphicon-edit"></i>																																
 				</span>
@@ -418,13 +433,13 @@
 		<c:if test="${sessionScope.u_id ne null && sessionScope.u_id ne rsmVO.u_id}">
 			<button type="button" id="btnReport" value="신고하기" class="btn btn-labeled btn-danger">
 				<span class="btn-label" style="height: 34px;">
-					<i class="glyphicon glyphicon-list"></i>			
+					<i class="glyphicon glyphicon-flag"></i>			
 				</span>
 				신고
 			</button>
 			&nbsp;			
 		</c:if>			
-		<button type="button" id="btnBackToList" value="목록으로" class="btn btn-labeled btn-info">
+		<button type="button" id="btnBackToList" value="목록으로" class="btn btn-labeled btn-success">
 			<span class="btn-label" style="height: 34px;">
 				<i class="glyphicon glyphicon-list"></i>				
 			</span>			
@@ -518,7 +533,7 @@
 											<input type="hidden" id="itm_content_origin" value="${item.itm_content }">											
 											<div id="itm_content" style="background-color: #FAFAFA; border: 1px solid #E6E6E6;">
 												<c:set value="${item.itm_content}" var="content"></c:set>												
-												${fn:replace(content, crcn, br)}																											
+												${fn:replace(content, cn, br)}																											
 											</div>											
 										</td>
 									</tr>
@@ -557,11 +572,10 @@
 										<tr>											 
 											<td align="center" style="border:hidden;">
 												<input type="hidden" id="toggleFlag" value="false">
-												<button type="button" name="doShowEdit" id="doShowEdit" class="btn btn-labeled btn-primary">
-													<span class="btn-label">
-														<i class="glyphicon glyphicon-menu-down"></i>																											
-													</span>
+												<button type="button" name="doShowEdit" id="doShowEdit" class="btn btn-info">
 													첨삭보기
+													<br>													
+													<i class="glyphicon glyphicon-menu-down"></i>
 												</button>													
 												<!-- 임의로 버튼으로 구현을 시도한다. 나중에 이미지 변경시 같은 이름으로 만들어주거나, 아니면 버튼을 이미지로 만들어도 좋다 -->
 												<!-- 2017-09-26 pinkbean -->																		
@@ -569,6 +583,22 @@
 												<div id="editDiv" style="display:none;" class="editDiv">
 													<div id="content"></div>
 													<div id="page-selection"></div>													
+													<div style="float:right;">
+														
+														<button type="button" class="btn btn-labeled btn-warning" id="btnEditItem">
+															<span class="btn-label" style="height: 35px;">
+																<i class="glyphicon glyphicon-edit"></i>
+															</span>
+															첨삭수정													
+														</button>
+														&nbsp;
+														<button type="button" class="btn btn-labeled btn-danger" id="btnDeleteItem">
+															<span class="btn-label" style="height: 35px;">
+																<i class="glyphicon glyphicon-trash"></i>
+															</span>
+															첨삭삭제														
+														</button>														
+													</div>																					
 												</div>																								
 											<!-- end_editDiv -->
 											</td>
@@ -646,7 +676,7 @@
                 </button>				
 			</div>			
 			<div align="right">
-				<button type="button" id="btnBackToList" value="목록으로" class="btn btn-labeled btn-info">
+				<button type="button" id="btnBackToList" value="목록으로" class="btn btn-labeled btn-success">
 					<span class="btn-label" style="height: 34px;">
 						<i class="glyphicon glyphicon-list"></i>				
 					</span>			
@@ -751,6 +781,50 @@
 				<div class="modal-footer">
 					<button id="btnItmSave" type="button" class="btn btn-default">작성완료</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+				</div>
+				<!-- //modal-footer -->	
+			</div>	
+			<!-- //Modal content-->		
+		</div>
+		<!-- //Modal dialog -->
+		</form>
+	</div>	
+	<!-- //Modal -->
+	
+		<!-- 수정하기 Modal Window -->
+	<div id="eModModal" class="modal fade" role="dialog">
+		<form name="eModModalFrm">
+		<!-- modal-dialog -->
+  		<div class="modal-dialog modal-lg">
+    		<!-- Modal content-->    		
+	    	<div class="modal-content">
+	    		<!-- modal-header -->
+				<div class="modal-header">
+	        		<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+	        		<h3 class="modal-title">수정하기</h3>
+	      		</div>
+	      		<!-- //modal-header -->
+	      		<!-- modal-body -->
+				<div class="modal-body">
+					<input type="hidden" id="eModItmId">					
+					<table class="table table-bordered table-condensed" border="1px" 
+					   				   			cellpadding="2" cellspacing="2" align="center" width="100%">
+						<tr>
+							<td>
+								<input id="eModTitle" type="text" style="width:100%; border: 0px;">
+							</td>					
+						</tr>
+						<tr>
+							<td>
+								<textarea id="eModContent" style="width:100%; border: 0px; height: 300px;"></textarea>
+							</td>
+						</tr>
+					</table>	
+			    </div>
+			    <!-- //modal-body -->
+				<div class="modal-footer">
+					<button id="btnEModSave" type="button" class="btn btn-primary">수정완료</button>
+					<button id="btnEModClose" type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 				</div>
 				<!-- //modal-footer -->	
 			</div>	

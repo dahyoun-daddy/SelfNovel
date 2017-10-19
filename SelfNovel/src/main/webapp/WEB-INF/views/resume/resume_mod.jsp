@@ -59,6 +59,13 @@
 	    		$("#rsm_title").focus();
 	    		return;	    	
 	    	}
+			
+			if($("#rsm_title").val().length > 50){
+				alert("제목은 최대 50글자입니다.(공백포함)");
+				$("#rsm_title").focus();
+	    		return;
+			}
+			
 			//rsm_content 공백검사
 			else if($("#rsm_content").val().trim() == ""){
 	    		alert("내용을 입력해주세요.");
@@ -73,6 +80,13 @@
 				var itm_title = $(this).val();
 				if(itm_title == ""){
 					alert("항목 제목을 입력해주세요!");
+					$(this).focus();
+					flag = false;
+					return;
+				}
+				
+				if(itm_title.length > 60){
+					alert("제목의 길이는 최대 60자입니다.(꽁백포함)");
 					$(this).focus();
 					flag = false;
 					return;
