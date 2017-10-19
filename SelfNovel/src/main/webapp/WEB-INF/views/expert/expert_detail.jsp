@@ -151,36 +151,59 @@
 		}
 	}
 	
+	function byteCheck(el){
+	    var codeByte = 0;
+	    for (var idx = 0; idx < el.length; idx++) {
+	        var oneChar = escape(el.charAt(idx));
+	        if ( oneChar.length == 1 ) {
+	            codeByte ++;
+	        } else if (oneChar.indexOf("%u") != -1) {
+	            codeByte += 2;
+	        } else if (oneChar.indexOf("%") != -1) {
+	            codeByte ++;
+	        }
+	    }
+	    return codeByte;
+	}
+
 	function do_order(){
 		var u_id = '<%=session.getAttribute("u_id")%>';
 		var exp_id = '${exp_id}';
 		var itm_titles="";
 		var itm_contents="";
 		
-		if($("#rsm_title").val() == '' || $("#rsm_title").val() == null){
+		if($("#rsm_title").val().trim() == '' || $("#rsm_title").val().trim() == null){
 			alert("요구사항 제목을 입력해 주세요.");
 			$("#rsm_title").focus();
 			return;
-		} else if($("#rsm_content").val() == '' || $("#rsm_content").val() == null) {
+		} else if($("#rsm_content").val().trim() == '' || $("#rsm_content").val().trim() == null) {
 			alert("요구사항 내용을 입력해 주세요.");
+			$("#rsm_content").focus();
+			return;
+		} else if(byteCheck($("#rsm_title").val().trim()) > 50){
+			alert("요구사항 제목이 너무 깁니다.");
 			$("#rsm_content").focus();
 			return;
 		}
 		
 		for(var i=1; i<sessionStorage.getItem("itemSeq")+1; i++){
 			if($("#item"+i).html() != null && $("#item"+i).html() != ''){
-				if($("#itm_title"+i).val() == null || $("#itm_title"+i).val() == ''){
+				if($("#itm_title"+i).val().trim() == null || $("#itm_title"+i).val().trim() == ''){
 					alert("항목 제목을 입력해 주세요.");
 					$("#itm_title"+i).focus();
 					return;
-				} else if($("#itm_content"+i).val() == null || $("#itm_content"+i).val() == ''){
+				} else if($("#itm_content"+i).val().trim() == null || $("#itm_content"+i).val().trim() == ''){
 					alert("항목 내용을 입력해 주세요.");
 					$("#itm_content"+i).focus();
 					return;
+				} else if(byteCheck($("#itm_title"+i).val().trim()) > 60){
+					alert("항목 제목이 너무 깁니다.");
+					$("#itm_title"+i).focus();
+					return;
 				}
 				
-				itm_titles += $("#itm_title"+i).val() + "\\";
-				itm_contents += $("#itm_content"+i).val() + "\\";
+				itm_titles += $("#itm_title"+i).val().trim() + "\\";
+				itm_contents += $("#itm_content"+i).val().trim() + "\\";
 			}
 		}
 		sessionStorage.setItem("itemSeq",1);

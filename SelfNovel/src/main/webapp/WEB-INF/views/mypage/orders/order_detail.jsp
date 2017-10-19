@@ -77,6 +77,21 @@
 	</table>
 </body>
 <script type="text/javascript">
+	function byteCheck(el){
+	    var codeByte = 0;
+	    for (var idx = 0; idx < el.length; idx++) {
+	        var oneChar = escape(el.charAt(idx));
+	        if ( oneChar.length == 1 ) {
+	            codeByte ++;
+	        } else if (oneChar.indexOf("%u") != -1) {
+	            codeByte += 2;
+	        } else if (oneChar.indexOf("%") != -1) {
+	            codeByte ++;
+	        }
+	    }
+	    return codeByte;
+	}
+
 	function do_save(rsm_id){
 		var itm_titles = "";
 		var itm_contents = "";
@@ -84,13 +99,17 @@
 		var max_size = '<%=i%>';
 		
 		for(var i=1; i<=max_size; i++){
-			if($("#itm_title"+i).val() == null || $("#itm_title"+i).val() ==''){
-				alert("항목 제목을 입력해 주세요.");
+			if($("#itm_title"+i).val().trim() == null || $("#itm_title"+i).val().trim() ==''){
+				alert("제목을 입력해 주세요.");
 				$("#itm_title"+i).focus();
 				return;
-			} else if($("#itm_content"+i).val() == null || $("#itm_content"+i).val() == ''){
-				alert("항목 내용을 입력해 주세요.");
+			} else if($("#itm_content"+i).val().trim() == null || $("#itm_content"+i).val().trim() == ''){
+				alert("내용을 입력해 주세요.");
 				$("#itm_content"+i).focus();
+				return;
+			} else if(byteCheck($("#itm_title"+i).val().trim()) > 60){
+				alert("제목이 너무 깁니다.");
+				$("#itm_title"+i).focus();
 				return;
 			} else{
 				itm_titles += $("#itm_title"+i).val() + "\\";
