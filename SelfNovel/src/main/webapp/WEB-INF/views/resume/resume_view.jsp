@@ -208,7 +208,28 @@
 		* '작성'버튼 클릭시 이벤트 :
 		* detail : do_save
 		***************************/
-		$("#btnItmSave").on("click", function(){			
+		$("#btnItmSave").on("click", function(){	
+
+			//rsm_title 공백검사
+			if($("#modalTitleNew").val().trim() == ""){
+	    		alert("제목을 입력해주세요.");
+	    		$("#modalTitleNew").focus();
+	    		return;	    	
+	    	}
+			
+			if($("#modalTitleNew").val() > 60){
+				alert("제목의 길이가 너무 깁니다.(공백포함 최대 60글자)");
+				return;
+			}
+			
+			//rsm_title 공백검사
+			if($("#modalContentNew").val().trim() == ""){
+	    		alert("내용을 입력해주세요.");
+	    		$("#modalContentNew").focus();
+	    		return;	    	
+	    	}
+			
+			
 			var rsm_id = $("#rsm_id").val();
 			var itm_title = $("#modalTitleNew").val();
 			var itm_content = $("#modalContentNew").val();
