@@ -55,7 +55,6 @@ function do_exit(){
 		<c:otherwise>
 			<script type="text/javascript">
 				{
-					alert(${img_id});
 					opener.document.getElementById("img_id").value=${img_id};
 					opener.document.getElementById("popupTest").value="파일 첨부됨";
 					self.close();
