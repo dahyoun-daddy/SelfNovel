@@ -73,22 +73,20 @@
 
 ## 개발 환경 및 개발 툴
 - [Java SE 8 (Oracle JDK 1.8.x)](http://www.oracle.com/technetwork/java/javase/downloads)
-- [Oracle Database 12c Release 1 (12.1.x Enterprise Edition)](http://www.oracle.com/technetwork/database/enterprise-edition/downloads)
-- [Spring Tool Suite (3.8.x)](http://spring.io/tools/sts/all)
+- [Oracle Database 11G Release 1 (http://www.oracle.com/technetwork/database/enterprise-edition/downloads)
+- [Spring Tool Suite (3.9.x)](http://spring.io/tools/sts/all)
 - [Apache Tomcat (8.5.x)](http://tomcat.apache.org)
 - [Apache Maven (3.3.x)](http://maven.apache.org)
 - [eXERD](http://exerd.com)
-- [Gliffy Diagrams](http://www.gliffy.com)
-- [Git](http://git-scm.com)
 - [GitHub](http://github.com)
 - [Maven Central Repository](http://maven.org)
 
 ## 적용 기술 및 라이브러리 의존성
-- [Spring Framework 4.3.x](http://projects.spring.io/spring-framework)
-- [JUnit 4.12](http://junit.org/junit4)
-- [MyBatis 3.4.x](http://www.mybatis.org/mybatis-3)
-- [MyBatis-Spring 1.3.x](http://www.mybatis.org/spring)
-- [Servlet 3.1.x](http://jcp.org/en/jsr/detail?id=340)
+- [Spring Framework 4.2.5](http://projects.spring.io/spring-framework)
+- [JUnit 4.7](http://junit.org/junit4)
+- [MyBatis 3.2.2](http://www.mybatis.org/mybatis-3)
+- [MyBatis-Spring 1.2.0](http://www.mybatis.org/spring)
+- [Servlet 3.1.0](http://jcp.org/en/jsr/detail?id=340)
 - [JSP 2.3.x](http://jcp.org/en/jsr/detail?id=245)
 - [EL 3.0.x](http://jcp.org/en/jsr/detail?id=341)
 - [JSTL 1.2.x](http://jcp.org/en/jsr/detail?id=52)
@@ -104,18 +102,14 @@
 - [Bootstrap 3.3.x](http://bootstrapk.com)
 - [Log4j 2.8.x](http://logging.apache.org/log4j)
 - [SLF4J 1.7.x](http://slf4j.org)
-- [Semantic Versioning](http://semver.org)
-- [NAVER Maps](http://github.com/navermaps/maps.js)
-- [NAVER SmartEditor](http://github.com/naver/smarteditor2)
-- [Daum Maps](http://apis.map.daum.net)
-- [Daum Postcode](http://github.com/daumPostcode)
-- [Google Maps](http://enterprise.google.com/intl/ko/maps)
+- [Google oauth](https://developers.google.com/identity/protocols/OAuth2)
+- [Apache Tiles 3.0.X](https://tiles.apache.org/download.html)
+- [Apache POI 3.15](https://poi.apache.org/download.html)
+
 
 ## 배포 타겟 서버 런타임 환경 및 브라우저 호환성
-- Microsoft Windows 10 Insider Preview
+- Microsoft Windows 8.1
 - Oracle Java SE HotSpot Virtual Machine JRE 8u121
-- Oracle Database 12c Release 1 Enterprise Edition 12.1.0.2.0
+- Oracle Database 11g Release 
 - Apache Tomcat 8.5.12
 - Chrome Stable Version
-
-## FlowChart
