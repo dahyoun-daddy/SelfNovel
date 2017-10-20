@@ -33,6 +33,7 @@ import com.sn.expert.domain.ExpertVO;
 import com.sn.expert.service.ExpertSvc;
 import com.sn.resume.domain.ItmVO;
 import com.sn.resume.domain.RsmVO;
+import com.sn.resume.domain.UnityItmVO;
 import com.sn.user.controller.UserController;
 import com.sn.user.domain.UserVO;
 import com.sn.user.service.UserSvc;
@@ -115,18 +116,18 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		expertVO.setU_id(req.getParameter("exp_id"));
 		expertVO = (ExpertVO) expertSvc.do_chkId(expertVO);
 		
-		List<ItmVO> itmVO = (List<ItmVO>) expertSvc.do_searchDetail_itm(expertVO);
-		List<RsmVO> rsmList = new ArrayList<RsmVO>();
+		List<UnityItmVO> itmVO = (List<UnityItmVO>) expertSvc.do_searchDetail_itm(expertVO);
+		List<UnityItmVO> rsmList = new ArrayList<UnityItmVO>();
 		CodesVO codesVO = new CodesVO();
 		codesVO.setMst_cd_id("C002");
 		List<CodesVO> codesList = (List<CodesVO>) codesDao.do_search(codesVO);
 		String temp = "";
 		
 		for(int i=0; i<itmVO.size(); i++) {
-			RsmVO rsmVO = new RsmVO(); 
+			UnityItmVO rsmVO = new UnityItmVO(); 
 			if(!temp.equals(itmVO.get(i).getRsm_id())) {
 				temp = itmVO.get(i).getRsm_id();
-				rsmVO = (RsmVO) expertSvc.do_searchDetail_rsm(itmVO.get(i));
+				rsmVO = (UnityItmVO) expertSvc.do_searchDetail_rsm(itmVO.get(i));
 				rsmList.add(rsmVO);
 			}
 		}
@@ -147,21 +148,21 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	
 	@RequestMapping(value="expert/do_detail.do", method = RequestMethod.POST)
 	public void do_detail(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		ItmVO itmVO = new ItmVO();
-		RsmVO rsmVO = new RsmVO();
-		
-		log.debug("asdf: " + req.getParameter("rsm_id"));
+		UnityItmVO itmVO = new UnityItmVO();
+		UnityItmVO rsmVO = new UnityItmVO();
 		
 		itmVO.setRsm_id(req.getParameter("rsm_id"));
-		rsmVO = (RsmVO) expertSvc.do_searchDetail_rsm(itmVO);
+		rsmVO = (UnityItmVO) expertSvc.do_searchDetail_rsm(itmVO);
 		String u_ids = "(u_id='"+ req.getParameter("u_id")
 			+ "' OR u_id='" + rsmVO.getU_id() + "')";
 		
 		Hashtable<String, String> idParam = new Hashtable<String, String>();
 		idParam.put("u_ids", u_ids);
-		itmVO.setParam(idParam);
 		
-		List<ItmVO> itmList = (List<ItmVO>) expertSvc.do_searchDetail(itmVO);
+		ItmVO itmVO2 = new ItmVO();
+		itmVO2.setRsm_id(req.getParameter("rsm_id"));
+		itmVO2.setParam(idParam);
+		List<ItmVO> itmList = (List<ItmVO>) expertSvc.do_searchDetail(itmVO2);
 		
 		res.setCharacterEncoding("UTF-8");
 		res.getWriter().write(new Gson().toJson(itmList));

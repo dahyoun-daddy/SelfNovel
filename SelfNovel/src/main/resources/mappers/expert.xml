@@ -70,7 +70,7 @@
 		ORDER BY rsm_id DESC, itm_prd_id NULLS FIRST, itm_reg_dt
 	</select>
 
-	<select id="do_searchDetail_rsm" parameterType="com.sn.resume.domain.ItmVO" resultType="com.sn.resume.domain.RsmVO">
+	<select id="do_searchDetail_rsm" parameterType="com.sn.resume.domain.ItmVO" resultType="com.sn.resume.domain.UnityItmVO">
 		SELECT a.rsm_id,
 		       a.rsm_title,
 		       a.u_id,
@@ -82,12 +82,13 @@
 		   AND a.rsm_id = '${rsm_id}'
 	</select>
 
-	<select id="do_searchDetail_itm" parameterType="ExpertVO" resultType="com.sn.resume.domain.ItmVO">
+	<select id="do_searchDetail_itm" parameterType="ExpertVO" resultType="com.sn.resume.domain.UnityItmVO">
 		SELECT *
-		  FROM item
-		 WHERE u_id = '${u_id}'
-		   AND itm_prd_id IS NOT NULL
-		ORDER BY rsm_id DESC
+		  FROM item a, resume b
+		 WHERE a.u_id = '${u_id}'
+           AND a.rsm_id = b.rsm_id
+		   AND a.itm_prd_id IS NOT NULL
+		ORDER BY b.rsm_reg_dt DESC
 	</select>
 
 	<select id="do_chkId" parameterType="ExpertVO" resultType="ExpertVO">

@@ -13,6 +13,7 @@ import com.sn.common.DTO;
 import com.sn.expert.domain.ExpertVO;
 import com.sn.resume.domain.ItmVO;
 import com.sn.resume.domain.RsmVO;
+import com.sn.resume.domain.UnityItmVO;
 
 @Repository
 public class ExpertDaoImpl implements ExpertDao {
@@ -120,7 +121,7 @@ public class ExpertDaoImpl implements ExpertDao {
 		log.debug(".do_searchDetail_rsm");
 		log.debug("dto.toString(): " + dto.toString());
 		log.debug("=================================");
-		return sqlSession.selectOne(namespace+".do_searchDetail_rsm", (ItmVO) dto);
+		return sqlSession.selectOne(namespace+".do_searchDetail_rsm", (UnityItmVO) dto);
 	}
 
 	@Override
