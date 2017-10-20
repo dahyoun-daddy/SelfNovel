@@ -73,7 +73,7 @@
 
 ## 개발 환경 및 개발 툴
 - [Java SE 8 (Oracle JDK 1.8.x)](http://www.oracle.com/technetwork/java/javase/downloads)
-- [Oracle Database 11G Release] (http://www.oracle.com/technetwork/database/enterprise-edition/downloads)
+- [Oracle Database 11g Release 2 (11.2.0.1.0)](http://www.oracle.com/technetwork/database/enterprise-edition/downloads)
 - [Spring Tool Suite (3.9.x)](http://spring.io/tools/sts/all)
 - [Apache Tomcat (8.5.x)](http://tomcat.apache.org)
 - [Apache Maven (3.3.x)](http://maven.apache.org)
