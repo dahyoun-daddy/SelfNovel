@@ -33,6 +33,7 @@ import com.sn.expert.domain.ExpertVO;
 import com.sn.expert.service.ExpertSvc;
 import com.sn.resume.domain.ItmVO;
 import com.sn.resume.domain.RsmVO;
+import com.sn.resume.domain.UnityItmVO;
 import com.sn.user.controller.UserController;
 import com.sn.user.domain.UserVO;
 import com.sn.user.service.UserSvc;
@@ -58,35 +59,35 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		String[] itm_title_arr = req.getParameter("itm_titles").split("\\\\");
 		String[] itm_content_arr = req.getParameter("itm_contents").split("\\\\");
 		
-		System.out.println("ssss: " + itm_title_arr.length);
-		System.out.println("ssss: " + itm_content_arr.length);
-		
-		
 		String itm_inserts ="";
 		String itm_contents = "";
+		String temp_title="";
+		String temp_content="";
 		
 		for(int i=0; i<itm_title_arr.length; i++) {
+			temp_title = itm_title_arr[i].replaceAll("\'", "\'\'");
+			temp_content = itm_content_arr[i].replaceAll("\'", "\'\'");
 			if(i==0 || itm_title_arr.length == 1) {	// 처음
 				if(itm_title_arr.length == 1) {	// 항목이 하나밖에 없으면
-					itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
-					itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + "\n";
+					itm_contents += "'"+temp_title+"' itm_title"+(i+1) + ",\n";
+					itm_contents += "'"+temp_content+"' itm_content"+(i+1) + "\n";
 				} else {
-					itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
-					itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + ",\n";
+					itm_contents += "'"+temp_title+"' itm_title"+(i+1) + ",\n";
+					itm_contents += "'"+temp_content+"' itm_content"+(i+1) + ",\n";
 				}
 				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
 				itm_inserts += "VALUES (resume_seq.currval, item_seq.nextval, null, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
 			}else if(i == itm_title_arr.length-1) {	// 마지막 경우
 				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
 				itm_inserts += "VALUES (resume_seq.currval, item_seq.currval+" + i + ", null, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
-				itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
-				itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + "\n";
+				itm_contents += "'"+temp_title+"' itm_title"+(i+1) + ",\n";
+				itm_contents += "'"+temp_content+"' itm_content"+(i+1) + "\n";
 				break;
 			}else {	// 이외
 				itm_inserts += "INTO item (rsm_id, itm_form_id, itm_prd_id, itm_title, itm_content, u_id, itm_reg_dt, itm_seq, itm_use_yn)\n";
 				itm_inserts += "VALUES (resume_seq.currval, item_seq.currval+" + i + ", null, itm_title"+(i+1)+", itm_content"+(i+1)+", u_id, sysdate, resume_seq.currval+"+i+", rsm_use_yn)\n";
-				itm_contents += "'"+itm_title_arr[i]+"' itm_title"+(i+1) + ",\n";
-				itm_contents += "'"+itm_content_arr[i]+"' itm_content"+(i+1) + ",\n";
+				itm_contents += "'"+temp_title+"' itm_title"+(i+1) + ",\n";
+				itm_contents += "'"+temp_content+"' itm_content"+(i+1) + ",\n";
 			}
 		}
 		
@@ -97,7 +98,7 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		rsmVO.setU_id(req.getParameter("u_id"));
 		rsmVO.setRsm_div(req.getParameter("rsm_div"));
 		rsmVO.setRsm_title(req.getParameter("rsm_title"));
-		rsmVO.setRsm_content(req.getParameter("rsm_content"));
+		rsmVO.setRsm_content(req.getParameter("rsm_content").replaceAll("\'", "\'\'"));
 		
 		if(expertSvc.do_saveOrder(rsmVO) > 0) {
 			for(int i=0; i<itm_title_arr.length; i++) {
@@ -115,18 +116,18 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		expertVO.setU_id(req.getParameter("exp_id"));
 		expertVO = (ExpertVO) expertSvc.do_chkId(expertVO);
 		
-		List<ItmVO> itmVO = (List<ItmVO>) expertSvc.do_searchDetail_itm(expertVO);
-		List<RsmVO> rsmList = new ArrayList<RsmVO>();
+		List<UnityItmVO> itmVO = (List<UnityItmVO>) expertSvc.do_searchDetail_itm(expertVO);
+		List<UnityItmVO> rsmList = new ArrayList<UnityItmVO>();
 		CodesVO codesVO = new CodesVO();
 		codesVO.setMst_cd_id("C002");
 		List<CodesVO> codesList = (List<CodesVO>) codesDao.do_search(codesVO);
 		String temp = "";
 		
 		for(int i=0; i<itmVO.size(); i++) {
-			RsmVO rsmVO = new RsmVO(); 
+			UnityItmVO rsmVO = new UnityItmVO(); 
 			if(!temp.equals(itmVO.get(i).getRsm_id())) {
 				temp = itmVO.get(i).getRsm_id();
-				rsmVO = (RsmVO) expertSvc.do_searchDetail_rsm(itmVO.get(i));
+				rsmVO = (UnityItmVO) expertSvc.do_searchDetail_rsm(itmVO.get(i));
 				rsmList.add(rsmVO);
 			}
 		}
@@ -147,21 +148,21 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 	
 	@RequestMapping(value="expert/do_detail.do", method = RequestMethod.POST)
 	public void do_detail(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		ItmVO itmVO = new ItmVO();
-		RsmVO rsmVO = new RsmVO();
-		
-		log.debug("asdf: " + req.getParameter("rsm_id"));
+		UnityItmVO itmVO = new UnityItmVO();
+		UnityItmVO rsmVO = new UnityItmVO();
 		
 		itmVO.setRsm_id(req.getParameter("rsm_id"));
-		rsmVO = (RsmVO) expertSvc.do_searchDetail_rsm(itmVO);
+		rsmVO = (UnityItmVO) expertSvc.do_searchDetail_rsm(itmVO);
 		String u_ids = "(u_id='"+ req.getParameter("u_id")
 			+ "' OR u_id='" + rsmVO.getU_id() + "')";
 		
 		Hashtable<String, String> idParam = new Hashtable<String, String>();
 		idParam.put("u_ids", u_ids);
-		itmVO.setParam(idParam);
 		
-		List<ItmVO> itmList = (List<ItmVO>) expertSvc.do_searchDetail(itmVO);
+		ItmVO itmVO2 = new ItmVO();
+		itmVO2.setRsm_id(req.getParameter("rsm_id"));
+		itmVO2.setParam(idParam);
+		List<ItmVO> itmList = (List<ItmVO>) expertSvc.do_searchDetail(itmVO2);
 		
 		res.setCharacterEncoding("UTF-8");
 		res.getWriter().write(new Gson().toJson(itmList));
@@ -376,3 +377,4 @@ private static Logger log = LoggerFactory.getLogger(ExpertController.class);
 		}
 	}
 }
+

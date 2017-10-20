@@ -119,7 +119,7 @@
 					},
 				success: function(data){
 					if(data<0)
-						alert('다건삭제 실패');
+						alert('삭제 실패');
 					else{
 						alert(data+'건 삭제를 성공했습니다.');
 					}
@@ -137,7 +137,7 @@
 		/* do_save */
 		/********************************************************/
 		$('#do_save').on('click', function() {	
-			alert('!');
+			alert('새 관리자를 추가했습니다.');
 			
 			var saveFrm = document.saveFrm;	
 			saveFrm.submit();

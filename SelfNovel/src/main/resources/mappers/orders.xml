@@ -16,6 +16,7 @@
 		FROM item
 		WHERE rsm_id = '${rsm_id}'
 		  AND itm_prd_id IS NOT NULL
+		ORDER BY itm_prd_id
 	</select>
 	
 	<update id="do_saveFirstTime" parameterType="com.sn.resume.domain.UnityItmVO">

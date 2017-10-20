@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -199,9 +200,8 @@
 					$("#itm_title"+i).focus();
 					return;
 				}
-				
 				itm_titles += $("#itm_title"+i).val().trim() + "\\";
-				itm_contents += $("#itm_content"+i).val().trim() + "\\";
+				itm_contents += $("#itm_content"+i).val() + "\\";
 			}
 		}
 		sessionStorage.setItem("itemSeq",1);
@@ -240,7 +240,18 @@
   	<div align="center">
 	    <table>
 	    	<tr>
-	    		<td rowspan="4"><img src="/controller/resources/exp_profiles/${exp_profile}" width="200px" height="200px"></td>
+	    		<td rowspan="4">
+	    			<c:set var="d" value="${exp_profile }"/>
+					<c:set var="e" value="${fn:substring(d,0,7) }"/>
+					<c:choose>
+						<c:when test="${e eq 'https:/'}">
+							<img style="position:relative; top:0; left:0;" src="${exp_profile}" width="200px" height="200px">	
+						</c:when>
+						<c:otherwise>
+							<img style="position:relative; top:0; left:0;" src="/controller/resources/exp_profiles/${exp_profile}" width="200px" height="200px">															
+						</c:otherwise>
+					</c:choose>
+	    		</td>
 	    		<td><h1>닉네임: ${u_name}</h1></td>
 	    	</tr>
 	    	<tr>
@@ -256,7 +267,7 @@
     </div>
   </div>
   <div align="right">
-  	<% if(session.getAttribute("u_id") != null){ %>
+  	<% if(session.getAttribute("u_id") != null && String.valueOf(session.getAttribute("u_level")).equals("1")){ %>
   		<button type="button"class="btn btn-labeled btn-primary" onclick="open_order()">
 			<span class="btn-label">
           		<i class="glyphicon glyphicon-check"></i>
