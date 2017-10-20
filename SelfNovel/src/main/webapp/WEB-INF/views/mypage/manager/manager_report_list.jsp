@@ -84,7 +84,7 @@
 		/* allCheck
 		/********************************************************/
 		$('#allCheck').on('change', function() {
-			$("input[name='chk']").prop('checked', this.checked);
+			$("input[name='msgChk']").prop('checked', this.checked);
 		});
 		
 		/********************************************************/
