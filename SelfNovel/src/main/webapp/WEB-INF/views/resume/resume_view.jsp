@@ -69,7 +69,7 @@
 			var parent = $(this).parent();					//현재 선택된 Item
 			var editDiv = $(parent).find(".editDiv");		//첨삭영역			
 			var content = $(parent).find("#content");		//내용영역
-			var btnArea = $(parent).find("#modBtnArea");
+			var btnArea = $(parent).find(".modBtnArea");
 			var page = $(parent).find("#page-selection");	//Page
 			var itm_prd_id = $(parent).parent().parent().find("#itm_form_id").val();
 			var itm_childs = $(parent).parent().parent().find("#itm_childs").val();					
@@ -320,7 +320,8 @@
 		/*****************************
 		* '첨삭항목 수정' 버튼 클릭시 이벤트		
 		*****************************/
-		$("#modBtnArea").on("click", "#btnEditItem",function(){
+		$(".modBtnArea").on("click", "#btnEditItem",function(){
+			console.log(1);
 			
 			var itm_form_id = $("#eItm_form_id").val();
 			var itm_title = $("#eItm_title").val();			
@@ -367,7 +368,7 @@
 		/*****************************
 		* '첨삭항목 삭제' 버튼 클릭시 이벤트		
 		*****************************/
-		$("#modBtnArea").on("click", "#btnDeleteItem",function(){
+		$(".modBtnArea").on("click", "#btnDeleteItem",function(){
 			if(confirm("정말로 삭제하시겠습니까?") == true){
 				var itm_form_id = $("#eItm_form_id").val();
 				
@@ -741,7 +742,7 @@
 												<!-- 숨겨지는 부분이다. 버튼을 클릭하면 토글된다. -->
 												<div id="editDiv" style="display:none;" class="editDiv">
 													<div id="content"></div>
-													<div id="modBtnArea" style="display: block; text-align: right;"></div>
+													<div class="modBtnArea" style="display: block; text-align: right;"></div>
 													<div id="page-selection" style="display: block;"></div>																																							
 												</div>																								
 											<!-- end_editDiv -->
