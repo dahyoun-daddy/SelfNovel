@@ -167,15 +167,19 @@ public class OrdersController {
 		unityItmVO.setU_id(req.getParameter("u_id"));
 		List<UnityItmVO> list = (List<UnityItmVO>) orderSvc.do_searchRev(unityItmVO);
 		List<UnityItmVO> getPrd = (List<UnityItmVO>) orderSvc.do_searchOriginal(unityItmVO);
+		String temp_title="";
+		String temp_content="";
 		
 		if(list != null && list.size() > 0 ) {
 			for(int i=0; i<list.size(); i++) {
-				if(itm_title_arr[i] == null || itm_content_arr[i] == null) {
+				temp_title = itm_title_arr[i].replaceAll("\'", "\'\'");
+				temp_content = itm_content_arr[i].replaceAll("\'", "\'\'");
+				if(temp_title == null || temp_content == null) {
 					res.getWriter().write("insufficiency");
 					return;
 				}
-				unityItmVO.setItm_title(itm_title_arr[i]);
-				unityItmVO.setItm_content(itm_content_arr[i]);
+				unityItmVO.setItm_title(temp_title);
+				unityItmVO.setItm_content(temp_content);
 				unityItmVO.setItm_form_id(Integer.parseInt(itm_form_id_arr[i]));
 				unityItmVO.setRsm_id(req.getParameter("rsm_id"));
 				flag *= orderSvc.do_updateItem(unityItmVO);
@@ -183,8 +187,10 @@ public class OrdersController {
 			}
 		} else {	// 처음 작성인 경우
 			for(int i=0; i<getPrd.size(); i++) {
-				unityItmVO.setItm_title(itm_title_arr[i]);
-				unityItmVO.setItm_content(itm_content_arr[i]);
+				temp_title = itm_title_arr[i].replaceAll("\'", "\'\'");
+				temp_content = itm_content_arr[i].replaceAll("\'", "\'\'");
+				unityItmVO.setItm_title(temp_title);
+				unityItmVO.setItm_content(temp_content);
 				unityItmVO.setItm_form_id(Integer.parseInt(itm_form_id_arr[i]));
 				unityItmVO.setRsm_id(req.getParameter("rsm_id"));
 				unityItmVO.setItm_prd_id((String.valueOf(getPrd.get(i).getItm_form_id())));
@@ -275,3 +281,4 @@ public class OrdersController {
 		}
 	}
 }
+

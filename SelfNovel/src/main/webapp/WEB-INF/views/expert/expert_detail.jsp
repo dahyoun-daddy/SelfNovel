@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -200,9 +200,8 @@
 					$("#itm_title"+i).focus();
 					return;
 				}
-				
 				itm_titles += $("#itm_title"+i).val().trim() + "\\";
-				itm_contents += $("#itm_content"+i).val().trim() + "\\";
+				itm_contents += $("#itm_content"+i).val() + "\\";
 			}
 		}
 		sessionStorage.setItem("itemSeq",1);
@@ -268,7 +267,7 @@
     </div>
   </div>
   <div align="right">
-  	<% if(session.getAttribute("u_id") != null){ %>
+  	<% if(session.getAttribute("u_id") != null && String.valueOf(session.getAttribute("u_level")).equals("1")){ %>
   		<button type="button"class="btn btn-labeled btn-primary" onclick="open_order()">
 			<span class="btn-label">
           		<i class="glyphicon glyphicon-check"></i>
