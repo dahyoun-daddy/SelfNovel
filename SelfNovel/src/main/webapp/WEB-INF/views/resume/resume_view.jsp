@@ -160,9 +160,19 @@
 			var itm_form_id = $("#modItmId").val();
 			var itm_title = $("#modTitle").val();
 			var itm_content = $("#modContent").val();
+
+			if(itm_title == ''){
+				alert("제목을 입력해주세요.");
+				return;
+			}	
 			
 			if(itm_title.length > 60){
 				alert("제목의 길이가 너무 깁니다.(공백포함 최대 60글자)");
+				return;
+			}
+			
+			if(itm_content == ''){
+				alert("내용을 입력해주세요.");
 				return;
 			}
 			
